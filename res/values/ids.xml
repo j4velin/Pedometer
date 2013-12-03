@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_id">121539218942</string>
+    <string name="achievement_boots_made_for_walking">CgkI_pu14sQDEAIQAQ</string>
+    <string name="achievement_boots_made_for_walking_ii">CgkI_pu14sQDEAIQBw</string>
+    <string name="achievement_boots_made_for_walking_iii">CgkI_pu14sQDEAIQCA</string>
+    <string name="achievement_stamina">CgkI_pu14sQDEAIQAg</string>
+    <string name="achievement_stamina_ii">CgkI_pu14sQDEAIQCQ</string>
+    <string name="achievement_stamina_iii">CgkI_pu14sQDEAIQCg</string>
+    <string name="achievement_marathon">CgkI_pu14sQDEAIQAw</string>
+    <string name="achievement_marathon_ii">CgkI_pu14sQDEAIQCw</string>
+    <string name="achievement_marathon_iii">CgkI_pu14sQDEAIQDA</string>
+    <string name="leaderboard_mosts_steps_walked">CgkI_pu14sQDEAIQDQ</string>
+
+</resources>

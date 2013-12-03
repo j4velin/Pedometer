@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Pedometer</string>
+    <string name="goal">Goal</string>
+    <string name="step_size">Step size</string>
+    <string name="about">About</string>
+    <string name="account">Account</string>
+    <string name="goal_summary">Current goal: %,d steps</string>
+    <string name="step_size_summary">Current step size: %1$.2f %2$s</string>
+    <string name="sign_in">Sign in with your Google account to use the Achievements and Leaderboards features</string>
+    <string name="signed_in">Signed in as %s</string>
+
+</resources>

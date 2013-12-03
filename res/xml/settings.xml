@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <Preference
+        android:key="goal"
+        android:title="@string/goal" />
+    <Preference
+        android:key="stepsize"
+        android:title="@string/step_size" />
+    <Preference
+        android:key="account"
+        android:summary="@string/sign_in"
+        android:title="@string/account" />
+    <Preference
+        android:key="about"
+        android:title="@string/about" />
+
+</PreferenceScreen>
