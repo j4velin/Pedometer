@@ -19,6 +19,7 @@ package de.j4velin.pedometer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 
 public class ShutdownRecevier extends BroadcastReceiver {
 
@@ -34,6 +35,12 @@ public class ShutdownRecevier extends BroadcastReceiver {
 		db.close();
 		if (Logger.LOG)
 			Logger.log("last step value before shutdown: " + SensorListener.steps);
+
+		// if the user used a root script for shutdown, the DEVICE_SHUTDOWN
+		// broadcast might not be send. Therefore, the app will check this
+		// setting on the next boot and displays an error message if it's not
+		// set to true
+		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("correctShutdown", true).commit();
 	}
 
 }
