@@ -11,6 +11,7 @@
     <string name="achievement_marathon">CgkI_pu14sQDEAIQAw</string>
     <string name="achievement_marathon_ii">CgkI_pu14sQDEAIQCw</string>
     <string name="achievement_marathon_iii">CgkI_pu14sQDEAIQDA</string>
-    <string name="leaderboard_mosts_steps_walked">CgkI_pu14sQDEAIQDQ</string>
+    <string name="leaderboard_most_steps_walked">CgkI_pu14sQDEAIQDw</string>
+    <string name="leaderboard_most_steps_walked_in_one_day">CgkI_pu14sQDEAIQDg</string>
 
 </resources>

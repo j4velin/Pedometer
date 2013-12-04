@@ -30,7 +30,7 @@ import android.preference.PreferenceManager;
 public class PlayServices {
 
 	/**
-	 * Updates the leaderboard score
+	 * Updates the 'most steps walked' leaderboard score
 	 * 
 	 * @param gc
 	 *            the GamesClient
@@ -39,9 +39,24 @@ public class PlayServices {
 	 * @param totalSteps
 	 *            the new score = total steps walked
 	 */
-	private static void updateLeaderboard(final GamesClient gc, final Context c, int totalSteps) {
+	private static void updateTotalLeaderboard(final GamesClient gc, final Context c, int totalSteps) {
 		// some cheat detection needed?
-		gc.submitScore(c.getString(R.string.leaderboard_mosts_steps_walked), totalSteps);
+		gc.submitScore(c.getString(R.string.leaderboard_most_steps_walked), totalSteps);
+	}
+	
+	/**
+	 * Updates the 'most steps walked in one day' leaderboard score
+	 * 
+	 * @param gc
+	 *            the GamesClient
+	 * @param c
+	 *            the Context
+	 * @param steps
+	 *            the new score = max number of steps walked in one day
+	 */
+	private static void updateOneDayLeaderboard(final GamesClient gc, final Context c, int steps) {
+		// some cheat detection needed?
+		gc.submitScore(c.getString(R.string.leaderboard_most_steps_walked_in_one_day), steps);
 	}
 
 	/**
@@ -61,6 +76,9 @@ public class PlayServices {
 		if (gc.isConnected()) {
 			Database db = new Database(context);
 			db.open();
+						
+			db.removeInvalidEntries();
+			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 			if (!prefs.getBoolean("achievement_boot_are_made_for_walking", false)) {
 				Cursor c = db.query(new String[] { "steps" }, "steps >= 7500", null, null, null, null, "1");
@@ -112,8 +130,6 @@ public class PlayServices {
 
 			int totalSteps = db.getTotal();
 
-			updateLeaderboard(gc, context, totalSteps);
-
 			if (!prefs.getBoolean("achievement_marathon", false)) {
 				if (totalSteps > 100000) {
 					gc.unlockAchievement(context.getString(R.string.achievement_marathon));
@@ -132,6 +148,11 @@ public class PlayServices {
 					prefs.edit().putBoolean("achievement_marathon3", true).apply();
 				}
 			}
+			
+			updateTotalLeaderboard(gc, context, totalSteps);
+					
+			updateOneDayLeaderboard(gc, context, db.getRecord());
+			
 			db.close();
 		}
 	}

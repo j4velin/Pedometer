@@ -89,7 +89,7 @@ public class MainActivity extends BaseGameActivity {
 		case R.id.action_achievements:
 			if (getGamesClient().isConnected()) {
 				startActivityForResult(item.getItemId() == R.id.action_achievements ? getGamesClient().getAchievementsIntent()
-						: getGamesClient().getLeaderboardIntent(getString(R.string.leaderboard_mosts_steps_walked)), 1);
+						: getGamesClient().getAllLeaderboardsIntent(), 1);
 			} else {
 				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 				builder2.setTitle("Sign in necessary");
