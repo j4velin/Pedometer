@@ -174,9 +174,9 @@ public class Database extends SQLiteOpenHelper {
 	/**
 	 * Removes invalid entries from the database. 
 	 * 
-	 * Currently, an invalid input is such with steps >= 2,000,000,000.
+	 * Currently, an invalid input is such with steps >= 2,000,000,000 or steps < 0.
 	 */
 	void removeInvalidEntries() {
-		database.delete("steps", "steps >= ?", new String[]{"2000000000"});
+		database.delete("steps", "steps >= ? OR steps < ?", new String[]{"2000000000", "0"});
 	}
 }

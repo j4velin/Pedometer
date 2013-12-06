@@ -37,8 +37,6 @@ public class BootReceiver extends BroadcastReceiver {
 		db.insertDay(Util.getToday(), 0); // device just booted; wont do
 											// anything if there is already a
 											// row for today
-		db.close();
-
 		NewDayReceiver.sheduleAlarmForNextDay(context);
 
 		context.startService(new Intent(context, SensorListener.class));
@@ -62,8 +60,12 @@ public class BootReceiver extends BroadcastReceiver {
 													.parse("http://j4velin-systems.de/faq/index.php?app=pm"))
 													.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0)).setShowWhen(false)
 							.setSmallIcon(R.drawable.ic_launcher).build());
-			;
+
+			// last entry might still have a negative step value, so remove that
+			// row if that's the case
+			db.removeInvalidEntries();
 		}
+		db.close();
 		prefs.edit().remove("correctShutdown").apply();
 
 	}
