@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
@@ -104,7 +105,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					dialog.dismiss();
 				}
 			});
-			builder.create().show();
+			Dialog dialog = builder.create();
+			dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+			dialog.show();
 			break;
 		case R.string.step_size:
 			builder = new AlertDialog.Builder(getActivity());
