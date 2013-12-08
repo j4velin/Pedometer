@@ -170,13 +170,11 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				Messenger messenger = new Messenger(service);
 				try {
-					Logger.log("activity sending message");
 					final ServiceConnection conn = this;
 					Messenger incoming = new Messenger(new Handler() {
 						public void handleMessage(Message msg) {
 							if (Logger.LOG)
 								Logger.log("SensorListener.steps: " + msg.arg1);
-							Logger.log("activity got message: "+msg.arg1);
 							since_boot = msg.arg1;
 							updateSteps();
 							getActivity().unbindService(conn);

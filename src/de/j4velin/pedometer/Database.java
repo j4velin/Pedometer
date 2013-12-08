@@ -56,10 +56,6 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	public void insertDay(final long date, int offset) {
-		if (Logger.LOG) {
-			Logger.log("before insertday");
-			logState();
-		}
 		Cursor c = database.query("steps", new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
 				null, null);
 		if (c.getCount() == 0) {
@@ -119,6 +115,8 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * Get the total of steps taken without today's value
+	 * 
 	 * @return number of steps taken, ignoring today
 	 */
 	int getTotalWithoutToday() {
@@ -131,18 +129,8 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * @return number of steps taken, with today
-	 */
-	// int getTotal() {
-	// Cursor c = database
-	// .rawQuery("SELECT SUM(steps) FROM " + DB_NAME, null);
-	// c.moveToFirst();
-	// int re = c.getInt(0) + SensorListener.steps;
-	// c.close();
-	// return re;
-	// }
-
-	/**
+	 * Get the maximum of steps walked in one day
+	 * 
 	 * @return the maximum number of steps walked in one day
 	 */
 	int getRecord() {
@@ -154,6 +142,8 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * Get the number of steps taken for a specific date
+	 *  
 	 * @param date
 	 *            the date in millis since 1970
 	 * @return the steps taken on this date or Integer.MIN_VALUE if date doesn't

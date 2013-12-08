@@ -46,7 +46,6 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	private static Messenger messenger = new Messenger(new Handler() {
 		public void handleMessage(Message msg) {
-			Logger.log("service got message");
 			Message m = Message.obtain();
 			m.arg1 = steps;
 			try {
