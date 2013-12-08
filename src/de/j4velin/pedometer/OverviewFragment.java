@@ -12,8 +12,14 @@ import com.echo.holographlibrary.BarGraph;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 
+import de.j4velin.pedometer.background.SensorListener;
+
+import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -21,6 +27,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,11 +44,10 @@ import android.widget.TextView;
 
 public class OverviewFragment extends Fragment implements SensorEventListener {
 
-	private static TextView stepsView, totalView;
-	private static PieSlice sliceGoal, sliceCurrent;
-	private static PieGraph pg;
-	private static int todayOffset, total_start, goal, steps_today;
-	private static Database db;
+	private TextView stepsView, totalView;
+	private PieSlice sliceGoal, sliceCurrent;
+	private PieGraph pg;
+	private int todayOffset, total_start, goal, since_boot;
 	private final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
 	private boolean showSteps = true;
 
@@ -51,7 +61,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View v = inflater.inflate(R.layout.activity_main, null);
 		stepsView = (TextView) v.findViewById(R.id.steps);
-		db = new Database(getActivity());
+		Database db = new Database(getActivity());
 		db.open();
 		Calendar yesterday = Calendar.getInstance();
 		yesterday.setTimeInMillis(Util.getToday());
@@ -96,6 +106,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			}
 			yesterday.add(Calendar.DAY_OF_YEAR, 1);
 		}
+		db.close();
 		BarGraph g = (BarGraph) v.findViewById(R.id.bargraph);
 		if (points.size() > 0) {
 			g.setBars(points);
@@ -111,6 +122,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 					((TextView) v.findViewById(R.id.unit)).setText("steps");
 				} else {
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+					int steps_today = Math.max(todayOffset + since_boot, 0);
 					float distance = steps_today * prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
 					String unit = prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT);
 					if (unit.equals("cm")) {
@@ -123,7 +135,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 					stepsView.setText(formatter.format(distance));
 					((TextView) v.findViewById(R.id.unit)).setText(unit);
 				}
-				updateSteps(SensorListener.steps);
+				updateSteps();
 			}
 		});
 
@@ -134,26 +146,61 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 	public void onResume() {
 		super.onResume();
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
-		db.open();
-		if (Logger.LOG)
-			db.logState();
-		// read todays offset
-		todayOffset = db.getSteps(Util.getToday());
+
+		if (todayOffset == 0) {
+			Database db = new Database(getActivity());
+			db.open();
+			if (Logger.LOG)
+				db.logState();
+			// read todays offset
+			todayOffset = db.getSteps(Util.getToday());
+			db.close();
+		}
+
 		goal = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("goal", 10000);
-		if (Logger.LOG)
-			Logger.log("SensorListener.steps: " + SensorListener.steps);
-		updateSteps(SensorListener.steps);
+		
+		getActivity().bindService(new Intent(getActivity(), SensorListener.class), new ServiceConnection() {
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+
+			}
+
+			@SuppressLint("HandlerLeak")
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder service) {
+				Messenger messenger = new Messenger(service);
+				try {
+					Logger.log("activity sending message");
+					final ServiceConnection conn = this;
+					Messenger incoming = new Messenger(new Handler() {
+						public void handleMessage(Message msg) {
+							if (Logger.LOG)
+								Logger.log("SensorListener.steps: " + msg.arg1);
+							Logger.log("activity got message: "+msg.arg1);
+							since_boot = msg.arg1;
+							updateSteps();
+							getActivity().unbindService(conn);
+						}
+					});
+					Message msg = Message.obtain();
+					msg.replyTo = incoming;
+					messenger.send(msg);
+				} catch (RemoteException e) {
+					if (Logger.LOG)
+						Logger.log(e);
+					e.printStackTrace();
+				}
+			}
+		}, 0);
 
 		// register a sensorlistener to live update the UI if a step is taken
 		SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
+		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		db.close();
 		try {
 			SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 			sm.unregisterListener(this);
@@ -186,17 +233,21 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		if (todayOffset == Integer.MIN_VALUE) { // no values for today
 			// we dont know when the reboot was, so set todays steps to 0 by
 			// initializing them with -STEPS_SINCE_BOOT
+			Database db = new Database(getActivity());
+			db.open();
 			db.insertDay(Util.getToday(), -(int) event.values[0]);
+			db.close();
 			todayOffset = -(int) event.values[0];
 		}
-		updateSteps((int) event.values[0]);
+		since_boot = (int) event.values[0];
+		updateSteps();
 	}
 
-	private void updateSteps(int steps) {
+	private void updateSteps() {
 		if (Logger.LOG)
-			Logger.log("update steps: " + steps);
+			Logger.log("update steps: " + since_boot);
 		// todayOffset might still be Integer.MIN_VALUE on first start
-		steps_today = Math.max(todayOffset + steps, 0);
+		int steps_today = Math.max(todayOffset + since_boot, 0);
 		sliceCurrent.setValue(steps_today);
 		if (goal - steps_today > 0) {
 			// goal not reached yet
@@ -214,7 +265,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		pg.invalidate();
 		if (showSteps) {
 			stepsView.setText(formatter.format(steps_today));
-		} else if (steps % 10 == 0) {
+		} else if (since_boot % 10 == 0) {
 			// update only every 10 steps
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 			float distance = steps_today * prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);

@@ -16,6 +16,8 @@
 
 package de.j4velin.pedometer;
 
+import de.j4velin.pedometer.background.NewDayReceiver;
+import de.j4velin.pedometer.background.SensorListener;
 import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -63,7 +65,7 @@ public class BootReceiver extends BroadcastReceiver {
 
 			// last entry might still have a negative step value, so remove that
 			// row if that's the case
-			db.removeInvalidEntries();
+			db.removeNegativeEntries();
 		}
 		db.close();
 		prefs.edit().remove("correctShutdown").apply();

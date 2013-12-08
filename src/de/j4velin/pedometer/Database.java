@@ -55,7 +55,11 @@ public class Database extends SQLiteOpenHelper {
 	public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	void insertDay(final long date, int offset) {
+	public void insertDay(final long date, int offset) {
+		if (Logger.LOG) {
+			Logger.log("before insertday");
+			logState();
+		}
 		Cursor c = database.query("steps", new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
 				null, null);
 		if (c.getCount() == 0) {
@@ -74,7 +78,7 @@ public class Database extends SQLiteOpenHelper {
 	/**
 	 * Writes the current steps database to the log
 	 */
-	void logState() {
+	public void logState() {
 		if (Logger.LOG) {
 			Cursor c = database.query(DB_NAME, null, null, null, null, null, null);
 			Logger.log(c);
@@ -83,8 +87,7 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Query the 'steps' table.
-	 * Remember to close the cursor!
+	 * Query the 'steps' table. Remember to close the cursor!
 	 * 
 	 * @param columns
 	 * @param selection
@@ -107,7 +110,7 @@ public class Database extends SQLiteOpenHelper {
 	 * @param steps
 	 *            the steps to add to the current steps-value for the date
 	 */
-	void updateSteps(final long date, int steps) {
+	public void updateSteps(final long date, int steps) {
 		database.execSQL("UPDATE " + DB_NAME + " SET steps = steps + " + steps + " WHERE date = " + date);
 		if (Logger.LOG) {
 			Logger.log("updateSteps " + date + " / " + steps);
@@ -126,25 +129,24 @@ public class Database extends SQLiteOpenHelper {
 		c.close();
 		return re;
 	}
-	
+
 	/**
 	 * @return number of steps taken, with today
 	 */
-	int getTotal() {
-		Cursor c = database
-				.rawQuery("SELECT SUM(steps) FROM " + DB_NAME, null);
-		c.moveToFirst();
-		int re = c.getInt(0) + SensorListener.steps;
-		c.close();
-		return re;
-	}
-	
+	// int getTotal() {
+	// Cursor c = database
+	// .rawQuery("SELECT SUM(steps) FROM " + DB_NAME, null);
+	// c.moveToFirst();
+	// int re = c.getInt(0) + SensorListener.steps;
+	// c.close();
+	// return re;
+	// }
+
 	/**
 	 * @return the maximum number of steps walked in one day
 	 */
 	int getRecord() {
-		Cursor c = database
-				.rawQuery("SELECT MAX(steps) FROM " + DB_NAME, null);
+		Cursor c = database.rawQuery("SELECT MAX(steps) FROM " + DB_NAME, null);
 		c.moveToFirst();
 		int re = c.getInt(0);
 		c.close();
@@ -157,7 +159,7 @@ public class Database extends SQLiteOpenHelper {
 	 * @return the steps taken on this date or Integer.MIN_VALUE if date doesn't
 	 *         exist in the database
 	 */
-	int getSteps(final long date) {
+	public int getSteps(final long date) {
 		Cursor c = database.query("steps", new String[] { "steps" }, "date = ?", new String[] { String.valueOf(date) }, null,
 				null, null);
 		c.moveToFirst();
@@ -169,14 +171,23 @@ public class Database extends SQLiteOpenHelper {
 		c.close();
 		return re;
 	}
-	
-	
+
 	/**
-	 * Removes invalid entries from the database. 
+	 * Removes all entries with negative values.
 	 * 
-	 * Currently, an invalid input is such with steps >= 2,000,000,000 or steps < 0.
+	 * Only call this directly after boot, otherwise it might remove the current
+	 * day as the current offset is likely to be negative
+	 */
+	void removeNegativeEntries() {
+		database.delete("steps", "steps < ?", new String[] { "0" });
+	}
+
+	/**
+	 * Removes invalid entries from the database.
+	 * 
+	 * Currently, an invalid input is such with steps >= 2,000,000,000
 	 */
 	void removeInvalidEntries() {
-		database.delete("steps", "steps >= ? OR steps < ?", new String[]{"2000000000", "0"});
+		database.delete("steps", "steps >= ?", new String[] { "2000000000" });
 	}
 }

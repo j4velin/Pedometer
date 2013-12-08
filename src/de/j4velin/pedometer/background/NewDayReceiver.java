@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer;
+package de.j4velin.pedometer.background;
 
 import java.util.Calendar;
+
+import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.Logger;
+import de.j4velin.pedometer.Util;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -28,10 +32,12 @@ public class NewDayReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
-		// Save the steps made yesterday and create a new row for today
+
+		// Save the steps made yesterday and create a new
+		// row for today
 		if (Logger.LOG) {
 			Logger.log("date changed, today is: " + Util.getToday());
-			Logger.log("Steps: "+SensorListener.steps);
+			Logger.log("Steps: " + SensorListener.steps);
 		}
 		Database db = new Database(context);
 		db.open();
@@ -40,22 +46,26 @@ public class NewDayReceiver extends BroadcastReceiver {
 		yesterday.add(Calendar.DAY_OF_YEAR, -1); // yesterday
 		db.updateSteps(yesterday.getTimeInMillis(), SensorListener.steps);
 
-		// if - for whatever reason - there still is a negative value in
+		// if - for whatever reason - there still is a
+		// negative value in
 		// yesterdays steps, set it to 0 instead
 		if (db.getSteps(yesterday.getTimeInMillis()) < 0) {
 			db.updateSteps(yesterday.getTimeInMillis(), -db.getSteps(yesterday.getTimeInMillis()));
 		}
 
-		// start the new days step with the offset of the current step-value
+		// start the new days step with the offset of the
+		// current step-value
 		// example: current steps since boot = 5.000
 		// --> offset for the following day = -5.000
-		// --> step-value of 5.001 then means there was 1 step taken today
+		// --> step-value of 5.001 then means there was 1
+		// step taken today
 		db.insertDay(Util.getToday(), -SensorListener.steps);
 		if (Logger.LOG) {
 			Logger.log("offset for new day: " + (-SensorListener.steps));
 			db.logState();
 		}
 		db.close();
+
 		sheduleAlarmForNextDay(context);
 	}
 
@@ -67,6 +77,7 @@ public class NewDayReceiver extends BroadcastReceiver {
 	 *            the Context
 	 */
 	@SuppressWarnings("deprecation")
+	public
 	static void sheduleAlarmForNextDay(final Context context) {
 		final Calendar tomorrow = Calendar.getInstance();
 		tomorrow.setTimeInMillis(Util.getToday()); // today

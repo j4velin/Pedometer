@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer;
+package de.j4velin.pedometer.background;
 
+import de.j4velin.pedometer.Logger;
 import android.app.Service;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 
 /**
  * Background service which keeps the step-sensor listener alive to always get
@@ -37,8 +42,23 @@ public class SensorListener extends Service implements SensorEventListener {
 	/**
 	 * The steps since boot as returned by the step-sensor
 	 */
-	public static int steps;
+	static int steps;
 
+	private static Messenger messenger = new Messenger(new Handler() {
+		public void handleMessage(Message msg) {
+			Logger.log("service got message");
+			Message m = Message.obtain();
+			m.arg1 = steps;
+			try {
+				msg.replyTo.send(m);
+			} catch (RemoteException e) {
+				if (Logger.LOG)
+					Logger.log(e);
+				e.printStackTrace();
+			}
+		};
+	});
+	
 	@Override
 	public void onAccuracyChanged(final Sensor sensor, int accuracy) {
 	}
@@ -52,7 +72,7 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public IBinder onBind(final Intent intent) {
-		return null;
+		return messenger.getBinder();
 	}
 
 	@Override
@@ -85,5 +105,4 @@ public class SensorListener extends Service implements SensorEventListener {
 			e.printStackTrace();
 		}
 	}
-
 }

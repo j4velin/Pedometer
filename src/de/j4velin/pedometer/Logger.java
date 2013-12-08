@@ -38,27 +38,26 @@ public class Logger {
 			log(ste.toString());
 		}
 	}
-	
+
 	public static void log(final Cursor c) {
 		if (!Logger.LOG)
 			return;
 		c.moveToFirst();
-		String title ="";
-		for(int i=0; i<c.getColumnCount();i++)
-			title += c.getColumnName(i)+" | ";
+		String title = "";
+		for (int i = 0; i < c.getColumnCount(); i++)
+			title += c.getColumnName(i) + " | ";
 		log(title);
-		while(!c.isAfterLast()) {
+		while (!c.isAfterLast()) {
 			title = "";
-			for(int i=0; i<c.getColumnCount();i++)
-				title += c.getString(i)+" | ";
+			for (int i = 0; i < c.getColumnCount(); i++)
+				title += c.getString(i) + " | ";
 			log(title);
 			c.moveToNext();
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	public
-	static void log(String msg) {
+	public static void log(String msg) {
 		if (!Logger.LOG)
 			return;
 		android.util.Log.d(APP, msg);

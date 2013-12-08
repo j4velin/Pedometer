@@ -128,7 +128,7 @@ public class PlayServices {
 				}
 			}
 
-			int totalSteps = db.getTotal();
+			int totalSteps = db.getTotalWithoutToday();
 
 			if (!prefs.getBoolean("achievement_marathon", false)) {
 				if (totalSteps > 100000) {

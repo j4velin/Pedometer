@@ -19,6 +19,9 @@ package de.j4velin.pedometer;
 import com.google.android.gms.games.GamesClient;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
+import de.j4velin.pedometer.background.NewDayReceiver;
+import de.j4velin.pedometer.background.SensorListener;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.app.AlertDialog;

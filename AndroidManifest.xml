@@ -37,16 +37,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="de.j4velin.pedometer.NewDayReceiver" />
         <receiver android:name="de.j4velin.pedometer.BootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="de.j4velin.pedometer.ShutdownRecevier" >
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
-                <action android:name="de.j4velin.ACTION_SHUTDOWN" />
             </intent-filter>
         </receiver>
         <receiver android:name="de.j4velin.pedometer.AppUpdatedReceiver" >
@@ -55,9 +48,22 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="de.j4velin.pedometer.SensorListener" >
+        <service
+            android:name="de.j4velin.pedometer.background.SensorListener"
+            android:process=":background" >
         </service>
 
+        <receiver
+            android:name="de.j4velin.pedometer.background.ShutdownRecevier"
+            android:process=":background" >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="de.j4velin.ACTION_SHUTDOWN" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="de.j4velin.pedometer.background.NewDayReceiver"
+            android:process=":background" />
     </application>
 
 </manifest>
