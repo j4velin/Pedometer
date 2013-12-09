@@ -17,7 +17,10 @@
 package de.j4velin.pedometer.background;
 
 import de.j4velin.pedometer.Logger;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -90,6 +93,16 @@ public class SensorListener extends Service implements SensorEventListener {
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+	}
+	
+	@Override
+	public void onTaskRemoved(final Intent rootIntent) {
+		super.onTaskRemoved(rootIntent);
+		if (Logger.LOG)
+			Logger.log("sensor service task removed");
+		// Restart service in 500 ms
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+				PendingIntent.getService(this, 0, new Intent(this, SensorListener.class), 0));
 	}
 
 	@Override
