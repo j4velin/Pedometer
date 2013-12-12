@@ -26,7 +26,7 @@ import android.os.Environment;
 
 public class Logger {
 
-	public final static boolean LOG = true;
+	public final static boolean LOG = false;
 
 	private static FileWriter fw;
 	private static Date date = new Date();
@@ -61,7 +61,7 @@ public class Logger {
 		if (!Logger.LOG)
 			return;
 		android.util.Log.d(APP, msg);
-		if (BuildConfig.DEBUG && false)
+		if (BuildConfig.DEBUG)
 			android.util.Log.d(APP, msg);
 		else {
 			try {
