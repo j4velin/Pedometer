@@ -9,3 +9,12 @@ Sign in with your Google+ account to unlock <b>achievements</b> and keep you mot
 
 
 Pedometer uses the 'HoloGraphLibrary' by Daniel Nadeau (https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home)
+
+
+<table sytle="border: 0px;">
+<tr>
+<td><img width="200px" src="https://lh3.ggpht.com/2ZFNccvrhhdL7pGwqoDeQbbpWjzDOc8hcqmINJ21VGXoddAVUj-RaOlLyemwEAIV8Q=h900-rw" /></td>
+<td><img width="200px" src="https://lh3.ggpht.com/FILbtxHCIo9ArHhrzjkJq6TcxCUQUrtyFn3qEVb0qBcFInwNn8c24IADtlREn8BVA91d=h900-rw" /></td>
+</tr>
+</table>
+
