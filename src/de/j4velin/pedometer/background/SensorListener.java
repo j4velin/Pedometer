@@ -17,7 +17,10 @@
 package de.j4velin.pedometer.background;
 
 import de.j4velin.pedometer.Logger;
+import de.j4velin.pedometer.R;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -31,6 +34,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 
 /**
  * Background service which keeps the step-sensor listener alive to always get
@@ -46,8 +50,19 @@ public class SensorListener extends Service implements SensorEventListener {
 	 * The steps since boot as returned by the step-sensor
 	 */
 	static int steps;
+	
+	/*
+	 * The notification builder to create and update the progress-notification
+	 */
+	private static Notification.Builder notificationBuilder;
+	
+	/*
+	 * The goal, needed for the notification progress
+	 */
+	private static int goal;
 
 	private static Messenger messenger = new Messenger(new Handler() {
+		// received a message, reply with the current step value
 		public void handleMessage(Message msg) {
 			Message m = Message.obtain();
 			m.arg1 = steps;
@@ -60,7 +75,7 @@ public class SensorListener extends Service implements SensorEventListener {
 			}
 		};
 	});
-	
+
 	@Override
 	public void onAccuracyChanged(final Sensor sensor, int accuracy) {
 	}
@@ -70,6 +85,13 @@ public class SensorListener extends Service implements SensorEventListener {
 		if (event.values[0] == 0) // unlikly to be a real value
 			return;
 		steps = (int) event.values[0];
+		
+		// update only every 100 steps
+		if (notificationBuilder != null && steps % 100 == 0) {
+			notificationBuilder.setProgress(goal, steps, true);
+			((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationBuilder.build());
+		}
+		
 	}
 
 	@Override
@@ -80,8 +102,21 @@ public class SensorListener extends Service implements SensorEventListener {
 	@Override
 	public int onStartCommand(final Intent intent, int flags, int startId) {
 		if (Logger.LOG)
-			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null) + " flags: " + flags
-					+ " startid: " + startId);
+			Logger.log("service started. steps: " + steps + " intent=null? "
+					+ (intent == null) + " flags: " + flags + " startid: "
+					+ startId);
+
+		// Workaround as on Android 4.4.2 START_STICKY has currently no effect
+		// -> try keeping the service in memory by making it a foreground
+		// service
+		goal = PreferenceManager.getDefaultSharedPreferences(this).getInt("goal", 10000);
+		notificationBuilder = new Notification.Builder(this);
+		notificationBuilder
+				.setPriority(Notification.PRIORITY_MIN)
+				.setProgress(goal, steps, true)
+				.setSmallIcon(R.drawable.ic_launcher).build();
+		startForeground(1, notificationBuilder.build());
+		
 		return START_STICKY;
 	}
 
@@ -94,15 +129,17 @@ public class SensorListener extends Service implements SensorEventListener {
 		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
 	}
-	
+
 	@Override
 	public void onTaskRemoved(final Intent rootIntent) {
 		super.onTaskRemoved(rootIntent);
 		if (Logger.LOG)
 			Logger.log("sensor service task removed");
 		// Restart service in 500 ms
-		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System.currentTimeMillis() + 500,
-				PendingIntent.getService(this, 0, new Intent(this, SensorListener.class), 0));
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(
+				AlarmManager.RTC, System.currentTimeMillis() + 500,
+				PendingIntent.getService(this, 0, new Intent(this,
+						SensorListener.class), 0));
 	}
 
 	@Override
@@ -116,5 +153,7 @@ public class SensorListener extends Service implements SensorEventListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		stopForeground(true);
 	}
 }
