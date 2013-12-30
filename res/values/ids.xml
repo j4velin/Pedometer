@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_id">121539218942</string>
     <string name="achievement_boots_made_for_walking">CgkI_pu14sQDEAIQAQ</string>
     <string name="achievement_boots_made_for_walking_ii">CgkI_pu14sQDEAIQBw</string>
@@ -12,6 +11,5 @@
     <string name="achievement_marathon_ii">CgkI_pu14sQDEAIQCw</string>
     <string name="achievement_marathon_iii">CgkI_pu14sQDEAIQDA</string>
     <string name="leaderboard_most_steps_walked">CgkI_pu14sQDEAIQDw</string>
-    <string name="leaderboard_most_steps_walked_in_one_day">CgkI_pu14sQDEAIQDg</string>
-
+    <string name="leaderboard_most_steps_walked_in_one_day">CgkI_pu14sQDEAIQEA</string>
 </resources>
