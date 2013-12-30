@@ -65,6 +65,9 @@ public class NewDayReceiver extends BroadcastReceiver {
 			db.logState();
 		}
 		db.close();
+		
+		// to update the notification
+		context.startService(new Intent(context, SensorListener.class));
 
 		sheduleAlarmForNextDay(context);
 	}
