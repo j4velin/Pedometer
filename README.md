@@ -18,3 +18,10 @@ Pedometer uses the 'HoloGraphLibrary' by Daniel Nadeau (https://bitbucket.org/da
 </tr>
 </table>
 
+
+
+Build
+-----
+
+To build the app, add the BaseGameUtils (https://developers.google.com/games/services/android/init) and the HoloGraphLibrary (https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home) as libraries to the project
+
