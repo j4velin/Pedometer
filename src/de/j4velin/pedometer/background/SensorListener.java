@@ -16,8 +16,12 @@
 
 package de.j4velin.pedometer.background;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.Logger;
+import de.j4velin.pedometer.MainActivity;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.Util;
 import android.app.AlarmManager;
@@ -90,9 +94,11 @@ public class SensorListener extends Service implements SensorEventListener {
 
 		// update only every 100 steps
 		if (notificationBuilder != null && steps % 100 == 0) {
-			notificationBuilder.setProgress(goal, today_offset + steps, false).setContentText(
-					(goal - today_offset - steps) + " steps to go");
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationBuilder.build());
+			notificationBuilder.setProgress(goal, today_offset + steps, false)
+					.setContentText(
+							NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps)) + " steps to go");
+			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+					.notify(1, notificationBuilder.build());
 		}
 
 	}
@@ -105,23 +111,9 @@ public class SensorListener extends Service implements SensorEventListener {
 	@Override
 	public int onStartCommand(final Intent intent, int flags, int startId) {
 		if (Logger.LOG)
-			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null) + " flags: " + flags
-					+ " startid: " + startId);
-
-		// Workaround as on Android 4.4.2 START_STICKY has currently no effect
-		// -> try keeping the service in memory by making it a foreground
-		// service
-		goal = PreferenceManager.getDefaultSharedPreferences(this).getInt("goal", 10000);
-		Database db = new Database(this);
-		db.open();
-		today_offset = db.getSteps(Util.getToday());
-		db.close();
-		notificationBuilder = new Notification.Builder(this);
-		notificationBuilder.setPriority(Notification.PRIORITY_MIN).setProgress(goal, today_offset + steps, false)
-				.setShowWhen(false).setContentTitle("Pedometer is counting")
-				.setContentText((goal - today_offset - steps) + " steps to go").setSmallIcon(R.drawable.ic_launcher).build();
-		startForeground(1, notificationBuilder.build());
-
+			Logger.log("service started. steps: " + steps + " intent=null? "
+					+ (intent == null) + " flags: " + flags + " startid: "
+					+ startId);
 		return START_STICKY;
 	}
 
@@ -133,6 +125,31 @@ public class SensorListener extends Service implements SensorEventListener {
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+		
+		if (getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getBoolean("notification", true)) {
+			goal = PreferenceManager
+					.getDefaultSharedPreferences(this).getInt("goal", 10000);
+			Database db = new Database(this);
+			db.open();
+			today_offset = db.getSteps(Util.getToday());
+			db.close();
+			notificationBuilder = new Notification.Builder(this);
+			notificationBuilder
+					.setPriority(Notification.PRIORITY_MIN)
+					.setProgress(goal, today_offset + steps, false)
+					.setShowWhen(false)
+					.setContentTitle("Pedometer is counting")
+					.setContentText(
+							NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps)) + " steps to go")
+							.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
+					.setSmallIcon(R.drawable.ic_launcher).build();
+
+			// Workaround as on Android 4.4.2 START_STICKY has currently no
+			// effect
+			// -> try keeping the service in memory by making it a foreground
+			// service
+			startForeground(1, notificationBuilder.build());
+		}
 	}
 
 	@Override
@@ -141,8 +158,10 @@ public class SensorListener extends Service implements SensorEventListener {
 		if (Logger.LOG)
 			Logger.log("sensor service task removed");
 		// Restart service in 500 ms
-		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System.currentTimeMillis() + 500,
-				PendingIntent.getService(this, 0, new Intent(this, SensorListener.class), 0));
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(
+				AlarmManager.RTC, System.currentTimeMillis() + 500,
+				PendingIntent.getService(this, 0, new Intent(this,
+						SensorListener.class), 0));
 	}
 
 	@Override
