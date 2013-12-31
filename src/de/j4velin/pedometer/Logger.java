@@ -60,7 +60,6 @@ public class Logger {
 	public static void log(String msg) {
 		if (!Logger.LOG)
 			return;
-		android.util.Log.d(APP, msg);
 		if (BuildConfig.DEBUG)
 			android.util.Log.d(APP, msg);
 		else {
