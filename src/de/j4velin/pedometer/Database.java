@@ -55,18 +55,25 @@ public class Database extends SQLiteOpenHelper {
 	public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	public void insertDay(final long date, int offset) {
-		Cursor c = database.query("steps", new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
+	/**
+	 * Inserts a new entry in the database, if there is no entry for the given date yet.
+	 * Use updateSteps(long date, int steps) if an entry for this date already exists.
+	 * 
+	 * @param date the date in ms since 1970
+	 * @param steps the steps for this date
+	 */
+	public void insertDay(final long date, int steps) {
+		Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
 				null, null);
 		if (c.getCount() == 0) {
 			ContentValues values = new ContentValues();
 			values.put("date", date);
-			values.put("steps", offset);
+			values.put("steps", steps);
 			database.insert(DB_NAME, null, values);
 		}
 		c.close();
 		if (Logger.LOG) {
-			Logger.log("insertDay " + date + " / " + offset);
+			Logger.log("insertDay " + date + " / " + steps);
 			logState();
 		}
 	}
