@@ -10,5 +10,10 @@
     <string name="step_size_summary">Current step size: %1$.2f %2$s</string>
     <string name="sign_in">Sign in with your Google account to use the Achievements and Leaderboards features</string>
     <string name="signed_in">Signed in as %s</string>
+    <string name="export_summary">Save your data in a .csv file</string>
+    <string name="export_title">Export/Backup</string>
+    <string name="import_summary">Imports previously saved data</string>
+    <string name="import_title">Import/Restore</string>
+    <string name="notification">Show notification</string>
 
 </resources>
