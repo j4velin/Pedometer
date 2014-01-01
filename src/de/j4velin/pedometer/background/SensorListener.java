@@ -94,9 +94,13 @@ public class SensorListener extends Service implements SensorEventListener {
 
 		// update only every 100 steps
 		if (notificationBuilder != null && steps % 100 == 0) {
+			if (today_offset == Integer.MIN_VALUE)
+				today_offset = -steps;
 			notificationBuilder.setProgress(goal, today_offset + steps, false)
 					.setContentText(
-							NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps)) + " steps to go");
+							NumberFormat.getInstance(Locale.getDefault())
+									.format((goal - today_offset - steps))
+									+ " steps to go");
 			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
 					.notify(1, notificationBuilder.build());
 		}
@@ -114,7 +118,54 @@ public class SensorListener extends Service implements SensorEventListener {
 			Logger.log("service started. steps: " + steps + " intent=null? "
 					+ (intent == null) + " flags: " + flags + " startid: "
 					+ startId);
+		if (intent.getBooleanExtra("updateNotificationState", false)) {
+			updateNotificationState();
+		}
 		return START_STICKY;
+	}
+
+	/**
+	 * Creates/cancels the progress notification. Is also called to update the goal and
+	 * today_offset values (for example at midnight)
+	 */
+	private void updateNotificationState() {
+		if (getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+				.getBoolean("notification", true)) {
+			goal = PreferenceManager.getDefaultSharedPreferences(this).getInt(
+					"goal", 10000);
+			Database db = new Database(this);
+			db.open();
+			today_offset = db.getSteps(Util.getToday());
+			db.close();
+			notificationBuilder = new Notification.Builder(this);
+			if (steps > 0) {
+				if (today_offset == Integer.MIN_VALUE)
+					today_offset = -steps;
+				notificationBuilder.setProgress(goal, today_offset + steps,
+						false).setContentText(
+						NumberFormat.getInstance(Locale.getDefault()).format(
+								(goal - today_offset - steps))
+								+ " steps to go");
+			} else {
+				notificationBuilder.setContentText("Your progress will be shown here soon");
+			}
+			notificationBuilder
+					.setPriority(Notification.PRIORITY_MIN)
+					.setShowWhen(false)
+					.setContentTitle("Pedometer is counting")
+					.setContentIntent(
+							PendingIntent.getActivity(this, 0, new Intent(this,
+									MainActivity.class), 0))
+					.setSmallIcon(R.drawable.ic_launcher).build();
+
+			// Workaround as on Android 4.4.2 START_STICKY has currently no
+			// effect
+			// -> try keeping the service in memory by making it a foreground
+			// service
+			startForeground(1, notificationBuilder.build());
+		} else {
+			stopForeground(true);
+		}
 	}
 
 	@Override
@@ -125,31 +176,8 @@ public class SensorListener extends Service implements SensorEventListener {
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
-		
-		if (getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getBoolean("notification", true)) {
-			goal = PreferenceManager
-					.getDefaultSharedPreferences(this).getInt("goal", 10000);
-			Database db = new Database(this);
-			db.open();
-			today_offset = db.getSteps(Util.getToday());
-			db.close();
-			notificationBuilder = new Notification.Builder(this);
-			notificationBuilder
-					.setPriority(Notification.PRIORITY_MIN)
-					.setProgress(goal, today_offset + steps, false)
-					.setShowWhen(false)
-					.setContentTitle("Pedometer is counting")
-					.setContentText(
-							NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps)) + " steps to go")
-							.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
-					.setSmallIcon(R.drawable.ic_launcher).build();
 
-			// Workaround as on Android 4.4.2 START_STICKY has currently no
-			// effect
-			// -> try keeping the service in memory by making it a foreground
-			// service
-			startForeground(1, notificationBuilder.build());
-		}
+		updateNotificationState();
 	}
 
 	@Override

@@ -50,7 +50,8 @@ public class NewDayReceiver extends BroadcastReceiver {
 		// negative value in
 		// yesterdays steps, set it to 0 instead
 		if (db.getSteps(yesterday.getTimeInMillis()) < 0) {
-			db.updateSteps(yesterday.getTimeInMillis(), -db.getSteps(yesterday.getTimeInMillis()));
+			db.updateSteps(yesterday.getTimeInMillis(),
+					-db.getSteps(yesterday.getTimeInMillis()));
 		}
 
 		// start the new days step with the offset of the
@@ -65,9 +66,10 @@ public class NewDayReceiver extends BroadcastReceiver {
 			db.logState();
 		}
 		db.close();
-		
+
 		// to update the notification
-		context.startService(new Intent(context, SensorListener.class));
+		context.startService(new Intent(context, SensorListener.class)
+				.putExtra("updateNotificationState", true));
 
 		sheduleAlarmForNextDay(context);
 	}
@@ -80,16 +82,18 @@ public class NewDayReceiver extends BroadcastReceiver {
 	 *            the Context
 	 */
 	@SuppressWarnings("deprecation")
-	public
-	static void sheduleAlarmForNextDay(final Context context) {
+	public static void sheduleAlarmForNextDay(final Context context) {
 		final Calendar tomorrow = Calendar.getInstance();
 		tomorrow.setTimeInMillis(Util.getToday()); // today
 		tomorrow.add(Calendar.DAY_OF_YEAR, 1); // tomorrow
 		tomorrow.add(Calendar.SECOND, 1); // tomorrow at 0:00:01
-		((AlarmManager) context.getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, tomorrow.getTimeInMillis(),
-				PendingIntent.getBroadcast(context, 1, new Intent(context, NewDayReceiver.class), 0));
+		((AlarmManager) context.getSystemService(Context.ALARM_SERVICE)).set(
+				AlarmManager.RTC, tomorrow.getTimeInMillis(), PendingIntent
+						.getBroadcast(context, 1, new Intent(context,
+								NewDayReceiver.class), 0));
 		if (Logger.LOG)
-			Logger.log("newDayAlarm sheduled for" + tomorrow.getTime().toLocaleString());
+			Logger.log("newDayAlarm sheduled for"
+					+ tomorrow.getTime().toLocaleString());
 	}
 
 }

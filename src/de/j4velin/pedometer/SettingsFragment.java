@@ -61,15 +61,11 @@ public class SettingsFragment extends PreferenceFragment implements
 								.putBoolean("notification", (Boolean) newValue)
 								.commit();
 
-						// restart service
-						getActivity()
-								.stopService(
-										new Intent(getActivity(),
-												SensorListener.class));
 						getActivity()
 								.startService(
 										new Intent(getActivity(),
-												SensorListener.class));
+												SensorListener.class).putExtra(
+												"updateNotificationState", true));
 						return true;
 					}
 				});
@@ -145,6 +141,10 @@ public class SettingsFragment extends PreferenceFragment implements
 							preference.setSummary(getString(
 									R.string.goal_summary, np.getValue()));
 							dialog.dismiss();
+							getActivity().startService(
+									new Intent(getActivity(),
+											SensorListener.class).putExtra(
+											"updateNotificationState", true));
 						}
 					});
 			builder.setNegativeButton(android.R.string.cancel,
