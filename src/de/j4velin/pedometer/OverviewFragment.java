@@ -61,7 +61,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		final View v = inflater.inflate(R.layout.activity_main, null);
+		final View v = inflater.inflate(R.layout.fragment_overview, null);
 		stepsView = (TextView) v.findViewById(R.id.steps);
 		Database db = new Database(getActivity());
 		db.open();
@@ -102,7 +102,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			steps = db.getSteps(yesterday.getTimeInMillis());
 			if (steps > Integer.MIN_VALUE) {
 				d = new Bar();
-				d.setColor(Color.parseColor("#990000"));
+				d.setColor(Color.parseColor("#0099cc"));
 				d.setName(df.format(new Date(yesterday.getTimeInMillis())));
 				d.setValue(steps);
 				d.setValueString(formatter.format(d.getValue()));
