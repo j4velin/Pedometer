@@ -96,11 +96,18 @@ public class SensorListener extends Service implements SensorEventListener {
 		if (notificationBuilder != null && steps % 100 == 0) {
 			if (today_offset == Integer.MIN_VALUE)
 				today_offset = -steps;
-			notificationBuilder.setProgress(goal, today_offset + steps, false)
-					.setContentText(
-							NumberFormat.getInstance(Locale.getDefault())
-									.format((goal - today_offset - steps))
-									+ " steps to go");
+			if (today_offset + steps < goal) {
+				notificationBuilder.setProgress(goal, today_offset + steps,
+						false).setContentText(
+						NumberFormat.getInstance(Locale.getDefault()).format(
+								(goal - today_offset - steps))
+								+ " steps to go");
+			} else {
+				notificationBuilder.setContentText("Goal reached! "+NumberFormat.getInstance(
+						Locale.getDefault()).format(
+						(today_offset + steps))
+						+ " steps and counting");
+			}
 			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
 					.notify(1, notificationBuilder.build());
 		}
@@ -125,8 +132,8 @@ public class SensorListener extends Service implements SensorEventListener {
 	}
 
 	/**
-	 * Creates/cancels the progress notification. Is also called to update the goal and
-	 * today_offset values (for example at midnight)
+	 * Creates/cancels the progress notification. Is also called to update the
+	 * goal and today_offset values (for example at midnight)
 	 */
 	private void updateNotificationState() {
 		if (getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
@@ -147,7 +154,8 @@ public class SensorListener extends Service implements SensorEventListener {
 								(goal - today_offset - steps))
 								+ " steps to go");
 			} else {
-				notificationBuilder.setContentText("Your progress will be shown here soon");
+				notificationBuilder
+						.setContentText("Your progress will be shown here soon");
 			}
 			notificationBuilder
 					.setPriority(Notification.PRIORITY_MIN)
@@ -178,6 +186,8 @@ public class SensorListener extends Service implements SensorEventListener {
 		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
 
 		updateNotificationState();
+		
+		NewDayReceiver.sheduleAlarmForNextDay(this);
 	}
 
 	@Override
