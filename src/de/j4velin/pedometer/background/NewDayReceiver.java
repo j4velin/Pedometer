@@ -88,9 +88,9 @@ public class NewDayReceiver extends BroadcastReceiver {
 		tomorrow.add(Calendar.DAY_OF_YEAR, 1); // tomorrow
 		tomorrow.add(Calendar.SECOND, 1); // tomorrow at 0:00:01
 		((AlarmManager) context.getSystemService(Context.ALARM_SERVICE)).set(
-				AlarmManager.RTC, tomorrow.getTimeInMillis(), PendingIntent
+				AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), PendingIntent
 						.getBroadcast(context, 1, new Intent(context,
-								NewDayReceiver.class), 0));
+								NewDayReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
 		if (Logger.LOG)
 			Logger.log("newDayAlarm sheduled for"
 					+ tomorrow.getTime().toLocaleString());
