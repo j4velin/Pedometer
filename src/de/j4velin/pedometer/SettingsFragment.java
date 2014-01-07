@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
@@ -61,11 +62,10 @@ public class SettingsFragment extends PreferenceFragment implements
 								.putBoolean("notification", (Boolean) newValue)
 								.commit();
 
-						getActivity()
-								.startService(
-										new Intent(getActivity(),
-												SensorListener.class).putExtra(
-												"updateNotificationState", true));
+						getActivity().startService(
+								new Intent(getActivity(), SensorListener.class)
+										.putExtra("updateNotificationState",
+												true));
 						return true;
 					}
 				});
@@ -205,7 +205,15 @@ public class SettingsFragment extends PreferenceFragment implements
 		case R.string.about:
 			builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle("About");
-			builder.setMessage("This app was created by Thomas Hoffmann (www.j4velin-development.de) and uses the 'HoloGraphLibrary' by Daniel Nadeau");
+			try {
+				builder.setMessage("This app was created by Thomas Hoffmann (www.j4velin-development.de) and uses the 'HoloGraphLibrary' by Daniel Nadeau\n\nApp version: "
+						+ getActivity().getPackageManager().getPackageInfo(
+								getActivity().getPackageName(), 0).versionName);
+			} catch (NameNotFoundException e1) {
+				// should not happen as the app is definitely installed when
+				// seeing the dialog
+				e1.printStackTrace();
+			}
 			builder.setPositiveButton(android.R.string.ok,
 					new DialogInterface.OnClickListener() {
 						@Override
