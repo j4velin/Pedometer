@@ -29,7 +29,7 @@ public class ShutdownRecevier extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		if (Logger.LOG)
-			Logger.log("shuting down");
+			Logger.log("shutting down");
 
 		// sensor stores steps since boot, so this value will be reset upon the
 		// next boot and therefore has to be saved now
