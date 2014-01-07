@@ -63,19 +63,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			Bundle savedInstanceState) {
 		final View v = inflater.inflate(R.layout.fragment_overview, null);
 		stepsView = (TextView) v.findViewById(R.id.steps);
-		Database db = new Database(getActivity());
-		db.open();
-		Calendar yesterday = Calendar.getInstance();
-		yesterday.setTimeInMillis(Util.getToday());
-		yesterday.add(Calendar.DAY_OF_YEAR, -1);
 		totalView = (TextView) v.findViewById(R.id.total);
-
-		int yesterdaySteps = db.getSteps(yesterday.getTimeInMillis());
-		((TextView) v.findViewById(R.id.yesterday)).setText(formatter
-				.format((yesterdaySteps > Integer.MIN_VALUE) ? yesterdaySteps
-						: 0));
-		total_start = db.getTotalWithoutToday();
-		totalView.setText(String.valueOf(total_start));
 
 		pg = (PieGraph) v.findViewById(R.id.graph);
 
@@ -90,32 +78,6 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		sliceGoal.setColor(Color.parseColor("#990000"));
 		sliceGoal.setValue(1);
 		pg.addSlice(sliceGoal);
-
-		// At the bottom, show some bars for the last 6 days
-		BarGraph g = (BarGraph) v.findViewById(R.id.bargraph);
-		ArrayList<Bar> points = new ArrayList<Bar>();
-		Bar d;
-		SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
-		yesterday.add(Calendar.DAY_OF_YEAR, -6);
-		int steps;
-		for (int i = 0; i < 7; i++) {
-			steps = db.getSteps(yesterday.getTimeInMillis());
-			if (steps > Integer.MIN_VALUE) {
-				d = new Bar();
-				d.setColor(Color.parseColor("#0099cc"));
-				d.setName(df.format(new Date(yesterday.getTimeInMillis())));
-				d.setValue(steps);
-				d.setValueString(formatter.format(d.getValue()));
-				points.add(d);
-			}
-			yesterday.add(Calendar.DAY_OF_YEAR, 1);
-		}
-		db.close();
-		if (points.size() > 0) {
-			g.setBars(points);
-		} else {
-			g.setVisibility(View.GONE);
-		}
 
 		stepsView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -153,15 +115,15 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 	public void onResume() {
 		super.onResume();
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		
+		Database db = new Database(getActivity());
+		db.open();
 
 		if (todayOffset == 0) {
-			Database db = new Database(getActivity());
-			db.open();
 			if (Logger.LOG)
 				db.logState();
 			// read todays offset
 			todayOffset = db.getSteps(Util.getToday());
-			db.close();
 		}
 
 		goal = PreferenceManager.getDefaultSharedPreferences(getActivity())
@@ -209,6 +171,48 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		sm.registerListener(this,
 				sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
 				SensorManager.SENSOR_DELAY_UI);
+		
+		// update yesterday & total step count		
+		Calendar yesterday = Calendar.getInstance();
+		yesterday.setTimeInMillis(Util.getToday());
+		yesterday.add(Calendar.DAY_OF_YEAR, -1);
+		
+		int yesterdaySteps = db.getSteps(yesterday.getTimeInMillis());
+		((TextView) getView().findViewById(R.id.yesterday)).setText(formatter
+				.format((yesterdaySteps > Integer.MIN_VALUE) ? yesterdaySteps
+						: 0));
+		total_start = db.getTotalWithoutToday();
+		totalView.setText(String.valueOf(total_start));
+		
+		// At the bottom, show some bars for the last 6 days
+		BarGraph g = (BarGraph) getView().findViewById(R.id.bargraph);
+		ArrayList<Bar> points = new ArrayList<Bar>();
+		Bar d;
+		SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
+		yesterday.add(Calendar.DAY_OF_YEAR, -6);
+		int steps;
+		for (int i = 0; i < 7; i++) {
+			steps = db.getSteps(yesterday.getTimeInMillis());
+			if (steps > Integer.MIN_VALUE) {
+				d = new Bar();
+				if (steps > goal)
+					d.setColor(Color.parseColor("#99CC00"));
+				else
+					d.setColor(Color.parseColor("#0099cc"));
+				d.setName(df.format(new Date(yesterday.getTimeInMillis())));
+				d.setValue(steps);
+				d.setValueString(formatter.format(d.getValue()));
+				points.add(d);
+			}
+			yesterday.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		db.close();
+		if (points.size() > 0) {
+			g.setBars(points);
+		} else {
+			g.setVisibility(View.GONE);
+		}
+		
 	}
 
 	@Override
