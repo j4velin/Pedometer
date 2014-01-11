@@ -83,7 +83,7 @@ public class Database extends SQLiteOpenHelper {
 	 */
 	public void logState() {
 		if (Logger.LOG) {
-			Cursor c = database.query(DB_NAME, null, null, null, null, null, null);
+			Cursor c = database.query(DB_NAME, null, null, null, null, null, "date DESC", "5");
 			Logger.log(c);
 			c.close();
 		}
