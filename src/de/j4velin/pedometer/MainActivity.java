@@ -40,17 +40,19 @@ public class MainActivity extends BaseGameActivity {
 		// so make sure the newDayAlarm is set
 		NewDayReceiver.sheduleAlarmForNextDay(this);
 
-		// Create new fragment and transaction
-		Fragment newFragment = new OverviewFragment();
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		if (b == null) {
+			// Create new fragment and transaction
+			Fragment newFragment = new OverviewFragment();
+			FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-		// Replace whatever is in the fragment_container view with this
-		// fragment,
-		// and add the transaction to the back stack
-		transaction.replace(android.R.id.content, newFragment);
+			// Replace whatever is in the fragment_container view with this
+			// fragment,
+			// and add the transaction to the back stack
+			transaction.replace(android.R.id.content, newFragment);
 
-		// Commit the transaction
-		transaction.commit();
+			// Commit the transaction
+			transaction.commit();
+		}
 	}
 
 	@Override
@@ -65,7 +67,7 @@ public class MainActivity extends BaseGameActivity {
 	public GamesClient getGC() {
 		return getGamesClient();
 	}
-	
+
 	public void beginSignIn() {
 		beginUserInitiatedSignIn();
 	}
