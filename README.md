@@ -8,7 +8,7 @@ Sign in with your Google+ account to unlock <b>achievements</b> and keep you mot
 
 
 
-Pedometer uses the 'HoloGraphLibrary' by Daniel Nadeau (https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home)
+Pedometer uses the [HoloGraphLibrary](https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home "HoloGraphLibrary: Android graphing and charting library") by Daniel Nadeau.
 
 
 <table sytle="border: 0px;">
@@ -23,5 +23,5 @@ Pedometer uses the 'HoloGraphLibrary' by Daniel Nadeau (https://bitbucket.org/da
 Build
 -----
 
-To build the app, add the BaseGameUtils (https://developers.google.com/games/services/android/init) and the HoloGraphLibrary (https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home) as libraries to the project
+To build the app, add the [BaseGameUtils](https://developers.google.com/games/services/android/init "Google Play communication library") and the [HoloGraphLibrary](https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home "HoloGraphLibrary: Android graphing and charting library") as libraries to the project.
 
