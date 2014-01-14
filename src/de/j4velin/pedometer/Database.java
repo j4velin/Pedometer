@@ -56,11 +56,14 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Inserts a new entry in the database, if there is no entry for the given date yet.
-	 * Use updateSteps(long date, int steps) if an entry for this date already exists.
+	 * Inserts a new entry in the database, if there is no entry for the given
+	 * date yet. Use updateSteps(long date, int steps) if an entry for this date
+	 * already exists.
 	 * 
-	 * @param date the date in ms since 1970
-	 * @param steps the steps for this date
+	 * @param date
+	 *            the date in ms since 1970
+	 * @param steps
+	 *            the steps for this date
 	 */
 	public void insertDay(final long date, int steps) {
 		Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
@@ -106,7 +109,8 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Adds 'steps' steps to the row for the date 'date'
+	 * Adds 'steps' steps to the row for the date 'date'. Won't do anything if
+	 * there isn't a row for the given date
 	 * 
 	 * @param date
 	 *            the date to update the steps for in millis since 1970
@@ -150,7 +154,7 @@ public class Database extends SQLiteOpenHelper {
 
 	/**
 	 * Get the number of steps taken for a specific date
-	 *  
+	 * 
 	 * @param date
 	 *            the date in millis since 1970
 	 * @return the steps taken on this date or Integer.MIN_VALUE if date doesn't
