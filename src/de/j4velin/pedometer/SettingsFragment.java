@@ -193,7 +193,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			builder.setTitle("About");
 			try {
 				builder.setMessage("This app was created by Thomas Hoffmann (www.j4velin-development.de) and uses the 'HoloGraphLibrary' by Daniel Nadeau\n\nApp version: "
-						+ getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName);
+						+ getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName+ "\n\nPedometer is open source! Get the code from https://github.com/j4velin/Pedometer");
 			} catch (NameNotFoundException e1) {
 				// should not happen as the app is definitely installed when
 				// seeing the dialog
