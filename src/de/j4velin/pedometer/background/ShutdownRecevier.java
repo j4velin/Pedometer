@@ -35,7 +35,7 @@ public class ShutdownRecevier extends BroadcastReceiver {
 		// next boot and therefore has to be saved now
 		Database db = new Database(context);
 		db.open();
-		db.updateSteps(Util.getToday(), SensorListener.steps);
+		db.insertSteps(Util.getToday(), SensorListener.steps);
 		db.close();
 		if (Logger.LOG)
 			Logger.log("last step value before shutdown: " + SensorListener.steps);

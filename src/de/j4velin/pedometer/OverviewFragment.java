@@ -235,7 +235,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			// initializing them with -STEPS_SINCE_BOOT
 			Database db = new Database(getActivity());
 			db.open();
-			db.insertDay(Util.getToday(), -(int) event.values[0]);
+			db.insertSteps(Util.getToday(), -(int) event.values[0]);
 			db.close();
 			todayOffset = -(int) event.values[0];
 		}
