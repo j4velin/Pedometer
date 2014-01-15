@@ -41,35 +41,39 @@ public class NewDayReceiver extends BroadcastReceiver {
 		}
 		Database db = new Database(context);
 		db.open();
-		final Calendar yesterday = Calendar.getInstance();
-		yesterday.setTimeInMillis(Util.getToday()); // today
-		yesterday.add(Calendar.DAY_OF_YEAR, -1); // yesterday
-		db.updateSteps(yesterday.getTimeInMillis(), SensorListener.steps);
 
-		// if - for whatever reason - there still is a
-		// negative value in
-		// yesterdays steps, set it to 0 instead
-		if (db.getSteps(yesterday.getTimeInMillis()) < 0) {
-			db.updateSteps(yesterday.getTimeInMillis(),
-					-db.getSteps(yesterday.getTimeInMillis()));
-		}
+		// only update if there is no entry for the new day yet
+		// (might happen if the receiver is called twice)
+		if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
 
-		// start the new days step with the offset of the
-		// current step-value
-		// example: current steps since boot = 5.000
-		// --> offset for the following day = -5.000
-		// --> step-value of 5.001 then means there was 1
-		// step taken today
-		db.insertDay(Util.getToday(), -SensorListener.steps);
-		if (Logger.LOG) {
-			Logger.log("offset for new day: " + (-SensorListener.steps));
-			db.logState();
+			final Calendar yesterday = Calendar.getInstance();
+			yesterday.setTimeInMillis(Util.getToday()); // today
+			yesterday.add(Calendar.DAY_OF_YEAR, -1); // yesterday
+			db.updateSteps(yesterday.getTimeInMillis(), SensorListener.steps);
+
+			// if - for whatever reason - there still is a
+			// negative value in
+			// yesterdays steps, set it to 0 instead
+			if (db.getSteps(yesterday.getTimeInMillis()) < 0) {
+				db.updateSteps(yesterday.getTimeInMillis(), -db.getSteps(yesterday.getTimeInMillis()));
+			}
+
+			// start the new days step with the offset of the
+			// current step-value
+			// example: current steps since boot = 5.000
+			// --> offset for the following day = -5.000
+			// --> step-value of 5.001 then means there was 1
+			// step taken today
+			db.insertDay(Util.getToday(), -SensorListener.steps);
+			if (Logger.LOG) {
+				Logger.log("offset for new day: " + (-SensorListener.steps));
+				db.logState();
+			}
 		}
 		db.close();
 
 		// to update the notification
-		context.startService(new Intent(context, SensorListener.class)
-				.putExtra("updateNotificationState", true));
+		context.startService(new Intent(context, SensorListener.class).putExtra("updateNotificationState", true));
 
 		sheduleAlarmForNextDay(context);
 	}
@@ -87,13 +91,11 @@ public class NewDayReceiver extends BroadcastReceiver {
 		tomorrow.setTimeInMillis(Util.getToday()); // today
 		tomorrow.add(Calendar.DAY_OF_YEAR, 1); // tomorrow
 		tomorrow.add(Calendar.SECOND, 1); // tomorrow at 0:00:01
-		((AlarmManager) context.getSystemService(Context.ALARM_SERVICE)).setExact(
-				AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), PendingIntent
-						.getBroadcast(context, 1, new Intent(context,
-								NewDayReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
+		((AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE)).setExact(
+				AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), PendingIntent.getBroadcast(context.getApplicationContext(),
+						10, new Intent(context, NewDayReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
 		if (Logger.LOG)
-			Logger.log("newDayAlarm sheduled for "
-					+ tomorrow.getTime().toLocaleString());
+			Logger.log("newDayAlarm sheduled for " + tomorrow.getTime().toLocaleString());
 	}
 
 }
