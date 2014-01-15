@@ -127,10 +127,10 @@ public class SensorListener extends Service implements SensorEventListener {
 		// Workaround as on Android 4.4.2 START_STICKY has currently no
 		// effect
 		// -> restart service every hour
-		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC,
-				System.currentTimeMillis() + 1000 * 60 * 60,
-				PendingIntent.getService(this, 2, new Intent(this, SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
-		
+		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System
+				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
+				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
+
 		return START_STICKY;
 	}
 
@@ -164,6 +164,10 @@ public class SensorListener extends Service implements SensorEventListener {
 			// -> try keeping the service in memory by making it a foreground
 			// service
 			startForeground(1, notificationBuilder.build());
+
+			if (Logger.LOG)
+				Logger.log("start foreground");
+
 		} else {
 			stopForeground(true);
 		}
@@ -179,6 +183,16 @@ public class SensorListener extends Service implements SensorEventListener {
 		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
 
 		updateNotificationState();
+		
+		Database db = new Database(this);
+		db.open();
+		int steps_today = db.getSteps(Util.getToday());
+		db.close();
+		if (steps_today == Integer.MIN_VALUE) {
+			// no entry for today yet
+			sendBroadcast(new Intent(this, NewDayReceiver.class));
+		}
+		
 	}
 
 	@Override
