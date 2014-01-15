@@ -264,7 +264,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					while ((line = in.readLine()) != null) {
 						data = line.split(";");
 						try {
-							db.insertDay(Long.valueOf(data[0]), Integer.valueOf(data[1]));
+							db.insertSteps(Long.valueOf(data[0]), Integer.valueOf(data[1]));
 						} catch (NumberFormatException nfe) {
 							skips++;
 						}

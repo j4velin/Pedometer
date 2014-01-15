@@ -55,28 +55,41 @@ public class Database extends SQLiteOpenHelper {
 	public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	/**
-	 * Inserts a new entry in the database, if there is no entry for the given date yet.
-	 * Use updateSteps(long date, int steps) if an entry for this date already exists.
-	 * 
-	 * @param date the date in ms since 1970
-	 * @param steps the steps for this date
-	 */
-	public void insertDay(final long date, int steps) {
-		Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
-				null, null);
-		if (c.getCount() == 0) {
-			ContentValues values = new ContentValues();
-			values.put("date", date);
-			values.put("steps", steps);
-			database.insert(DB_NAME, null, values);
-		}
-		c.close();
-		if (Logger.LOG) {
-			Logger.log("insertDay " + date + " / " + steps);
-			logState();
-		}
-	}
+    /**
+     -	 * Inserts a new entry in the database, if there is no entry for the given date yet, else it'll just update.
+     -	 *
+     -	 * @param date the date in ms since 1970
+     -	 * @param steps the steps for this date
+     -	 */
+    public void insertSteps(final long date, int steps)
+    {
+        Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null, null, null);
+
+        ContentValues values = new ContentValues();
+        values.put("date", date);
+        values.put("steps", steps);
+
+        if (c.getCount() == 0)
+        {
+            database.insert(DB_NAME, null, values);
+
+            if (Logger.LOG) {
+                Logger.log("insertSteps: Inserted steps " + date + " / " + steps);
+                logState();
+            }
+        }
+        else
+        {
+            database.update(DB_NAME, values, "date = " + date, null);
+
+            if (Logger.LOG) {
+                Logger.log("insertSteps: Updated steps " + date + " / " + steps);
+                logState();
+            }
+        }
+
+        c.close();
+    }
 
 	/**
 	 * Writes the current steps database to the log
@@ -103,22 +116,6 @@ public class Database extends SQLiteOpenHelper {
 	Cursor query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy,
 			final String having, final String orderBy, final String limit) {
 		return database.query(DB_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
-	}
-
-	/**
-	 * Adds 'steps' steps to the row for the date 'date'
-	 * 
-	 * @param date
-	 *            the date to update the steps for in millis since 1970
-	 * @param steps
-	 *            the steps to add to the current steps-value for the date
-	 */
-	public void updateSteps(final long date, int steps) {
-		database.execSQL("UPDATE " + DB_NAME + " SET steps = steps + " + steps + " WHERE date = " + date);
-		if (Logger.LOG) {
-			Logger.log("updateSteps " + date + " / " + steps);
-			logState();
-		}
 	}
 
 	/**

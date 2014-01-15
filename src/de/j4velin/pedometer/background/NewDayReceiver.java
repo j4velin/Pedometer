@@ -44,13 +44,13 @@ public class NewDayReceiver extends BroadcastReceiver {
 		final Calendar yesterday = Calendar.getInstance();
 		yesterday.setTimeInMillis(Util.getToday()); // today
 		yesterday.add(Calendar.DAY_OF_YEAR, -1); // yesterday
-		db.updateSteps(yesterday.getTimeInMillis(), SensorListener.steps);
+		db.insertSteps(yesterday.getTimeInMillis(), SensorListener.steps);
 
 		// if - for whatever reason - there still is a
 		// negative value in
 		// yesterdays steps, set it to 0 instead
 		if (db.getSteps(yesterday.getTimeInMillis()) < 0) {
-			db.updateSteps(yesterday.getTimeInMillis(),
+			db.insertSteps(yesterday.getTimeInMillis(),
 					-db.getSteps(yesterday.getTimeInMillis()));
 		}
 
@@ -60,7 +60,7 @@ public class NewDayReceiver extends BroadcastReceiver {
 		// --> offset for the following day = -5.000
 		// --> step-value of 5.001 then means there was 1
 		// step taken today
-		db.insertDay(Util.getToday(), -SensorListener.steps);
+		db.insertSteps(Util.getToday(), -SensorListener.steps);
 		if (Logger.LOG) {
 			Logger.log("offset for new day: " + (-SensorListener.steps));
 			db.logState();
