@@ -13,7 +13,7 @@ Pedometer uses the [HoloGraphLibrary](https://bitbucket.org/danielnadeau/hologra
 
 <table sytle="border: 0px;">
 <tr>
-<td><img width="200px" src="https://lh3.ggpht.com/2ZFNccvrhhdL7pGwqoDeQbbpWjzDOc8hcqmINJ21VGXoddAVUj-RaOlLyemwEAIV8Q=h900-rw" /></td>
+<td><img width="200px" src="https://lh4.ggpht.com/LvIHF45qV4HpXP2EERDj7_uquJ9jzZyKes0QF2MoSsVN1gvOlfuM9241kB63vJ722Mym=h900-rw" /></td>
 <td><img width="200px" src="https://lh3.ggpht.com/FILbtxHCIo9ArHhrzjkJq6TcxCUQUrtyFn3qEVb0qBcFInwNn8c24IADtlREn8BVA91d=h900-rw" /></td>
 </tr>
 </table>
