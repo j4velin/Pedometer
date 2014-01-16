@@ -48,7 +48,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 	private PieSlice sliceGoal, sliceCurrent;
 	private PieGraph pg;
 	private int todayOffset, total_start, goal, since_boot;
-	private final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
+	public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
 	private boolean showSteps = true;
 
 	@Override
