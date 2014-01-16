@@ -23,5 +23,5 @@ Pedometer uses the [HoloGraphLibrary](https://bitbucket.org/danielnadeau/hologra
 Build
 -----
 
-To build the app, add the [BaseGameUtils](https://developers.google.com/games/services/android/init "Google Play communication library") and the [HoloGraphLibrary](https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home "HoloGraphLibrary: Android graphing and charting library") as libraries to the project.
+To build the app, add the [BaseGameUtils](https://developers.google.com/games/services/android/init "Google Play communication library") and the [HoloGraphLibrary](https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home "HoloGraphLibrary: Android graphing and charting library") as libraries to the project as well as the [DashClock API](https://code.google.com/p/dashclock/downloads/list "DashClock Lock screen clock widget for Android 4.2+").
 
