@@ -54,8 +54,9 @@ public class NewDayReceiver extends BroadcastReceiver {
 			// if - for whatever reason - there still is a
 			// negative value in
 			// yesterdays steps, set it to 0 instead
-			if (db.getSteps(yesterday.getTimeInMillis()) < 0) {
-				db.updateSteps(yesterday.getTimeInMillis(), -db.getSteps(yesterday.getTimeInMillis()));
+			int steps_yesterday = db.getSteps(yesterday.getTimeInMillis());
+			if (steps_yesterday < 0 && steps_yesterday > Integer.MIN_VALUE) {
+				db.updateSteps(yesterday.getTimeInMillis(), -steps_yesterday);
 			}
 
 			// start the new days step with the offset of the
@@ -91,9 +92,10 @@ public class NewDayReceiver extends BroadcastReceiver {
 		tomorrow.setTimeInMillis(Util.getToday()); // today
 		tomorrow.add(Calendar.DAY_OF_YEAR, 1); // tomorrow
 		tomorrow.add(Calendar.SECOND, 1); // tomorrow at 0:00:01
-		((AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE)).setExact(
-				AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), PendingIntent.getBroadcast(context.getApplicationContext(),
-						10, new Intent(context, NewDayReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT));
+		((AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE))
+				.setExact(AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), PendingIntent.getBroadcast(
+						context.getApplicationContext(), 10, new Intent(context.getApplicationContext(), NewDayReceiver.class),
+						PendingIntent.FLAG_UPDATE_CURRENT));
 		if (Logger.LOG)
 			Logger.log("newDayAlarm sheduled for " + tomorrow.getTime().toLocaleString());
 	}
