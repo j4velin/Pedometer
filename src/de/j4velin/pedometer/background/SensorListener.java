@@ -130,6 +130,16 @@ public class SensorListener extends Service implements SensorEventListener {
 		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System
 				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
 				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
+		
+		// check if NewDayReceiver was called for the current day
+		Database db = new Database(this);
+		db.open();
+		int steps_today = db.getSteps(Util.getToday());
+		db.close();
+		if (steps_today == Integer.MIN_VALUE) {
+			// no entry for today yet
+			sendBroadcast(new Intent(this, NewDayReceiver.class));
+		}
 
 		return START_STICKY;
 	}
@@ -183,16 +193,6 @@ public class SensorListener extends Service implements SensorEventListener {
 		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
 
 		updateNotificationState();
-		
-		Database db = new Database(this);
-		db.open();
-		int steps_today = db.getSteps(Util.getToday());
-		db.close();
-		if (steps_today == Integer.MIN_VALUE) {
-			// no entry for today yet
-			sendBroadcast(new Intent(this, NewDayReceiver.class));
-		}
-		
 	}
 
 	@Override
