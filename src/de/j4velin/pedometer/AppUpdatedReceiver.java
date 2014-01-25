@@ -25,7 +25,7 @@ import android.content.Intent;
 public class AppUpdatedReceiver extends BroadcastReceiver {
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(final Context context, final Intent intent) {
 		if (Logger.LOG)
 			Logger.log("app updated");
 		NewDayReceiver.sheduleAlarmForNextDay(context);
