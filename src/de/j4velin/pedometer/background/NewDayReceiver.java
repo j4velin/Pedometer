@@ -41,35 +41,14 @@ public class NewDayReceiver extends BroadcastReceiver {
 		}
 		Database db = new Database(context);
 		db.open();
-
-		// only update if there is no entry for the new day yet
-		// (might happen if the receiver is called twice)
-		if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
-
-			final Calendar yesterday = Calendar.getInstance();
-			yesterday.setTimeInMillis(Util.getToday()); // today
-			yesterday.add(Calendar.DAY_OF_YEAR, -1); // yesterday
-			db.updateSteps(yesterday.getTimeInMillis(), SensorListener.steps);
-
-			// if - for whatever reason - there still is a
-			// negative value in
-			// yesterdays steps, set it to 0 instead
-			int steps_yesterday = db.getSteps(yesterday.getTimeInMillis());
-			if (steps_yesterday < 0 && steps_yesterday > Integer.MIN_VALUE) {
-				db.updateSteps(yesterday.getTimeInMillis(), -steps_yesterday);
-			}
-
-			// start the new days step with the offset of the
-			// current step-value
-			// example: current steps since boot = 5.000
-			// --> offset for the following day = -5.000
-			// --> step-value of 5.001 then means there was 1
-			// step taken today
-			db.insertDay(Util.getToday(), -SensorListener.steps);
-			if (Logger.LOG) {
-				Logger.log("offset for new day: " + (-SensorListener.steps));
-				db.logState();
-			}
+		// start the new days step with the offset of the
+		// current step-value.
+		//
+		// insertNewDay also updates the step value for yesterday
+		db.insertNewDay(Util.getToday(), SensorListener.steps);
+		if (Logger.LOG) {
+			Logger.log("offset for new day: " + (-SensorListener.steps));
+			db.logState();
 		}
 		db.close();
 
