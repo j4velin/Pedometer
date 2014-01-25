@@ -85,7 +85,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		stepsize.setSummary(getString(R.string.step_size_summary, prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE),
 				prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT)));
 
-		setHasOptionsMenu(true);		
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -193,7 +193,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			builder.setTitle("About");
 			try {
 				builder.setMessage("This app was created by Thomas Hoffmann (www.j4velin-development.de) and uses the 'HoloGraphLibrary' by Daniel Nadeau\n\nApp version: "
-						+ getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName+ "\n\nPedometer is open source! Get the code from https://github.com/j4velin/Pedometer");
+						+ getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName
+						+ "\n\nPedometer is open source! Get the code from https://github.com/j4velin/Pedometer");
 			} catch (NameNotFoundException e1) {
 				// should not happen as the app is definitely installed when
 				// seeing the dialog
@@ -257,14 +258,15 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				db.open();
 				String line;
 				String[] data;
-				int skips = 0;
+				int skips = 0, inserted = 0;
 				BufferedReader in;
 				try {
 					in = new BufferedReader(new FileReader(f));
 					while ((line = in.readLine()) != null) {
 						data = line.split(";");
 						try {
-							db.insertDay(Long.valueOf(data[0]), Integer.valueOf(data[1]));
+							if (db.insertDayFromBackup(Long.valueOf(data[0]), Integer.valueOf(data[1])))
+								inserted++;
 						} catch (NumberFormatException nfe) {
 							skips++;
 						}
@@ -279,8 +281,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				}
 				new AlertDialog.Builder(getActivity())
 						.setMessage(
-								skips > 0 ? skips + " entries were ignored as they did not contain valid data"
-										: "Data successfully imported").create().show();
+								skips > 0 ? inserted + " entries imported\n" + skips
+										+ " entries were ignored as they did not contain valid data" : inserted
+										+ " entries imported").create().show();
 			} else {
 				new AlertDialog.Builder(getActivity()).setMessage("Error: External storage not available").create().show();
 			}
