@@ -123,13 +123,6 @@ public class SensorListener extends Service implements SensorEventListener {
 		}
 
 		NewDayReceiver.sheduleAlarmForNextDay(this);
-
-		// Workaround as on Android 4.4.2 START_STICKY has currently no
-		// effect
-		// -> restart service every hour
-		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System
-				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
-				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 		
 		// check if NewDayReceiver was called for the current day
 		Database db = new Database(this);
