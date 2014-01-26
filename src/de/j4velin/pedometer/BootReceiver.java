@@ -17,6 +17,8 @@
 package de.j4velin.pedometer;
 
 import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

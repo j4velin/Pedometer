@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -20,10 +20,10 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.Logger;
 import de.j4velin.pedometer.MainActivity;
 import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.Util;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;

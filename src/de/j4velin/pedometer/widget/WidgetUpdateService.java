@@ -1,9 +1,9 @@
 package de.j4velin.pedometer.widget;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.Logger;
-import de.j4velin.pedometer.Util;
 import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;

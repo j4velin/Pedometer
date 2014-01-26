@@ -30,12 +30,12 @@ import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.Logger;
 import de.j4velin.pedometer.MainActivity;
 import de.j4velin.pedometer.OverviewFragment;
 import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.Util;
 import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 
 /**
  * Class for providing a DashClock (https://code.google.com/p/dashclock)

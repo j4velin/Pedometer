@@ -19,8 +19,8 @@ package de.j4velin.pedometer.background;
 import java.util.Calendar;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.Logger;
-import de.j4velin.pedometer.Util;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

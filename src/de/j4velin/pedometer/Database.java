@@ -16,6 +16,8 @@
 
 package de.j4velin.pedometer;
 
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
