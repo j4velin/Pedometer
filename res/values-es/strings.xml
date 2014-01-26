@@ -15,5 +15,21 @@
     <string name="import_summary">Importa datos salvados con anterioridad</string>
     <string name="import_title">Importar/Restaurar</string>
     <string name="notification">Mostrar notificación</string>
+    <string name="set_goal">Establecer objetivo</string>
+    <string name="set_step_size">Establecer tamaño de paso</string>
+    <string name="about_text">Esta aplicación ha sido creada por Thomas Hoffmann (www.j4velin-development.de) y utiliza \'HoloGraphLibrary\' de Daniel Nadeau y \'ColorPickerPreference\' de Sergey Margaritov.\n\nVersión de la aplicación: %s\n\n¡Podómetro es código libre! Obtén el código de https://github.com/j4velin/Pedometer</string>
+    <string name="sign_out">Cerrar sesión</string>
+    <string name="file_cant_read">Error: no se puede leer %s </string>
+    <string name="error_file">Error accediendo al archivo: %s</string>
+    <string name="error_external_storage_not_available">Error: Almancenamiento externo no disponible</string>
+    <string name="data_saved">Datos guardados en %s</string>
+    <string name="entries_imported">%d entradas importadas</string>
+    <string name="entries_ignored">%d entradas fueron ignoradas ya que no contenían datos válidos</string>
+    <string name="sign_in_necessary">Inicio de sesión necesario</string>
+    <string name="please_sign_in_with_your_google_account">Por favor, inicie sesión con su cuenta de Google+ para usar esta funcinalidad.</string>
+    <string name="steps">pasos</string>
+    <string name="text_color">Color de texto:</string>
+    <string name="background_color">Color de fondo:</string>
+    
 
 </resources>
