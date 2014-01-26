@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer;
+package de.j4velin.pedometer.util;
 
 import java.util.Calendar;
 

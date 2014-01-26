@@ -16,6 +16,8 @@
 
 package de.j4velin.pedometer;
 
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -57,28 +59,68 @@ public class Database extends SQLiteOpenHelper {
 
 	/**
 	 * Inserts a new entry in the database, if there is no entry for the given
-	 * date yet. Use updateSteps(long date, int steps) if an entry for this date
-	 * already exists.
+	 * date yet. Steps should be the current number of steps and it's negative
+	 * value will be used as offset for the new date. Also adds 'steps' steps to
+	 * the previous day, if there is an entry for that date.
+	 * 
+	 * This method does nothing if there is already an entry for 'date'- use
+	 * {@link #updateSteps} in this case.
+	 * 
+	 * To restore data from a backup, use {@link #insertDayFromBackup}
 	 * 
 	 * @param date
 	 *            the date in ms since 1970
 	 * @param steps
-	 *            the steps for this date
+	 *            the current step value to be used as negative offset for the
+	 *            new day; must be >= 0
 	 */
-	public void insertDay(final long date, int steps) {
+	public void insertNewDay(long date, int steps) {
 		Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
 				null, null);
-		if (c.getCount() == 0) {
+		if (c.getCount() == 0 && steps >= 0) {
 			ContentValues values = new ContentValues();
 			values.put("date", date);
-			values.put("steps", steps);
+			// use the negative steps as offset
+			values.put("steps", -steps);
 			database.insert(DB_NAME, null, values);
+
+			// add 'steps' to yesterdays count
+			date -= 24 * 60 * 60 * 1000;
+			updateSteps(date, steps);
 		}
 		c.close();
 		if (Logger.LOG) {
 			Logger.log("insertDay " + date + " / " + steps);
 			logState();
 		}
+	}
+
+	/**
+	 * Inserts a new entry in the database, if there is no entry for the given
+	 * date yet. Use this method for restoring data from a backup.
+	 * 
+	 * This method does nothing if there is already an entry for 'date'.
+	 * 
+	 * @param date
+	 *            the date in ms since 1970
+	 * @param steps
+	 *            the step value for 'date'; must be >= 0
+	 * 
+	 * @return true if a new entry was created, false if there was already an
+	 *         entry for 'date'
+	 */
+	public boolean insertDayFromBackup(long date, int steps) {
+		Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
+				null, null);
+		boolean re = c.getCount() == 0 && steps >= 0;
+		if (re) {
+			ContentValues values = new ContentValues();
+			values.put("date", date);
+			values.put("steps", steps);
+			database.insert(DB_NAME, null, values);
+		}
+		c.close();
+		return re;
 	}
 
 	/**

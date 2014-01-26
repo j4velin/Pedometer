@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Thomas Hoffmann
+ * Copyright 2014 Thomas Hoffmann
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,13 @@
 
 package de.j4velin.pedometer.widget;
 
+import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.annotation.SuppressLint;
+import android.app.Service;
+import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -26,26 +32,15 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
-import com.google.android.apps.dashclock.api.DashClockExtension;
-import com.google.android.apps.dashclock.api.ExtensionData;
-
-import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.MainActivity;
-import de.j4velin.pedometer.OverviewFragment;
-import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.background.SensorListener;
-import de.j4velin.pedometer.util.Logger;
-import de.j4velin.pedometer.util.Util;
-
-/**
- * Class for providing a DashClock (https://code.google.com/p/dashclock)
- * extension
- * 
- */
-public class DashClock extends DashClockExtension {
+public class WidgetUpdateService extends Service {
 
 	@Override
-	protected void onUpdateData(int reason) {
+	public IBinder onBind(final Intent intent) {
+		return null;
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
 		bindService(new Intent(this, SensorListener.class), new ServiceConnection() {
 			@Override
 			public void onServiceDisconnected(ComponentName name) {
@@ -61,16 +56,20 @@ public class DashClock extends DashClockExtension {
 					Messenger incoming = new Messenger(new Handler() {
 						public void handleMessage(Message msg) {
 							if (Logger.LOG)
-								Logger.log("SensorListener.steps for dashclock: " + msg.arg1);
-							ExtensionData data = new ExtensionData();
-							Database db = new Database(DashClock.this);
+								Logger.log("SensorListener.steps for widget: " + msg.arg1);
+							Database db = new Database(WidgetUpdateService.this);
 							db.open();
-							int steps = Math.max(msg.arg1 + db.getSteps(Util.getToday()), 0);
-							data.visible(true).status(OverviewFragment.formatter.format(steps)).icon(R.drawable.ic_dashclock)
-									.clickIntent(new Intent(DashClock.this, MainActivity.class));
+							int steps = Math.max(msg.arg1 + db.getSteps(Util.getToday()),0);
 							db.close();
-							publishUpdate(data);
 							unbindService(conn);
+							final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
+							int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this,
+									Widget.class));
+							for (int appWidgetId : appWidgetIds) {
+								appWidgetManager.updateAppWidget(appWidgetId,
+										Widget.updateWidget(appWidgetId, WidgetUpdateService.this, steps));
+							}
+							stopSelf();
 						}
 					});
 					Message msg = Message.obtain();
@@ -83,6 +82,7 @@ public class DashClock extends DashClockExtension {
 				}
 			}
 		}, 0);
+		return START_NOT_STICKY;
 	}
 
 }

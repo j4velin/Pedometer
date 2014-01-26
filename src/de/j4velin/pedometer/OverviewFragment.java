@@ -13,6 +13,8 @@ import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 
 import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -230,13 +232,10 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			return;
 		if (Logger.LOG)
 			Logger.log("sensorChanged | todayOffset: " + todayOffset + " since boot: " + event.values[0]);
-		if (todayOffset == Integer.MIN_VALUE) { // no values for today
+		if (todayOffset == Integer.MIN_VALUE) {
+			// no values for today
 			// we dont know when the reboot was, so set todays steps to 0 by
 			// initializing them with -STEPS_SINCE_BOOT
-			Database db = new Database(getActivity());
-			db.open();
-			db.insertDay(Util.getToday(), -(int) event.values[0]);
-			db.close();
 			todayOffset = -(int) event.values[0];
 		}
 		since_boot = (int) event.values[0];

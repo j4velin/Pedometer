@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.j4velin.pedometer"
-    android:versionCode="18"
-    android:versionName="1.0.13 Beta" >
+    android:versionCode="20"
+    android:versionName="1.0.15 Beta" >
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
@@ -83,6 +83,27 @@
             <meta-data
                 android:name="description"
                 android:value="Displays the steps taken today" />
+        </service>
+
+        <activity
+            android:name="de.j4velin.pedometer.widget.WidgetConfig"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name="de.j4velin.pedometer.widget.Widget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget" />
+        </receiver>
+
+        <service android:name="de.j4velin.pedometer.widget.WidgetUpdateService" >
         </service>
     </application>
 

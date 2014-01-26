@@ -15,5 +15,20 @@
     <string name="import_summary">Imports previously saved data</string>
     <string name="import_title">Import/Restore</string>
     <string name="notification">Show notification</string>
+    <string name="set_goal">Set goal</string>
+    <string name="set_step_size">Set step size</string>
+    <string name="about_text">This app was created by Thomas Hoffmann (www.j4velin-development.de) and uses \'HoloGraphLibrary\' by Daniel Nadeau and \'ColorPickerPreference\' by Sergey Margaritov.\n\nApp version: %s\n\nPedometer is open source! Get the code from https://github.com/j4velin/Pedometer</string>
+    <string name="sign_out">Sign out</string>
+    <string name="file_cant_read">Error: %s can not be read</string>
+    <string name="error_file">Error accessing the file: %s</string>
+    <string name="error_external_storage_not_available">Error: External storage not available</string>
+    <string name="data_saved">Data saved in %s</string>
+    <string name="entries_imported">%d entries imported</string>
+    <string name="entries_ignored">%d entries were ignored as they did not contain valid data</string>
+    <string name="sign_in_necessary">Sign in necessary</string>
+    <string name="please_sign_in_with_your_google_account">Please sign in with your Google+ account to use this feature.</string>
+    <string name="steps">steps</string>
+    <string name="text_color">Text color:</string>
+    <string name="background_color">Background color:</string>
 
 </resources>

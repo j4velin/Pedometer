@@ -16,8 +16,8 @@
 
 package de.j4velin.pedometer;
 
-import de.j4velin.pedometer.background.NewDayReceiver;
 import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,10 +25,9 @@ import android.content.Intent;
 public class AppUpdatedReceiver extends BroadcastReceiver {
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(final Context context, final Intent intent) {
 		if (Logger.LOG)
 			Logger.log("app updated");
-		NewDayReceiver.sheduleAlarmForNextDay(context);
 		context.startService(new Intent(context, SensorListener.class));		
 	}
 

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -85,7 +86,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		stepsize.setSummary(getString(R.string.step_size_summary, prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE),
 				prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT)));
 
-		setHasOptionsMenu(true);		
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -138,7 +139,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			np.setMaxValue(100000);
 			np.setValue(prefs.getInt("goal", 10000));
 			builder.setView(np);
-			builder.setTitle("Set goal");
+			builder.setTitle(R.string.set_goal);
 			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -169,7 +170,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			unit.check(prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm : R.id.ft);
 			value.setText(String.valueOf(prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE)));
 			builder.setView(v);
-			builder.setTitle("Set step size");
+			builder.setTitle(R.string.set_step_size);
 			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -190,10 +191,10 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			break;
 		case R.string.about:
 			builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle("About");
+			builder.setTitle(R.string.about);
 			try {
-				builder.setMessage("This app was created by Thomas Hoffmann (www.j4velin-development.de) and uses the 'HoloGraphLibrary' by Daniel Nadeau\n\nApp version: "
-						+ getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName+ "\n\nPedometer is open source! Get the code from https://github.com/j4velin/Pedometer");
+				builder.setMessage(getString(R.string.about_text,
+						getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName));
 			} catch (NameNotFoundException e1) {
 				// should not happen as the app is definitely installed when
 				// seeing the dialog
@@ -221,7 +222,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				((TextView) v.findViewById(R.id.signedin)).append(((MainActivity) getActivity()).getGC().getCurrentPlayer()
 						.getDisplayName());
 				v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-				builder.setPositiveButton("Sign out", new DialogInterface.OnClickListener() {
+				builder.setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						((MainActivity) getActivity()).getGC().signOut();
@@ -249,7 +250,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 				File f = new File(getActivity().getExternalFilesDir(null), "Pedometer.csv");
 				if (!f.exists() || !f.canRead()) {
-					new AlertDialog.Builder(getActivity()).setMessage("Error: " + f.getAbsolutePath() + " can not be read")
+					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.file_cant_read, f.getAbsolutePath()))
 							.create().show();
 					break;
 				}
@@ -257,21 +258,23 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				db.open();
 				String line;
 				String[] data;
-				int skips = 0;
+				int skips = 0, inserted = 0;
 				BufferedReader in;
 				try {
 					in = new BufferedReader(new FileReader(f));
 					while ((line = in.readLine()) != null) {
 						data = line.split(";");
 						try {
-							db.insertDay(Long.valueOf(data[0]), Integer.valueOf(data[1]));
+							if (db.insertDayFromBackup(Long.valueOf(data[0]), Integer.valueOf(data[1])))
+								inserted++;
 						} catch (NumberFormatException nfe) {
 							skips++;
 						}
 					}
 					in.close();
 				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage("Error reading file: " + e.getMessage()).create().show();
+					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage())).create()
+							.show();
 					e.printStackTrace();
 					break;
 				} finally {
@@ -279,10 +282,11 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				}
 				new AlertDialog.Builder(getActivity())
 						.setMessage(
-								skips > 0 ? skips + " entries were ignored as they did not contain valid data"
-										: "Data successfully imported").create().show();
+								skips > 0 ? getString(R.string.entries_imported, inserted) + "\n"
+										+ getString(R.string.entries_ignored, skips) : getString(R.string.entries_imported,
+										inserted)).create().show();
 			} else {
-				new AlertDialog.Builder(getActivity()).setMessage("Error: External storage not available").create().show();
+				new AlertDialog.Builder(getActivity()).setMessage(R.string.error_external_storage_not_available).create().show();
 			}
 			break;
 		case R.string.export_title:
@@ -293,7 +297,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					f.createNewFile();
 					out = new BufferedWriter(new FileWriter(f));
 				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage("Error creating file: " + e.getMessage()).create().show();
+					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage())).create()
+							.show();
 					e.printStackTrace();
 					break;
 				}
@@ -309,7 +314,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					}
 					out.close();
 				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage("Error writing to file: " + e.getMessage()).create().show();
+					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage())).create()
+							.show();
 					e.printStackTrace();
 					break;
 				} finally {
@@ -317,13 +323,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 						c.close();
 					db.close();
 				}
-				new AlertDialog.Builder(getActivity()).setMessage("Data saved in " + f.getAbsolutePath()).create().show();
+				new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.data_saved, f.getAbsolutePath())).create()
+						.show();
 			} else {
-				new AlertDialog.Builder(getActivity()).setMessage("Error: External storage not available").create().show();
+				new AlertDialog.Builder(getActivity()).setMessage(R.string.error_external_storage_not_available).create().show();
 			}
 			break;
 		}
 		return false;
 	}
-
 }

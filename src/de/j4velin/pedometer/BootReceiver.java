@@ -16,8 +16,9 @@
 
 package de.j4velin.pedometer;
 
-import de.j4velin.pedometer.background.NewDayReceiver;
 import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -36,10 +37,9 @@ public class BootReceiver extends BroadcastReceiver {
 			Logger.log("booted");
 		Database db = new Database(context);
 		db.open();
-		db.insertDay(Util.getToday(), 0); // device just booted; wont do
+		db.insertNewDay(Util.getToday(), 0); // device just booted; wont do
 											// anything if there is already a
 											// row for today
-		NewDayReceiver.sheduleAlarmForNextDay(context);
 
 		context.startService(new Intent(context, SensorListener.class));
 

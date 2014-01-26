@@ -20,10 +20,10 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.Logger;
 import de.j4velin.pedometer.MainActivity;
 import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.Util;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -123,13 +123,6 @@ public class SensorListener extends Service implements SensorEventListener {
 		}
 
 		NewDayReceiver.sheduleAlarmForNextDay(this);
-
-		// Workaround as on Android 4.4.2 START_STICKY has currently no
-		// effect
-		// -> restart service every hour
-		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System
-				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
-				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 		
 		// check if NewDayReceiver was called for the current day
 		Database db = new Database(this);
