@@ -92,8 +92,8 @@ public class MainActivity extends BaseGameActivity {
 						: getGamesClient().getAllLeaderboardsIntent(), 1);
 			} else {
 				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-				builder2.setTitle("Sign in necessary");
-				builder2.setMessage("Please sign in with your Google+ account to use this feature.");
+				builder2.setTitle(R.string.sign_in_necessary);
+				builder2.setMessage(R.string.please_sign_in_with_your_google_account);
 				builder2.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
