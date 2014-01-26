@@ -15,8 +15,7 @@
         android:shadowDx="0"
         android:shadowDy="2"
         android:shadowRadius="3"
-        android:text="0"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/widgettext"

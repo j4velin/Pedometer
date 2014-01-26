@@ -88,9 +88,19 @@
         <activity
             android:name="de.j4velin.pedometer.widget.WidgetConfig"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
         </activity>
 
         <receiver android:name="de.j4velin.pedometer.widget.Widget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget" />
         </receiver>
 
         <service android:name="de.j4velin.pedometer.widget.WidgetUpdateService" >

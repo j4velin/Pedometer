@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp" >
+    android:padding="15dp" >
 
     <TextView
         android:id="@+id/texttext"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/texttext"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:text="@string/background_color" />
 
     <de.j4velin.pedometer.util.ColorPreview
@@ -26,13 +26,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/bgtext"
-        android:layout_toRightOf="@+id/bgtext" />
+        android:layout_toRightOf="@+id/bgtext"
+        android:layout_marginLeft="15dp"
+        android:minWidth="20dp" />
 
     <de.j4velin.pedometer.util.ColorPreview
         android:id="@+id/textcolor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/texttext"
-        android:layout_alignLeft="@+id/bgcolor" />
+        android:layout_alignLeft="@+id/bgcolor"
+        android:minWidth="20dp" />
 
 </RelativeLayout>

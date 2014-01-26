@@ -1,3 +1,19 @@
+/*
+ * Copyright 2014 Thomas Hoffmann
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.j4velin.pedometer.widget;
 
 import de.j4velin.pedometer.R;
@@ -9,7 +25,7 @@ import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,11 +33,11 @@ import android.view.View.OnClickListener;
 public class WidgetConfig extends Activity implements OnClickListener {
 
 	private static int widgetId;
-
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		save();
+		startService(new Intent(this, WidgetUpdateService.class));
 	}
 
 	@Override
@@ -32,8 +48,14 @@ public class WidgetConfig extends Activity implements OnClickListener {
 		if (extras != null) {
 			setContentView(R.layout.widgetconfig);
 
-			findViewById(R.id.textcolor).setOnClickListener(this);
-			findViewById(R.id.bgcolor).setOnClickListener(this);
+			View textcolor = findViewById(R.id.textcolor);
+			textcolor.setOnClickListener(this);
+			textcolor.setTag(Color.WHITE);
+			textcolor.setBackgroundColor(Color.WHITE);
+			View bgcolor = findViewById(R.id.bgcolor);
+			bgcolor.setOnClickListener(this);
+			bgcolor.setTag(Color.TRANSPARENT);
+			bgcolor.setBackgroundColor(Color.TRANSPARENT);
 
 			widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
@@ -57,16 +79,13 @@ public class WidgetConfig extends Activity implements OnClickListener {
 				findViewById(v.getId()).setTag(color);
 				v.setBackgroundColor(color);
 				v.setTag(color);
+				getSharedPreferences("Widgets", Context.MODE_PRIVATE)
+						.edit()
+						.putInt((v.getId() == R.id.bgcolor ? "background_" : "color_") + widgetId,
+								(Integer) findViewById(R.id.textcolor).getTag()).apply();
 			}
 		});
 		dialog.show();
-	}
-
-	private void save() {
-		final Editor edit = getSharedPreferences("Widgets", Context.MODE_PRIVATE).edit();
-		edit.putInt("text_" + widgetId, (Integer) findViewById(R.id.textcolor).getTag());
-		edit.putInt("bg_" + widgetId, (Integer) findViewById(R.id.bgcolor).getTag());
-		edit.apply();
 	}
 
 }
