@@ -19,7 +19,6 @@ package de.j4velin.pedometer;
 import com.google.android.gms.games.GamesClient;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
-import de.j4velin.pedometer.background.NewDayReceiver;
 import de.j4velin.pedometer.background.SensorListener;
 
 import android.os.Bundle;
@@ -36,10 +35,6 @@ public class MainActivity extends BaseGameActivity {
 	protected void onCreate(final Bundle b) {
 		super.onCreate(b);
 		startService(new Intent(this, SensorListener.class));
-		// AppUpdateReceiver is not launched when installing the app,
-		// so make sure the newDayAlarm is set
-		NewDayReceiver.sheduleAlarmForNextDay(this);
-
 		if (b == null) {
 			// Create new fragment and transaction
 			Fragment newFragment = new OverviewFragment();
