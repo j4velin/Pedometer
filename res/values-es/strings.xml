@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Pedometer</string>
+    <string name="app_name">Podómetro</string>
     <string name="goal">Objetivo</string>
     <string name="step_size">Longitud de paso</string>
     <string name="about">Acerca de</string>
