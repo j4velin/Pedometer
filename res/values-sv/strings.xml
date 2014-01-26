@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Pedometer</string>
+    <string name="goal">Mål</string>
+    <string name="step_size">Steglängd</string>
+    <string name="about">Om</string>
+    <string name="account">Konto</string>
+    <string name="goal_summary">Nuvarande mål: %,d steg</string>
+    <string name="step_size_summary">Nuvarande steglängd: %1$.2f %2$s</string>
+    <string name="sign_in">Logga in med ditt Googlekonto för att använda prestationer och topplistor</string>
+    <string name="signed_in">Inloggad som %s</string>
+    <string name="export_summary">Spara ditt data i en .csv-fil</string>
+    <string name="export_title">Exportera/Säkerhetskopiera</string>
+    <string name="import_summary">Importerar tidigare sparad data</string>
+    <string name="import_title">Importera/Återställa</string>
+    <string name="notification">Visa notifiering</string>
+    <string name="set_goal">Sätt mål</string>
+    <string name="set_step_size">Sätt steglängd</string>
+    <string name="about_text">Dennna app skapades av Thomas Hoffmann (www.j4velin-development.de) och använder \'HoloGraphLibrary\' av Daniel Nadeau och \'ColorPickerPreference\' av Sergey Margaritov.\n\nApp version: %s\n\nPedometer är öppen källkod! Hämta koden från https://github.com/j4velin/Pedometer</string>
+    <string name="sign_out">Logga ut</string>
+    <string name="file_cant_read">Fel: %s kan inte läsas</string>
+    <string name="error_file">Fel vid filåtkomst: %s</string>
+    <string name="error_external_storage_not_available">Fel: Extern lagring inte tillgänglig</string>
+    <string name="data_saved">Data sparat i %s</string>
+    <string name="entries_imported">%d poster importerade</string>
+    <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
+    <string name="sign_in_necessary">Inloggning nödvändig</string>
+    <string name="please_sign_in_with_your_google_account">Logga in med ditt konto på Google+ för att använda den här funktionen.</string>
+    <string name="steps">steg</string>
+    <string name="text_color">Textfärg:</string>
+    <string name="background_color">Bakgrundsfärg:</string>
+
+</resources>
