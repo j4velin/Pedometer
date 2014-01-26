@@ -17,7 +17,7 @@
     <string name="notification">Visa notifiering</string>
     <string name="set_goal">Sätt mål</string>
     <string name="set_step_size">Sätt steglängd</string>
-    <string name="about_text">Dennna app skapades av Thomas Hoffmann (www.j4velin-development.de) och använder \'HoloGraphLibrary\' av Daniel Nadeau och \'ColorPickerPreference\' av Sergey Margaritov.\n\nApp version: %s\n\nPedometer är öppen källkod! Hämta koden från https://github.com/j4velin/Pedometer</string>
+    <string name="about_text">Denna app skapades av Thomas Hoffmann (www.j4velin-development.de) och använder \'HoloGraphLibrary\' av Daniel Nadeau och \'ColorPickerPreference\' av Sergey Margaritov.\n\nApp version: %s\n\nPedometer är öppen källkod! Hämta koden från https://github.com/j4velin/Pedometer</string>
     <string name="sign_out">Logga ut</string>
     <string name="file_cant_read">Fel: %s kan inte läsas</string>
     <string name="error_file">Fel vid filåtkomst: %s</string>
