@@ -27,5 +27,8 @@
     <string name="entries_ignored">%d entries were ignored as they did not contain valid data</string>
     <string name="sign_in_necessary">Sign in necessary</string>
     <string name="please_sign_in_with_your_google_account">Please sign in with your Google+ account to use this feature.</string>
+    <string name="steps">steps</string>
+    <string name="text_color">Text color:</string>
+    <string name="background_color">Background color:</string>
 
 </resources>
