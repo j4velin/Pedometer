@@ -46,10 +46,6 @@ public class NewDayReceiver extends BroadcastReceiver {
 		//
 		// insertNewDay also updates the step value for yesterday
 		db.insertNewDay(Util.getToday(), SensorListener.steps);
-		if (Logger.LOG) {
-			Logger.log("offset for new day: " + (-SensorListener.steps));
-			db.logState();
-		}
 		db.close();
 
 		// to update the notification
@@ -66,7 +62,7 @@ public class NewDayReceiver extends BroadcastReceiver {
 	 *            the Context
 	 */
 	@SuppressWarnings("deprecation")
-	public static void sheduleAlarmForNextDay(final Context context) {
+	static void sheduleAlarmForNextDay(final Context context) {
 		final Calendar tomorrow = Calendar.getInstance();
 		tomorrow.setTimeInMillis(Util.getToday()); // today
 		tomorrow.add(Calendar.DAY_OF_YEAR, 1); // tomorrow
