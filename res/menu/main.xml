@@ -4,16 +4,21 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
-        android:title="Settings"/>
+        android:title="@string/settings"/>
     <item
         android:id="@+id/action_achievements"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="Achievements"/>
+        android:title="@string/achievements"/>
     <item
         android:id="@+id/action_leaderboard"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="Leaderboard"/>
+        android:title="@string/leaderboard"/>
+       <item
+        android:id="@+id/action_faq"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/faq"/>
 
 </menu>
