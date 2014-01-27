@@ -51,6 +51,8 @@ import android.preference.PreferenceManager;
  * 
  */
 public class SensorListener extends Service implements SensorEventListener {
+	
+	static boolean IS_RUNNING;
 
 	/**
 	 * The steps since boot as returned by the step-sensor
@@ -115,6 +117,8 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public int onStartCommand(final Intent intent, int flags, int startId) {
+		IS_RUNNING = true;
+		
 		if (Logger.LOG)
 			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null) + " flags: " + flags
 					+ " startid: " + startId);
@@ -123,7 +127,7 @@ public class SensorListener extends Service implements SensorEventListener {
 		}
 
 		NewDayReceiver.sheduleAlarmForNextDay(this);
-		
+
 		// check if NewDayReceiver was called for the current day
 		Database db = new Database(this);
 		db.open();
@@ -133,6 +137,13 @@ public class SensorListener extends Service implements SensorEventListener {
 			// no entry for today yet
 			sendBroadcast(new Intent(this, NewDayReceiver.class));
 		}
+
+		// Workaround as on Android 4.4.2 START_STICKY has currently no
+		// effect
+		// -> restart service every hour
+		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System
+				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
+				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
 		return START_STICKY;
 	}
@@ -209,7 +220,7 @@ public class SensorListener extends Service implements SensorEventListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		IS_RUNNING = false;
 		stopForeground(true);
 	}
 }
