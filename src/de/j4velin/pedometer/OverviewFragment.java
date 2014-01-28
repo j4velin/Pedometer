@@ -182,18 +182,17 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		int steps;
 		for (int i = 0; i < 7; i++) {
 			steps = db.getSteps(yesterday.getTimeInMillis());
-			if (steps <= 0) {
-				continue;
+			if (steps > 0) {
+				d = new Bar();
+				if (steps > goal)
+					d.setColor(Color.parseColor("#99CC00"));
+				else
+					d.setColor(Color.parseColor("#0099cc"));
+				d.setName(df.format(new Date(yesterday.getTimeInMillis())));
+				d.setValue(steps);
+				d.setValueString(formatter.format(d.getValue()));
+				points.add(d);
 			}
-			d = new Bar();
-			if (steps > goal)
-				d.setColor(Color.parseColor("#99CC00"));
-			else
-				d.setColor(Color.parseColor("#0099cc"));
-			d.setName(df.format(new Date(yesterday.getTimeInMillis())));
-			d.setValue(steps);
-			d.setValueString(formatter.format(d.getValue()));
-			points.add(d);
 			yesterday.add(Calendar.DAY_OF_YEAR, 1);
 		}
 		db.close();
