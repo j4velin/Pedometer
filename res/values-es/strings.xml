@@ -30,6 +30,11 @@
     <string name="steps">pasos</string>
     <string name="text_color">Color de texto:</string>
     <string name="background_color">Color de fondo:</string>
+    <string name="settings">Ajustes</string>
+    <string name="achievements">Logros</string>
+    <string name="leaderboard">Ranking</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">¡Objetivo alcanzado! %s pasos y contando</string>
+    <string name="notification_text">%s pasos pendientes</string>
     
-
 </resources>
