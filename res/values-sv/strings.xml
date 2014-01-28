@@ -10,9 +10,9 @@
     <string name="step_size_summary">Nuvarande steglängd: %1$.2f %2$s</string>
     <string name="sign_in">Logga in med ditt Googlekonto för att använda prestationer och topplistor</string>
     <string name="signed_in">Inloggad som %s</string>
-    <string name="export_summary">Spara ditt data i en .csv-fil</string>
+    <string name="export_summary">Spara data i CSV-format</string>
     <string name="export_title">Exportera/Säkerhetskopiera</string>
-    <string name="import_summary">Importerar tidigare sparad data</string>
+    <string name="import_summary">Importera tidigare sparat data</string>
     <string name="import_title">Importera/Återställa</string>
     <string name="notification">Visa notifiering</string>
     <string name="set_goal">Sätt mål</string>
