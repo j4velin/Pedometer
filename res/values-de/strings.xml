@@ -6,8 +6,8 @@
     <string name="step_size">Schrittweite</string>
     <string name="about">Info</string>
     <string name="account">Konto</string>
-    <string name="goal_summary">Aktuelles Ziel: %.d Schritte</string>
-    <string name="step_size_summary">Aktuelle Schrittweite: %1$,2f %2$s</string>
+    <string name="goal_summary">Aktuelles Ziel: %,d Schritte</string>
+    <string name="step_size_summary">Aktuelle Schrittweite: %1$.2f %2$s</string>
     <string name="sign_in">Logge dich mit deinem Google Konto ein um Erfolge zu sammeln und die Bestenslisten zu nutzen</string>
     <string name="signed_in">Eingeloggt als %s</string>
     <string name="export_summary">Sichere deine Daten in einer .csv Datei</string>
@@ -30,5 +30,10 @@
     <string name="steps">Schritte</string>
     <string name="text_color">Text-Farbe:</string>
     <string name="background_color">Hintergrund-Farbe:</string>
-
+    <string name="settings">Einstellungen</string>
+    <string name="achievements">Errungenschaften</string>
+    <string name="leaderboard">Bestenliste</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">Ziel erreicht! Schon über %s Schritte</string>
+    <string name="notification_text">Ziel wird in %s Schritte erreicht</string>
 </resources>
