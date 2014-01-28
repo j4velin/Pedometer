@@ -20,20 +20,18 @@ import de.j4velin.pedometer.MainActivity;
 import de.j4velin.pedometer.R;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
-import android.content.BroadcastReceiver;
+import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.widget.RemoteViews;
 
-public class Widget extends BroadcastReceiver {
-
+public class Widget extends AppWidgetProvider {
+	
 	@Override
-	public void onReceive(final Context context, final Intent intent) {
-		if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())) {
-			context.startService(new Intent(context, WidgetUpdateService.class));
-		}
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+		context.startService(new Intent(context, WidgetUpdateService.class));
 	}
 
 	static RemoteViews updateWidget(final int appWidgetId, final Context context, final int steps) {

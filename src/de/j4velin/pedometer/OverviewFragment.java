@@ -138,10 +138,12 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 					final ServiceConnection conn = this;
 					Messenger incoming = new Messenger(new Handler() {
 						public void handleMessage(Message msg) {
-							if (Logger.LOG)
-								Logger.log("SensorListener.steps: " + msg.arg1);
-							since_boot = msg.arg1;
-							updateSteps();
+							if (msg != null) {
+								if (Logger.LOG)
+									Logger.log("SensorListener.steps: " + msg.arg1);
+								since_boot = msg.arg1;
+								updateSteps();
+							}
 							getActivity().unbindService(conn);
 						}
 					});
@@ -179,16 +181,18 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		yesterday.add(Calendar.DAY_OF_YEAR, -6);
 		int steps;
 		for (int i = 0; i < 7; i++) {
-			steps = Math.max(db.getSteps(yesterday.getTimeInMillis()), 0);
-			d = new Bar();
-			if (steps > goal)
-				d.setColor(Color.parseColor("#99CC00"));
-			else
-				d.setColor(Color.parseColor("#0099cc"));
-			d.setName(df.format(new Date(yesterday.getTimeInMillis())));
-			d.setValue(steps);
-			d.setValueString(formatter.format(d.getValue()));
-			points.add(d);
+			steps = db.getSteps(yesterday.getTimeInMillis());
+			if (steps > 0) {
+				d = new Bar();
+				if (steps > goal)
+					d.setColor(Color.parseColor("#99CC00"));
+				else
+					d.setColor(Color.parseColor("#0099cc"));
+				d.setName(df.format(new Date(yesterday.getTimeInMillis())));
+				d.setValue(steps);
+				d.setValueString(formatter.format(d.getValue()));
+				points.add(d);
+			}
 			yesterday.add(Calendar.DAY_OF_YEAR, 1);
 		}
 		db.close();

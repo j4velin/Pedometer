@@ -30,5 +30,11 @@
     <string name="steps">steps</string>
     <string name="text_color">Text color:</string>
     <string name="background_color">Background color:</string>
+    <string name="settings">Settings</string>
+    <string name="achievements">Achievements</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">Goal reached! %s steps and counting</string>
+    <string name="notification_text">%s steps to go</string>
 
 </resources>

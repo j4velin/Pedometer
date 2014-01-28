@@ -32,26 +32,34 @@ public class NewDayReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
-
-		// Save the steps made yesterday and create a new
-		// row for today
 		if (Logger.LOG) {
 			Logger.log("date changed, today is: " + Util.getToday());
 			Logger.log("Steps: " + SensorListener.steps);
 		}
-		Database db = new Database(context);
-		db.open();
-		// start the new days step with the offset of the
-		// current step-value.
-		//
-		// insertNewDay also updates the step value for yesterday
-		db.insertNewDay(Util.getToday(), SensorListener.steps);
-		db.close();
 
-		// to update the notification
-		context.startService(new Intent(context, SensorListener.class).putExtra("updateNotificationState", true));
+		if (SensorListener.IS_RUNNING) {
+			// Save the steps made yesterday and create a new
+			// row for today
+			Database db = new Database(context);
+			db.open();
+			// start the new days step with the offset of the
+			// current step-value.
+			//
+			// insertNewDay also updates the step value for yesterday
+			db.insertNewDay(Util.getToday(), SensorListener.steps);
+			db.close();
 
-		sheduleAlarmForNextDay(context);
+			sheduleAlarmForNextDay(context);
+
+			// to update the notification
+			context.startService(new Intent(context, SensorListener.class).putExtra("updateNotificationState", true));
+
+		} else {
+			// start the SensorListener first. SensorListener will then start
+			// this Receiver again as it see that there is no entry for today
+			// yet
+			context.startService(new Intent(context, SensorListener.class));
+		}
 	}
 
 	/**
@@ -67,12 +75,13 @@ public class NewDayReceiver extends BroadcastReceiver {
 		tomorrow.setTimeInMillis(Util.getToday()); // today
 		tomorrow.add(Calendar.DAY_OF_YEAR, 1); // tomorrow
 		tomorrow.add(Calendar.SECOND, 1); // tomorrow at 0:00:01
-		((AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE))
-				.setExact(AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), PendingIntent.getBroadcast(
-						context.getApplicationContext(), 10, new Intent(context.getApplicationContext(), NewDayReceiver.class),
-						PendingIntent.FLAG_UPDATE_CURRENT));
+
+		PendingIntent pi = PendingIntent.getBroadcast(context.getApplicationContext(), 10,
+				new Intent(context.getApplicationContext(), NewDayReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager am = ((AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE));
+		am.cancel(pi);
+		am.setExact(AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), pi);
 		if (Logger.LOG)
 			Logger.log("newDayAlarm sheduled for " + tomorrow.getTime().toLocaleString());
 	}
-
 }

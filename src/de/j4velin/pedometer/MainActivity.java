@@ -21,6 +21,7 @@ import com.google.example.games.basegameutils.BaseGameActivity;
 
 import de.j4velin.pedometer.background.SensorListener;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.app.AlertDialog;
@@ -109,6 +110,10 @@ public class MainActivity extends BaseGameActivity {
 				});
 				builder2.create().show();
 			}
+			break;
+		case R.id.action_faq:
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://j4velin-systems.de/faq/index.php?app=pm"))
+					.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 			break;
 		}
 		return true;
