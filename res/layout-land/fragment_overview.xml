@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:gravity="center_horizontal"
-        android:text="10,000"
         android:textSize="50sp" />
 
     <TextView
@@ -28,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/steps"
         android:gravity="center_horizontal"
-        android:text="steps"
+        android:text="@string/steps"
         android:textSize="20sp" />
 
     <LinearLayout
@@ -44,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="Yesterday" />
+            android:text="@string/yesterday" />
 
         <TextView
             android:id="@+id/textView4"
@@ -52,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="Total" />
+            android:text="@string/total" />
     </LinearLayout>
 
     <com.echo.holographlibrary.BarGraph
@@ -77,7 +76,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="0"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -87,7 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="100"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
