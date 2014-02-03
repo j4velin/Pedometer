@@ -3,7 +3,7 @@
     android:configure="de.j4velin.pedometer.widget.WidgetConfig"
     android:initialLayout="@layout/widget"
     android:minHeight="40dp"
-    android:minWidth="80dp"
+    android:minWidth="40dp"
     android:previewImage="@drawable/ic_launcher"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
