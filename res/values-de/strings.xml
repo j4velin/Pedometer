@@ -36,4 +36,8 @@
     <string name="faq">FAQ</string>
     <string name="goal_reached_notification">Ziel erreicht! Schon über %s Schritte</string>
     <string name="notification_text">Ziel wird in %s Schritte erreicht</string>
-</resources>
+    <string name="yesterday">Gestern</string>
+    <string name="total">Gesamt</string>
+    <string name="notification_title">Schrittzähler aktiv</string>
+    <string name="your_progress_will_be_shown_here_soon">Dein Fortschritt wird bald aktualisiert</string>
+</resources>
