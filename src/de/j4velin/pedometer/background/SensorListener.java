@@ -165,12 +165,13 @@ public class SensorListener extends Service implements SensorEventListener {
 				if (today_offset == Integer.MIN_VALUE)
 					today_offset = -steps;
 				notificationBuilder.setProgress(goal, today_offset + steps, false).setContentText(
-						NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps)) + " steps to go");
+						getString(R.string.notification_text,
+								NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps))));
 			} else {
-				notificationBuilder.setContentText("Your progress will be shown here soon");
+				notificationBuilder.setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
 			}
 			notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
-					.setContentTitle("Pedometer is counting")
+					.setContentTitle(getString(R.string.notification_title))
 					.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
 					.setSmallIcon(R.drawable.ic_launcher).build();
 
