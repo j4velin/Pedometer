@@ -84,7 +84,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			public void onClick(final View view) {
 				showSteps = !showSteps;
 				if (showSteps) {
-					((TextView) v.findViewById(R.id.unit)).setText("steps");
+					((TextView) v.findViewById(R.id.unit)).setText(getString(R.string.steps));
 				} else {
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 					int steps_today = Math.max(todayOffset + since_boot, 0);

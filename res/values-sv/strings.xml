@@ -10,19 +10,19 @@
     <string name="step_size_summary">Nuvarande steglängd: %1$.2f %2$s</string>
     <string name="sign_in">Logga in med ditt Googlekonto för att använda prestationer och topplistor</string>
     <string name="signed_in">Inloggad som %s</string>
-    <string name="export_summary">Spara ditt data i en .csv-fil</string>
+    <string name="export_summary">Spara data i CSV-format</string>
     <string name="export_title">Exportera/Säkerhetskopiera</string>
-    <string name="import_summary">Importerar tidigare sparad data</string>
+    <string name="import_summary">Importera tidigare sparad data</string>
     <string name="import_title">Importera/Återställa</string>
     <string name="notification">Visa notifiering</string>
-    <string name="set_goal">Sätt mål</string>
-    <string name="set_step_size">Sätt steglängd</string>
+    <string name="set_goal">Ange mål</string>
+    <string name="set_step_size">Ange steglängd</string>
     <string name="about_text">Denna app skapades av Thomas Hoffmann (www.j4velin-development.de) och använder \'HoloGraphLibrary\' av Daniel Nadeau och \'ColorPickerPreference\' av Sergey Margaritov.\n\nApp version: %s\n\nPedometer är öppen källkod! Hämta koden från https://github.com/j4velin/Pedometer</string>
     <string name="sign_out">Logga ut</string>
     <string name="file_cant_read">Fel: %s kan inte läsas</string>
     <string name="error_file">Fel vid filåtkomst: %s</string>
     <string name="error_external_storage_not_available">Fel: Extern lagring inte tillgänglig</string>
-    <string name="data_saved">Data sparat i %s</string>
+    <string name="data_saved">Data sparad i %s</string>
     <string name="entries_imported">%d poster importerade</string>
     <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
     <string name="sign_in_necessary">Inloggning nödvändig</string>
@@ -36,5 +36,7 @@
     <string name="faq">FAQ</string>
     <string name="goal_reached_notification">Mål nått! %s steg hittills</string>
     <string name="notification_text">%s steg kvar</string>
+    <string name="yesterday">Igår</string>
+    <string name="total">Totalt</string>
 	
 </resources>

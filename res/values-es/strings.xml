@@ -10,13 +10,13 @@
     <string name="step_size_summary">Longitud actual de paso: %1$.2f %2$s</string>
     <string name="sign_in">Inicia sesión con tu cuenta de Google para usar las funcionalidades de Logros y Ranking</string>
     <string name="signed_in">Sesión iniciada como %s</string>
-    <string name="export_summary">Salva tus datos en un archivo .csv</string>
+    <string name="export_summary">Guarda tus datos en un archivo .csv</string>
     <string name="export_title">Exportar/Copia de seguridad</string>
-    <string name="import_summary">Importa datos salvados con anterioridad</string>
+    <string name="import_summary">Importa datos guardados con anterioridad</string>
     <string name="import_title">Importar/Restaurar</string>
     <string name="notification">Mostrar notificación</string>
     <string name="set_goal">Establecer objetivo</string>
-    <string name="set_step_size">Establecer tamaño de paso</string>
+    <string name="set_step_size">Establecer longitud de paso</string>
     <string name="about_text">Esta aplicación ha sido creada por Thomas Hoffmann (www.j4velin-development.de) y utiliza \'HoloGraphLibrary\' de Daniel Nadeau y \'ColorPickerPreference\' de Sergey Margaritov.\n\nVersión de la aplicación: %s\n\n¡Podómetro es código libre! Obtén el código de https://github.com/j4velin/Pedometer</string>
     <string name="sign_out">Cerrar sesión</string>
     <string name="file_cant_read">Error: no se puede leer %s </string>
@@ -32,9 +32,11 @@
     <string name="background_color">Color de fondo:</string>
     <string name="settings">Ajustes</string>
     <string name="achievements">Logros</string>
-    <string name="leaderboard">Ranking</string>
-    <string name="faq">FAQ</string>
+    <string name="leaderboard">Marcadores</string>
+    <string name="faq">Ayuda</string>
     <string name="goal_reached_notification">¡Objetivo alcanzado! %s pasos y contando</string>
-    <string name="notification_text">%s pasos pendientes</string>
+    <string name="notification_text">Faltan %s pasos</string>
+    <string name="yesterday">Ayer</string>
+    <string name="total">Total</string>
     
 </resources>
