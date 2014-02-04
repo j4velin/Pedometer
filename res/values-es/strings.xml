@@ -8,7 +8,7 @@
     <string name="account">Cuenta</string>
     <string name="goal_summary">Objetivo actual: %,d pasos</string>
     <string name="step_size_summary">Longitud actual de paso: %1$.2f %2$s</string>
-    <string name="sign_in">Inicia sesión con tu cuenta de Google para usar las funcionalidades de Logros y Ranking</string>
+    <string name="sign_in">Inicia sesión con tu cuenta de Google para usar las funcionalidades de Logros y Marcadores</string>
     <string name="signed_in">Sesión iniciada como %s</string>
     <string name="export_summary">Guarda tus datos en un archivo .csv</string>
     <string name="export_title">Exportar/Copia de seguridad</string>
@@ -26,7 +26,7 @@
     <string name="entries_imported">%d entradas importadas</string>
     <string name="entries_ignored">%d entradas fueron ignoradas ya que no contenían datos válidos</string>
     <string name="sign_in_necessary">Inicio de sesión necesario</string>
-    <string name="please_sign_in_with_your_google_account">Por favor, inicie sesión con su cuenta de Google+ para usar esta funcinalidad.</string>
+    <string name="please_sign_in_with_your_google_account">Por favor, inicie sesión con su cuenta de Google+ para usar esta funcionalidad.</string>
     <string name="steps">pasos</string>
     <string name="text_color">Color de texto:</string>
     <string name="background_color">Color de fondo:</string>
@@ -38,5 +38,7 @@
     <string name="notification_text">Faltan %s pasos</string>
     <string name="yesterday">Ayer</string>
     <string name="total">Total</string>
+    <string name="notification_title">Podómetro está contando</string>
+    <string name="your_progress_will_be_shown_here_soon">Tu progreso se mostrará aquí pronto</string>    
     
 </resources>
