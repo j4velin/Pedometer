@@ -46,10 +46,10 @@ import android.widget.TextView;
 
 public class OverviewFragment extends Fragment implements SensorEventListener {
 
-	private TextView stepsView, totalView;
+	private TextView stepsView, totalView, averageView;
 	private PieSlice sliceGoal, sliceCurrent;
 	private PieGraph pg;
-	private int todayOffset, total_start, goal, since_boot;
+	private int todayOffset, total_start, goal, since_boot, total_days;
 	public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
 	private boolean showSteps = true;
 
@@ -64,6 +64,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		final View v = inflater.inflate(R.layout.fragment_overview, null);
 		stepsView = (TextView) v.findViewById(R.id.steps);
 		totalView = (TextView) v.findViewById(R.id.total);
+		averageView = (TextView) v.findViewById(R.id.average);
 
 		pg = (PieGraph) v.findViewById(R.id.graph);
 
@@ -86,21 +87,17 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 				if (showSteps) {
 					((TextView) v.findViewById(R.id.unit)).setText(getString(R.string.steps));
 				} else {
-					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-					int steps_today = Math.max(todayOffset + since_boot, 0);
-					float distance = steps_today * prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
-					String unit = prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT);
+					String unit = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("stepsize_unit",
+							SettingsFragment.DEFAULT_STEP_UNIT);
 					if (unit.equals("cm")) {
-						distance /= 100000;
 						unit = "km";
 					} else {
-						distance /= 5280;
 						unit = "mi";
 					}
-					stepsView.setText(formatter.format(distance));
 					((TextView) v.findViewById(R.id.unit)).setText(unit);
 				}
-				updateSteps();
+				updatePie();
+				updateBars();
 			}
 		});
 
@@ -141,7 +138,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 							if (Logger.LOG)
 								Logger.log("SensorListener.steps: " + msg.arg1);
 							since_boot = msg.arg1;
-							updateSteps();
+							updatePie();
 							if (getActivity() != null)
 								getActivity().unbindService(conn);
 						}
@@ -161,46 +158,13 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI);
 
-		// update yesterday & total step count
-		Calendar yesterday = Calendar.getInstance();
-		yesterday.setTimeInMillis(Util.getToday());
-		yesterday.add(Calendar.DAY_OF_YEAR, -1);
-
-		int yesterdaySteps = db.getSteps(yesterday.getTimeInMillis());
-		((TextView) getView().findViewById(R.id.yesterday)).setText(formatter
-				.format((yesterdaySteps > Integer.MIN_VALUE) ? yesterdaySteps : 0));
 		total_start = db.getTotalWithoutToday();
-		totalView.setText(String.valueOf(total_start));
+		total_days = db.getDays();
 
-		// At the bottom, show some bars for the last 6 days
-		BarGraph g = (BarGraph) getView().findViewById(R.id.bargraph);
-		ArrayList<Bar> points = new ArrayList<Bar>();
-		Bar d;
-		SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
-		yesterday.add(Calendar.DAY_OF_YEAR, -6);
-		int steps;
-		for (int i = 0; i < 7; i++) {
-			steps = db.getSteps(yesterday.getTimeInMillis());
-			if (steps > 0) {
-				d = new Bar();
-				if (steps > goal)
-					d.setColor(Color.parseColor("#99CC00"));
-				else
-					d.setColor(Color.parseColor("#0099cc"));
-				d.setName(df.format(new Date(yesterday.getTimeInMillis())));
-				d.setValue(steps);
-				d.setValueString(formatter.format(d.getValue()));
-				points.add(d);
-			}
-			yesterday.add(Calendar.DAY_OF_YEAR, 1);
-		}
 		db.close();
-		if (points.size() > 0) {
-			g.setBars(points);
-		} else {
-			g.setVisibility(View.GONE);
-		}
 
+		updatePie();
+		updateBars();
 	}
 
 	@Override
@@ -242,10 +206,15 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			todayOffset = -(int) event.values[0];
 		}
 		since_boot = (int) event.values[0];
-		updateSteps();
+		updatePie();
 	}
 
-	private void updateSteps() {
+	/**
+	 * Updates the pie graph to show todays steps/distance as well as the
+	 * yesterday and total values. Should be called when switching from step
+	 * count to distance.
+	 */
+	private void updatePie() {
 		if (Logger.LOG)
 			Logger.log("update steps: " + since_boot);
 		// todayOffset might still be Integer.MIN_VALUE on first start
@@ -267,18 +236,84 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		pg.invalidate();
 		if (showSteps) {
 			stepsView.setText(formatter.format(steps_today));
-		} else if (since_boot % 10 == 0) {
-			// update only every 10 steps
+			totalView.setText(formatter.format(total_start + steps_today));
+			averageView.setText(formatter.format((total_start + steps_today) / total_days));
+		} else {
+			// update only every 10 steps when displaying distance
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-			float distance = steps_today * prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
+			float stepsize = prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
+			float distance_today = steps_today * stepsize;
+			float distance_total = (total_start + steps_today) * stepsize;
 			if (prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT).equals("cm")) {
-				distance /= 100000;
+				distance_today /= 100000;
+				distance_total /= 100000;
 			} else {
-				distance /= 5280;
+				distance_today /= 5280;
+				distance_total /= 5280;
 			}
-			stepsView.setText(formatter.format(distance));
+			stepsView.setText(formatter.format(distance_today));
+			totalView.setText(formatter.format(distance_total));
+			averageView.setText(formatter.format(distance_total / total_days));
 		}
-		totalView.setText(formatter.format(total_start + steps_today));
+	}
+
+	/**
+	 * Updates the bar graph to show the steps/distance of the last week. Should
+	 * be called when switching from step count to distance.
+	 */
+	private void updateBars() {
+		Database db = new Database(getActivity());
+		db.open();
+		Calendar yesterday = Calendar.getInstance();
+		yesterday.setTimeInMillis(Util.getToday());
+		yesterday.add(Calendar.DAY_OF_YEAR, -1);
+		BarGraph g = (BarGraph) getView().findViewById(R.id.bargraph);
+		ArrayList<Bar> points = new ArrayList<Bar>();
+		Bar d;
+		SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
+		yesterday.add(Calendar.DAY_OF_YEAR, -6);
+		int steps;
+		float distance, stepsize = SettingsFragment.DEFAULT_STEP_SIZE;
+		boolean stepsize_cm = true;
+		if (!showSteps) {
+			// load some more settings if distance is needed
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+			stepsize = prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
+			stepsize_cm = prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT).equals("cm");
+		}
+		for (int i = 0; i < 7; i++) {
+			steps = db.getSteps(yesterday.getTimeInMillis());
+			if (steps > 0) {
+				d = new Bar();
+				if (steps > goal)
+					d.setColor(Color.parseColor("#99CC00"));
+				else
+					d.setColor(Color.parseColor("#0099cc"));
+				d.setName(df.format(new Date(yesterday.getTimeInMillis())));
+				// steps or distance?
+				if (showSteps) {
+					d.setValue(steps);
+					d.setValueString(formatter.format(d.getValue()));
+				} else {
+					distance = steps * stepsize;
+					if (stepsize_cm) {
+						distance /= 100000;
+					} else {
+						distance /= 5280;
+					}
+					d.setValue(distance);
+					d.setValueString(formatter.format(distance));
+				}
+				points.add(d);
+			}
+			yesterday.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		if (points.size() > 0) {
+			g.setBars(points);
+		} else {
+			g.setVisibility(View.GONE);
+		}
+		db.close();
 	}
 
 }

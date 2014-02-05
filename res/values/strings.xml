@@ -40,5 +40,6 @@
     <string name="total">Total</string>
     <string name="notification_title">Pedometer is counting</string>
     <string name="your_progress_will_be_shown_here_soon">Your progress will be shown here soon</string>
+    <string name="average">Average</string>
 
 </resources>
