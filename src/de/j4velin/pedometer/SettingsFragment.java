@@ -174,10 +174,14 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					prefs.edit().putFloat("stepsize_value", Float.valueOf(value.getText().toString()))
-							.putString("stepsize_unit", unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft").apply();
-					preference.setSummary(getString(R.string.step_size_summary, Float.valueOf(value.getText().toString()),
-							unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
+					try {
+						prefs.edit().putFloat("stepsize_value", Float.valueOf(value.getText().toString()))
+								.putString("stepsize_unit", unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft").apply();
+						preference.setSummary(getString(R.string.step_size_summary, Float.valueOf(value.getText().toString()),
+								unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
+					} catch (NumberFormatException nfe) {
+						nfe.printStackTrace();
+					}
 					dialog.dismiss();
 				}
 			});
