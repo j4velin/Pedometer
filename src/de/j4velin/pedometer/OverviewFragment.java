@@ -138,13 +138,12 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 					final ServiceConnection conn = this;
 					Messenger incoming = new Messenger(new Handler() {
 						public void handleMessage(Message msg) {
-							if (msg != null) {
-								if (Logger.LOG)
-									Logger.log("SensorListener.steps: " + msg.arg1);
-								since_boot = msg.arg1;
-								updateSteps();
-							}
-							getActivity().unbindService(conn);
+							if (Logger.LOG)
+								Logger.log("SensorListener.steps: " + msg.arg1);
+							since_boot = msg.arg1;
+							updateSteps();
+							if (getActivity() != null)
+								getActivity().unbindService(conn);
 						}
 					});
 					Message msg = Message.obtain();
