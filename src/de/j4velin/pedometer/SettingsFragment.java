@@ -223,8 +223,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				}
 			});
 			if (((MainActivity) getActivity()).getGC().isConnected()) {
-				((TextView) v.findViewById(R.id.signedin)).append(((MainActivity) getActivity()).getGC().getCurrentPlayer()
-						.getDisplayName());
+				((TextView) v.findViewById(R.id.signedin)).setText(getString(R.string.signed_in, ((MainActivity) getActivity())
+						.getGC().getCurrentPlayer().getDisplayName()));
 				v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
 				builder.setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
 					@Override

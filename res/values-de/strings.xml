@@ -40,4 +40,6 @@
     <string name="total">Gesamt</string>
     <string name="notification_title">Schrittzähler aktiv</string>
     <string name="your_progress_will_be_shown_here_soon">Dein Fortschritt wird bald aktualisiert</string>
-</resources>
+    <string name="average">Durchschnitt</string>
+
+</resources>
