@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Pedometer</string>
+    <string name="goal">目標</string>
+    <string name="step_size">步幅</string>
+    <string name="about">關於</string>
+    <string name="account">帳戶</string>
+    <string name="goal_summary">當前的目標: %,d 步</string>
+    <string name="step_size_summary">當前步幅: %1$.2f %2$s</string>
+    <string name="sign_in">登入您的 Google 帳戶來使用成就和排行榜功能</string>
+    <string name="signed_in">以 %s 登入</string>
+    <string name="export_summary">儲存您的資料到 csv 檔案</string>
+    <string name="export_title">匯出/儲存</string>
+    <string name="import_summary">匯入之前儲存的資料</string>
+    <string name="import_title">匯入/還原</string>
+    <string name="notification">顯示通知</string>
+    <string name="set_goal">設定目標</string>
+    <string name="set_step_size">設定步幅</string>
+    <string name="about_text">本應用由 Thomas Hoffmann (www.j4velin-development.de) 開發。並使用了由 Daniel Nadeau 開發的 \'HoloGraphLibrary\' 和由 Sergey Margaritov 開發的 \'ColorPickerPreference\'。\n\n版本號: %s\n\nPedometer 是開源的！可以從 https://github.com/j4velin/Pedometer 獲得原始碼。</string>
+    <string name="sign_out">登出</string>
+    <string name="file_cant_read">錯誤：無法讀取 %s</string>
+    <string name="error_file">訪問檔案錯誤：%s</string>
+    <string name="error_external_storage_not_available">錯誤：外部存儲不可用</string>
+    <string name="data_saved">資料儲存到 %s</string>
+    <string name="entries_imported">%d 項條目已匯入</string>
+    <string name="entries_ignored">%d 項條目被跳過，因為它們不包含有效資料</string>
+    <string name="sign_in_necessary">必須要登入</string>
+    <string name="please_sign_in_with_your_google_account">請登入您的 Google+ 帳戶才能使用此功能。</string>
+    <string name="steps">步</string>
+    <string name="text_color">文字顏色：</string>
+    <string name="background_color">背景顏色：</string>
+    <string name="settings">設定</string>
+    <string name="achievements">成就</string>
+    <string name="leaderboard">排行榜</string>
+    <string name="faq">常問問題</string>
+    <string name="goal_reached_notification">達成目標！已走了 %s 步</string>
+    <string name="notification_text">還有 %s 步</string>
+    <string name="yesterday">昨天</string>
+    <string name="total">今天</string>
+    <string name="notification_title">Pedometer 正在記步</string>
+    <string name="your_progress_will_be_shown_here_soon">您的進度很快會在這顯示</string>
+
+</resources>
