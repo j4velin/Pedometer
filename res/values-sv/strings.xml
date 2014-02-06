@@ -40,5 +40,6 @@
     <string name="total">Totalt</string>
     <string name="notification_title">Pedometer är aktiv</string>
     <string name="your_progress_will_be_shown_here_soon">Dina framsteg kommer att visas här snart</string>
+    <string name="average">Genomsnitt</string>
 	
 </resources>
