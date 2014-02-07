@@ -98,10 +98,10 @@ public class SensorListener extends Service implements SensorEventListener {
 		if (notificationBuilder != null && steps % 100 == 0) {
 			if (today_offset == Integer.MIN_VALUE)
 				today_offset = -steps;
+			notificationBuilder.setProgress(goal, today_offset + steps, false);
 			if (today_offset + steps < goal) {
-				notificationBuilder.setProgress(goal, today_offset + steps, false).setContentText(
-						getString(R.string.notification_text,
-								NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps))));
+				notificationBuilder.setContentText(getString(R.string.notification_text,
+						NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps))));
 			} else {
 				notificationBuilder.setContentText(getString(R.string.goal_reached_notification,
 						NumberFormat.getInstance(Locale.getDefault()).format((today_offset + steps))));
