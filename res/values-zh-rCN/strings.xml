@@ -38,7 +38,7 @@
     <string name="notification_text">还有 %s 步</string>
     <string name="yesterday">昨天</string>
     <string name="total">今天</string>
-    <string name="notification_title">Pedometer 正在记步</string>
+    <string name="notification_title">Pedometer 正在计步</string>
     <string name="your_progress_will_be_shown_here_soon">您的进度很快会在这显示</string>
     <string name="average">平均</string>
 
