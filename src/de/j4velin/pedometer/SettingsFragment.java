@@ -174,10 +174,14 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					prefs.edit().putFloat("stepsize_value", Float.valueOf(value.getText().toString()))
-							.putString("stepsize_unit", unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft").apply();
-					preference.setSummary(getString(R.string.step_size_summary, Float.valueOf(value.getText().toString()),
-							unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
+					try {
+						prefs.edit().putFloat("stepsize_value", Float.valueOf(value.getText().toString()))
+								.putString("stepsize_unit", unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft").apply();
+						preference.setSummary(getString(R.string.step_size_summary, Float.valueOf(value.getText().toString()),
+								unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
+					} catch (NumberFormatException nfe) {
+						nfe.printStackTrace();
+					}
 					dialog.dismiss();
 				}
 			});
@@ -219,8 +223,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				}
 			});
 			if (((MainActivity) getActivity()).getGC().isConnected()) {
-				((TextView) v.findViewById(R.id.signedin)).append(((MainActivity) getActivity()).getGC().getCurrentPlayer()
-						.getDisplayName());
+				((TextView) v.findViewById(R.id.signedin)).setText(getString(R.string.signed_in, ((MainActivity) getActivity())
+						.getGC().getCurrentPlayer().getDisplayName()));
 				v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
 				builder.setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
 					@Override

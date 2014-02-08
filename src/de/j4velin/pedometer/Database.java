@@ -233,4 +233,30 @@ public class Database extends SQLiteOpenHelper {
 	void removeInvalidEntries() {
 		database.delete("steps", "steps >= ?", new String[] { "2000000000" });
 	}
+
+	/**
+	 * Get the number of 'valid' days (= days with a step value > 0).
+	 * 
+	 * The current day might or might not be included, so this value may vary by
+	 * 1 day. (if there was not reboot today, today's offset will be < 0 and
+	 * therefore today will not be counted - if there was already a reboot,
+	 * todays offset might be > 0 and therefore counted).
+	 * 
+	 * It is safe to divide by the return value as this will be at least 1 (and
+	 * not 0).
+	 * 
+	 * @return the number of days with a step value > 0, return will be >= 1
+	 */
+	int getDays() {
+		Cursor c = database.query("steps", new String[] { "COUNT(*)" }, "steps > ?", new String[] { String.valueOf(0) }, null,
+				null, null);
+		c.moveToFirst();
+		int re;
+		if (c.getCount() == 0)
+			re = 1;
+		else
+			re = c.getInt(0);
+		c.close();
+		return re <= 0 ? 1 : re;
+	}
 }

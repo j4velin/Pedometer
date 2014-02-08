@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="@string/yesterday" />
+            android:text="@string/average" />
 
         <TextView
             android:id="@+id/textView4"
@@ -71,7 +71,7 @@
         android:layout_alignTop="@+id/graph" >
 
         <TextView
-            android:id="@+id/yesterday"
+            android:id="@+id/average"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

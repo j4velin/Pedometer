@@ -10,14 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:text="You need to sign in with your Google+ account to unlock and view achievements" />
+        android:text="@string/sign_in" />
 
     <TextView
         android:id="@+id/signedin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:text="You are currently logged in as: " />
+        android:paddingBottom="10dp" />
 
     <!-- sign-in button -->
 
