@@ -7,12 +7,12 @@
     <string name="about">Acerca de</string>
     <string name="account">Cuenta</string>
     <string name="goal_summary">Objetivo actual: %,d pasos</string>
-    <string name="step_size_summary">Longitud actual de paso: %1$.2f %2$s</string>
+    <string name="step_size_summary">Longitud de paso actual: %1$.2f %2$s</string>
     <string name="sign_in">Inicia sesión con tu cuenta de Google para usar las funcionalidades de Logros y Marcadores</string>
     <string name="signed_in">Sesión iniciada como %s</string>
     <string name="export_summary">Guarda tus datos en un archivo .csv</string>
     <string name="export_title">Exportar/Copia de seguridad</string>
-    <string name="import_summary">Importa datos guardados con anterioridad</string>
+    <string name="import_summary">Recupera datos guardados con anterioridad</string>
     <string name="import_title">Importar/Restaurar</string>
     <string name="notification">Mostrar notificación</string>
     <string name="set_goal">Establecer objetivo</string>
@@ -23,10 +23,10 @@
     <string name="error_file">Error accediendo al archivo: %s</string>
     <string name="error_external_storage_not_available">Error: Almancenamiento externo no disponible</string>
     <string name="data_saved">Datos guardados en %s</string>
-    <string name="entries_imported">%d entradas importadas</string>
+    <string name="entries_imported">%d entradas recuperadas</string>
     <string name="entries_ignored">%d entradas fueron ignoradas ya que no contenían datos válidos</string>
     <string name="sign_in_necessary">Inicio de sesión necesario</string>
-    <string name="please_sign_in_with_your_google_account">Por favor, inicie sesión con su cuenta de Google+ para usar esta funcionalidad.</string>
+    <string name="please_sign_in_with_your_google_account">Por favor, inicia sesión con tu cuenta de Google+ para usar esta funcionalidad.</string>
     <string name="steps">pasos</string>
     <string name="text_color">Color de texto:</string>
     <string name="background_color">Color de fondo:</string>
@@ -40,5 +40,6 @@
     <string name="total">Total</string>
     <string name="notification_title">Podómetro está contando</string>
     <string name="your_progress_will_be_shown_here_soon">Tu progreso se mostrará aquí pronto</string>    
+    <string name="average">Media</string>
     
 </resources>
