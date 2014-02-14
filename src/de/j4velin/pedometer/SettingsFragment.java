@@ -229,7 +229,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				builder.setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						((MainActivity) getActivity()).getGC().signOut();
+						((MainActivity) getActivity()).signOut();
 						preference.setSummary(getString(R.string.sign_in));
 						dialog.dismiss();
 					}

@@ -67,6 +67,10 @@ public class MainActivity extends BaseGameActivity {
 	public void beginSignIn() {
 		beginUserInitiatedSignIn();
 	}
+	
+	public void signOut() {
+		super.signOut();
+	}
 
 	@Override
 	public void onBackPressed() {
