@@ -20,8 +20,8 @@
     <string name="about_text">本應用由 Thomas Hoffmann (www.j4velin-development.de) 開發。並使用了由 Daniel Nadeau 開發的 HoloGraphLibrary 和由 Sergey Margaritov 開發的 ColorPickerPreference。\n\n版本號: %s\n\nPedometer 是開源的！可以從 https://github.com/j4velin/Pedometer 獲得原始碼。</string>
     <string name="sign_out">登出</string>
     <string name="file_cant_read">錯誤：無法讀取 %s</string>
-    <string name="error_file">訪問檔案錯誤：%s</string>
-    <string name="error_external_storage_not_available">錯誤：外部存儲不可用</string>
+    <string name="error_file">存取檔案錯誤：%s</string>
+    <string name="error_external_storage_not_available">錯誤：無法使用外部儲存</string>
     <string name="data_saved">資料儲存到 %s</string>
     <string name="entries_imported">%d 項條目已匯入</string>
     <string name="entries_ignored">%d 項條目被跳過，因為它們不包含有效資料</string>
@@ -37,9 +37,9 @@
     <string name="goal_reached_notification">達成目標！已走了 %s 步</string>
     <string name="notification_text">還有 %s 步</string>
     <string name="yesterday">昨天</string>
-    <string name="total">今天</string>
+    <string name="total">總計</string>
     <string name="notification_title">Pedometer 正在計步</string>
-    <string name="your_progress_will_be_shown_here_soon">您的進度很快會在這顯示</string>
+    <string name="your_progress_will_be_shown_here_soon">您的進度即將在此顯示</string>
     <string name="average">平均</string>
 
 </resources>
