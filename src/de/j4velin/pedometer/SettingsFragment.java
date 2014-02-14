@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -252,10 +253,15 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			break;
 		case R.string.import_title:
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				File f = new File(getActivity().getExternalFilesDir(null), "Pedometer.csv");
+				File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
 				if (!f.exists() || !f.canRead()) {
 					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.file_cant_read, f.getAbsolutePath()))
-							.create().show();
+							.setPositiveButton(android.R.string.ok, new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+								}
+							}).create().show();
 					break;
 				}
 				Database db = new Database(getActivity());
@@ -277,8 +283,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					}
 					in.close();
 				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage())).create()
-							.show();
+					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage()))
+							.setPositiveButton(android.R.string.ok, new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+								}
+							}).create().show();
 					e.printStackTrace();
 					break;
 				} finally {
@@ -288,21 +299,37 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 						.setMessage(
 								skips > 0 ? getString(R.string.entries_imported, inserted) + "\n"
 										+ getString(R.string.entries_ignored, skips) : getString(R.string.entries_imported,
-										inserted)).create().show();
+										inserted)).setPositiveButton(android.R.string.ok, new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create().show();
 			} else {
-				new AlertDialog.Builder(getActivity()).setMessage(R.string.error_external_storage_not_available).create().show();
+				new AlertDialog.Builder(getActivity()).setMessage(R.string.error_external_storage_not_available)
+						.setPositiveButton(android.R.string.ok, new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create().show();
 			}
 			break;
 		case R.string.export_title:
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 				BufferedWriter out = null;
-				File f = new File(getActivity().getExternalFilesDir(null), "Pedometer.csv");
+				File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
 				try {
 					f.createNewFile();
 					out = new BufferedWriter(new FileWriter(f));
 				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage())).create()
-							.show();
+					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage()))
+							.setPositiveButton(android.R.string.ok, new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+								}
+							}).create().show();
 					e.printStackTrace();
 					break;
 				}
@@ -318,8 +345,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					}
 					out.close();
 				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage())).create()
-							.show();
+					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage()))
+							.setPositiveButton(android.R.string.ok, new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+								}
+							}).create().show();
 					e.printStackTrace();
 					break;
 				} finally {
@@ -327,10 +359,21 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 						c.close();
 					db.close();
 				}
-				new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.data_saved, f.getAbsolutePath())).create()
-						.show();
+				new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.data_saved, f.getAbsolutePath()))
+						.setPositiveButton(android.R.string.ok, new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create().show();
 			} else {
-				new AlertDialog.Builder(getActivity()).setMessage(R.string.error_external_storage_not_available).create().show();
+				new AlertDialog.Builder(getActivity()).setMessage(R.string.error_external_storage_not_available)
+						.setPositiveButton(android.R.string.ok, new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create().show();
 			}
 			break;
 		}
