@@ -108,6 +108,10 @@ public class SensorListener extends Service implements SensorEventListener {
 			}
 			((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationBuilder.build());
 		}
+		if (steps % 500 == 0) {
+			PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("backup_steps", steps)
+					.putLong("backup_date", Util.getToday()).apply();
+		}
 
 	}
 
