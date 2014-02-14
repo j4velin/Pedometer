@@ -41,5 +41,9 @@
     <string name="notification_title">Schrittzähler aktiv</string>
     <string name="your_progress_will_be_shown_here_soon">Dein Fortschritt wird bald aktualisiert</string>
     <string name="average">Durchschnitt</string>
-
+    <string name="record">Rekord</string>
+    <string name="total_last_7_days">Gesamt letzte 7 Tage</string>
+    <string name="average_last_7_days">Durchschnitt der letzten 7 Tage</string>
+    <string name="total_this_month">Gesamt diesen Monat</string>
+    <string name="average_this_month">Durchschnitt diesen Monat</string>
 </resources>
