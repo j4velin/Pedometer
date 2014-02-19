@@ -87,20 +87,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			@Override
 			public void onClick(final View view) {
 				showSteps = !showSteps;
-				if (showSteps) {
-					((TextView) v.findViewById(R.id.unit)).setText(getString(R.string.steps));
-				} else {
-					String unit = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("stepsize_unit",
-							SettingsFragment.DEFAULT_STEP_UNIT);
-					if (unit.equals("cm")) {
-						unit = "km";
-					} else {
-						unit = "mi";
-					}
-					((TextView) v.findViewById(R.id.unit)).setText(unit);
-				}
-				updatePie();
-				updateBars();
+				stepsDistanceChanged();
 			}
 		});
 
@@ -165,6 +152,27 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		total_days = db.getDays();
 
 		db.close();
+
+		stepsDistanceChanged();
+	}
+
+	/**
+	 * Call this method if the Fragment should update the "steps"/"km" text in
+	 * the pie graph as well as the pie and the bars graphs.
+	 */
+	private void stepsDistanceChanged() {
+		if (showSteps) {
+			((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
+		} else {
+			String unit = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("stepsize_unit",
+					SettingsFragment.DEFAULT_STEP_UNIT);
+			if (unit.equals("cm")) {
+				unit = "km";
+			} else {
+				unit = "mi";
+			}
+			((TextView) getView().findViewById(R.id.unit)).setText(unit);
+		}
 
 		updatePie();
 		updateBars();
