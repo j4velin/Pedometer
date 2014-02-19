@@ -34,12 +34,19 @@
     <string name="achievements">成就</string>
     <string name="leaderboard">排行榜</string>
     <string name="faq">常問問題</string>
-    <string name="goal_reached_notification">達成目標！已走了 %s 步</string>
+    <string name="goal_reached_notification">目標達成！已走了 %s 步</string>
     <string name="notification_text">還有 %s 步</string>
     <string name="yesterday">昨天</string>
     <string name="total">總計</string>
     <string name="notification_title">Pedometer 正在計步</string>
     <string name="your_progress_will_be_shown_here_soon">您的進度即將在此顯示</string>
     <string name="average">平均</string>
+    <string name="record">最高紀錄</string>
+    <string name="total_last_7_days">本週總計</string>
+    <string name="average_last_7_days">本週平均</string>
+    <string name="total_this_month">本月總計</string>
+    <string name="average_this_month">本月平均</string>
+
+
 
 </resources>
