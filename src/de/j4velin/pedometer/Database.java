@@ -281,10 +281,8 @@ public class Database extends SQLiteOpenHelper {
 	/**
 	 * Get the number of 'valid' days (= days with a step value > 0).
 	 * 
-	 * The current day might or might not be included, so this value may vary by
-	 * 1 day. (if there was not reboot today, today's offset will be < 0 and
-	 * therefore today will not be counted - if there was already a reboot,
-	 * todays offset might be > 0 and therefore counted).
+	 * The current day is also added to this number, even if the value in the
+	 * database might still be < 0.
 	 * 
 	 * It is safe to divide by the return value as this will be at least 1 (and
 	 * not 0).
@@ -292,14 +290,11 @@ public class Database extends SQLiteOpenHelper {
 	 * @return the number of days with a step value > 0, return will be >= 1
 	 */
 	int getDays() {
-		Cursor c = database.query(DB_NAME, new String[] { "COUNT(*)" }, "steps > ?", new String[] { String.valueOf(0) }, null,
-				null, null);
+		Cursor c = database.query(DB_NAME, new String[] { "COUNT(*)" }, "steps > ? AND date < ?",
+				new String[] { String.valueOf(0), String.valueOf(Util.getToday()) }, null, null, null);
 		c.moveToFirst();
-		int re;
-		if (c.getCount() == 0)
-			re = 1;
-		else
-			re = c.getInt(0);
+		// todays is not counted yet
+		int re = c.getInt(0) + 1;
 		c.close();
 		return re <= 0 ? 1 : re;
 	}

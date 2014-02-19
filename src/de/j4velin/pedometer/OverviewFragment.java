@@ -348,7 +348,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 
 					date.setTimeInMillis(Util.getToday());
 					date.set(Calendar.DAY_OF_MONTH, 1);
-					int thisMonth = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis());
+					int thisMonth = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis()) + since_boot;
 
 					((TextView) d.findViewById(R.id.record)).setText(formatter.format(record.second) + " @ "
 							+ java.text.DateFormat.getDateInstance().format(record.first));
