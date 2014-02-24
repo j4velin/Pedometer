@@ -41,5 +41,10 @@
     <string name="notification_title">Podómetro está contando</string>
     <string name="your_progress_will_be_shown_here_soon">Tu progreso se mostrará aquí pronto</string>    
     <string name="average">Media</string>
+    <string name="record">Récord</string>
+    <string name="total_last_7_days">Total últimos 7 días</string>
+    <string name="average_last_7_days">Media últimos 7 días</string>
+    <string name="total_this_month">Total este mes</string>
+    <string name="average_this_month">Media este mes</string>
     
 </resources>
