@@ -41,5 +41,10 @@
     <string name="notification_title">Pedometer is counting</string>
     <string name="your_progress_will_be_shown_here_soon">Your progress will be shown here soon</string>
     <string name="average">Average</string>
+    <string name="record">Record</string>
+    <string name="total_last_7_days">Total last 7 days</string>
+    <string name="average_last_7_days">Average last 7 days</string>
+    <string name="total_this_month">Total this month</string>
+    <string name="average_this_month">Average this month</string>
 
 </resources>

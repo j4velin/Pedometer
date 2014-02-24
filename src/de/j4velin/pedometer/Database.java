@@ -16,6 +16,8 @@
 
 package de.j4velin.pedometer;
 
+import java.util.Date;
+
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import android.content.ContentValues;
@@ -24,6 +26,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Pair;
 
 public class Database extends SQLiteOpenHelper {
 
@@ -195,6 +198,20 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * Get the maximum of steps walked in one day and the date that happend
+	 * 
+	 * @return a pair containing the date (Date) in millis since 1970 and the
+	 *         step value (Integer)
+	 */
+	Pair<Date, Integer> getRecordData() {
+		Cursor c = database.query(DB_NAME, new String[] { "date, steps" }, null, null, null, null, "steps DESC", "1");
+		c.moveToFirst();
+		Pair<Date, Integer> p = new Pair<Date, Integer>(new Date(c.getLong(0)), c.getInt(1));
+		c.close();
+		return p;
+	}
+
+	/**
 	 * Get the number of steps taken for a specific date
 	 * 
 	 * @param date
@@ -203,7 +220,7 @@ public class Database extends SQLiteOpenHelper {
 	 *         exist in the database
 	 */
 	public int getSteps(final long date) {
-		Cursor c = database.query("steps", new String[] { "steps" }, "date = ?", new String[] { String.valueOf(date) }, null,
+		Cursor c = database.query(DB_NAME, new String[] { "steps" }, "date = ?", new String[] { String.valueOf(date) }, null,
 				null, null);
 		c.moveToFirst();
 		int re;
@@ -216,13 +233,40 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * Get the number of steps taken between 'start' and 'end' date
+	 * 
+	 * Note that todays entry might have a negative value, so take care of that
+	 * if 'end' >= Util.getToday()!
+	 * 
+	 * @param start
+	 *            start date in ms since 1970 (steps for this date included)
+	 * @param end
+	 *            end date in ms since 1970 (steps for this date included)
+	 * @return the number of steps from 'start' to 'end'. Can be < 0 as todays
+	 *         entry might have negative value
+	 */
+	public int getSteps(final long start, final long end) {
+		Cursor c = database.query(DB_NAME, new String[] { "SUM(steps)" }, "date >= ? AND date <= ?",
+				new String[] { String.valueOf(start), String.valueOf(end) }, null, null, null);
+		int re;
+		if (c.getCount() == 0) {
+			re = 0;
+		} else {
+			c.moveToFirst();
+			re = c.getInt(0);
+		}
+		c.close();
+		return re;
+	}
+
+	/**
 	 * Removes all entries with negative values.
 	 * 
 	 * Only call this directly after boot, otherwise it might remove the current
 	 * day as the current offset is likely to be negative
 	 */
 	void removeNegativeEntries() {
-		database.delete("steps", "steps < ?", new String[] { "0" });
+		database.delete(DB_NAME, "steps < ?", new String[] { "0" });
 	}
 
 	/**
@@ -231,16 +275,14 @@ public class Database extends SQLiteOpenHelper {
 	 * Currently, an invalid input is such with steps >= 2,000,000,000
 	 */
 	void removeInvalidEntries() {
-		database.delete("steps", "steps >= ?", new String[] { "2000000000" });
+		database.delete(DB_NAME, "steps >= ?", new String[] { "2000000000" });
 	}
 
 	/**
 	 * Get the number of 'valid' days (= days with a step value > 0).
 	 * 
-	 * The current day might or might not be included, so this value may vary by
-	 * 1 day. (if there was not reboot today, today's offset will be < 0 and
-	 * therefore today will not be counted - if there was already a reboot,
-	 * todays offset might be > 0 and therefore counted).
+	 * The current day is also added to this number, even if the value in the
+	 * database might still be < 0.
 	 * 
 	 * It is safe to divide by the return value as this will be at least 1 (and
 	 * not 0).
@@ -248,15 +290,13 @@ public class Database extends SQLiteOpenHelper {
 	 * @return the number of days with a step value > 0, return will be >= 1
 	 */
 	int getDays() {
-		Cursor c = database.query("steps", new String[] { "COUNT(*)" }, "steps > ?", new String[] { String.valueOf(0) }, null,
-				null, null);
+		Cursor c = database.query(DB_NAME, new String[] { "COUNT(*)" }, "steps > ? AND date < ?",
+				new String[] { String.valueOf(0), String.valueOf(Util.getToday()) }, null, null, null);
 		c.moveToFirst();
-		int re;
-		if (c.getCount() == 0)
-			re = 1;
-		else
-			re = c.getInt(0);
+		// todays is not counted yet
+		int re = c.getInt(0) + 1;
 		c.close();
 		return re <= 0 ? 1 : re;
 	}
+
 }

@@ -62,7 +62,11 @@ public class BootReceiver extends BroadcastReceiver {
 													.parse("http://j4velin-systems.de/faq/index.php?app=pm"))
 													.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0)).setShowWhen(false)
 							.setSmallIcon(R.drawable.ic_launcher).build());
-
+			
+			// add the saved backup to reduce actual loss
+			db.updateSteps(prefs.getLong("backup_date", 0), prefs.getInt("backup_steps", 0));
+			prefs.edit().putInt("backup_steps", 0).apply(); // reset backup
+			
 			// last entry might still have a negative step value, so remove that
 			// row if that's the case
 			db.removeNegativeEntries();
