@@ -16,11 +16,9 @@
 
 package de.j4velin.pedometer.widget;
 
-import de.j4velin.pedometer.R;
-
 import net.margaritov.preference.colorpicker.ColorPickerDialog;
 import net.margaritov.preference.colorpicker.ColorPickerDialog.OnColorChangedListener;
-
+import de.j4velin.pedometer.R;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -33,7 +31,7 @@ import android.view.View.OnClickListener;
 public class WidgetConfig extends Activity implements OnClickListener {
 
 	private static int widgetId;
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -57,7 +55,8 @@ public class WidgetConfig extends Activity implements OnClickListener {
 			bgcolor.setTag(Color.TRANSPARENT);
 			bgcolor.setBackgroundColor(Color.TRANSPARENT);
 
-			widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+			widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
+					AppWidgetManager.INVALID_APPWIDGET_ID);
 
 			final Intent resultValue = new Intent();
 			resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
@@ -70,7 +69,8 @@ public class WidgetConfig extends Activity implements OnClickListener {
 	@Override
 	public void onClick(final View v) {
 		ColorPickerDialog dialog = new ColorPickerDialog(this,
-				(findViewById(v.getId()).getTag() != null) ? (Integer) findViewById(v.getId()).getTag() : -1);
+				(findViewById(v.getId()).getTag() != null) ? (Integer) findViewById(v.getId())
+						.getTag() : -1);
 		dialog.setHexValueEnabled(true);
 		dialog.setAlphaSliderVisible(true);
 		dialog.setOnColorChangedListener(new OnColorChangedListener() {
