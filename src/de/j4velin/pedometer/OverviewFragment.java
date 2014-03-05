@@ -350,7 +350,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 					date.setTimeInMillis(Util.getToday());
 					int daysThisMonth = date.get(Calendar.DAY_OF_MONTH);
 
-					date.add(Calendar.DATE, -7);
+					date.add(Calendar.DATE, -6);
 
 					int thisWeek = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis())
 							+ since_boot;
