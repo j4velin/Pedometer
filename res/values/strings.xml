@@ -46,5 +46,6 @@
     <string name="average_last_7_days">Average last 7 days</string>
     <string name="total_this_month">Total this month</string>
     <string name="average_this_month">Average this month</string>
+    <string name="file_already_exists">File already exists. Are you sure you want to overwrite it?</string>
 
 </resources>

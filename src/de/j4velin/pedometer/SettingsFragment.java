@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
-
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import android.app.AlertDialog;
@@ -344,7 +343,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				if (f.exists()) {
 					new AlertDialog.Builder(getActivity())
 							.setMessage(
-									"File already exists. Are you sure you want to overwrite it?")
+									R.string.file_already_exists)
 							.setPositiveButton(android.R.string.ok, new OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
