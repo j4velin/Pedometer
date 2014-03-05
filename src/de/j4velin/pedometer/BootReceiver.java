@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 
 public class BootReceiver extends BroadcastReceiver {
 
@@ -43,7 +42,7 @@ public class BootReceiver extends BroadcastReceiver {
 
 		context.startService(new Intent(context, SensorListener.class));
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
 		if (!prefs.getBoolean("correctShutdown", false)) {
 			// DEVICE_SHUTDOWN was not sent on shutdown -> display error message
 			((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(

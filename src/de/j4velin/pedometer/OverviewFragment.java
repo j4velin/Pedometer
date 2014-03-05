@@ -35,7 +35,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -109,44 +108,47 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			todayOffset = db.getSteps(Util.getToday());
 		}
 
-		goal = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("goal", 10000);
+		goal = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt(
+				"goal", 10000);
 
-		getActivity().bindService(new Intent(getActivity(), SensorListener.class), new ServiceConnection() {
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
+		getActivity().bindService(new Intent(getActivity(), SensorListener.class),
+				new ServiceConnection() {
+					@Override
+					public void onServiceDisconnected(ComponentName name) {
 
-			}
+					}
 
-			@SuppressLint("HandlerLeak")
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				Messenger messenger = new Messenger(service);
-				try {
-					final ServiceConnection conn = this;
-					Messenger incoming = new Messenger(new Handler() {
-						public void handleMessage(Message msg) {
+					@SuppressLint("HandlerLeak")
+					@Override
+					public void onServiceConnected(ComponentName name, IBinder service) {
+						Messenger messenger = new Messenger(service);
+						try {
+							final ServiceConnection conn = this;
+							Messenger incoming = new Messenger(new Handler() {
+								public void handleMessage(Message msg) {
+									if (Logger.LOG)
+										Logger.log("SensorListener.steps: " + msg.arg1);
+									since_boot = msg.arg1;
+									updatePie();
+									if (getActivity() != null)
+										getActivity().unbindService(conn);
+								}
+							});
+							Message msg = Message.obtain();
+							msg.replyTo = incoming;
+							messenger.send(msg);
+						} catch (RemoteException e) {
 							if (Logger.LOG)
-								Logger.log("SensorListener.steps: " + msg.arg1);
-							since_boot = msg.arg1;
-							updatePie();
-							if (getActivity() != null)
-								getActivity().unbindService(conn);
+								Logger.log(e);
+							e.printStackTrace();
 						}
-					});
-					Message msg = Message.obtain();
-					msg.replyTo = incoming;
-					messenger.send(msg);
-				} catch (RemoteException e) {
-					if (Logger.LOG)
-						Logger.log(e);
-					e.printStackTrace();
-				}
-			}
-		}, 0);
+					}
+				}, 0);
 
 		// register a sensorlistener to live update the UI if a step is taken
 		SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI);
+		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+				SensorManager.SENSOR_DELAY_UI);
 
 		total_start = db.getTotalWithoutToday();
 		total_days = db.getDays();
@@ -164,7 +166,8 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		if (showSteps) {
 			((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
 		} else {
-			String unit = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("stepsize_unit",
+			String unit = getActivity().getSharedPreferences("pedometer",
+					Context.MODE_MULTI_PROCESS).getString("stepsize_unit",
 					SettingsFragment.DEFAULT_STEP_UNIT);
 			if (unit.equals("cm")) {
 				unit = "km";
@@ -182,7 +185,8 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 	public void onPause() {
 		super.onPause();
 		try {
-			SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+			SensorManager sm = (SensorManager) getActivity().getSystemService(
+					Context.SENSOR_SERVICE);
 			sm.unregisterListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -209,7 +213,8 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		if (event.values[0] == 0)
 			return;
 		if (Logger.LOG)
-			Logger.log("sensorChanged | todayOffset: " + todayOffset + " since boot: " + event.values[0]);
+			Logger.log("sensorChanged | todayOffset: " + todayOffset + " since boot: "
+					+ event.values[0]);
 		if (todayOffset == Integer.MIN_VALUE) {
 			// no values for today
 			// we dont know when the reboot was, so set todays steps to 0 by
@@ -251,7 +256,8 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			averageView.setText(formatter.format((total_start + steps_today) / total_days));
 		} else {
 			// update only every 10 steps when displaying distance
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
+					Context.MODE_MULTI_PROCESS);
 			float stepsize = prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
 			float distance_today = steps_today * stepsize;
 			float distance_total = (total_start + steps_today) * stepsize;
@@ -288,9 +294,11 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		boolean stepsize_cm = true;
 		if (!showSteps) {
 			// load some more settings if distance is needed
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
+					Context.MODE_MULTI_PROCESS);
 			stepsize = prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
-			stepsize_cm = prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT).equals("cm");
+			stepsize_cm = prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT)
+					.equals("cm");
 		}
 		for (int i = 0; i < 7; i++) {
 			steps = db.getSteps(yesterday.getTimeInMillis());
@@ -344,20 +352,28 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 
 					date.add(Calendar.DATE, -7);
 
-					int thisWeek = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis()) + since_boot;
+					int thisWeek = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis())
+							+ since_boot;
 
 					date.setTimeInMillis(Util.getToday());
 					date.set(Calendar.DAY_OF_MONTH, 1);
-					int thisMonth = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis()) + since_boot;
+					int thisMonth = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis())
+							+ since_boot;
 
-					((TextView) d.findViewById(R.id.record)).setText(formatter.format(record.second) + " @ "
+					((TextView) d.findViewById(R.id.record)).setText(formatter
+							.format(record.second)
+							+ " @ "
 							+ java.text.DateFormat.getDateInstance().format(record.first));
 
-					((TextView) d.findViewById(R.id.totalthisweek)).setText(formatter.format(thisWeek));
-					((TextView) d.findViewById(R.id.totalthismonth)).setText(formatter.format(thisMonth));
+					((TextView) d.findViewById(R.id.totalthisweek)).setText(formatter
+							.format(thisWeek));
+					((TextView) d.findViewById(R.id.totalthismonth)).setText(formatter
+							.format(thisMonth));
 
-					((TextView) d.findViewById(R.id.averagethisweek)).setText(formatter.format(thisWeek / 7));
-					((TextView) d.findViewById(R.id.averagethismonth)).setText(formatter.format(thisMonth / daysThisMonth));
+					((TextView) d.findViewById(R.id.averagethisweek)).setText(formatter
+							.format(thisWeek / 7));
+					((TextView) d.findViewById(R.id.averagethismonth)).setText(formatter
+							.format(thisMonth / daysThisMonth));
 
 					db.close();
 					d.show();

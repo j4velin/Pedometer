@@ -10,7 +10,6 @@ import java.util.Locale;
 
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -76,7 +75,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					.getCurrentPlayer().getDisplayName() : savedInstanceState.getString("player")));
 		}
 
-		final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+		final SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
 
 		Preference goal = findPreference("goal");
 		goal.setOnPreferenceClickListener(this);
@@ -130,12 +129,11 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 	public boolean onPreferenceClick(final Preference preference) {
 		AlertDialog.Builder builder;
 		View v;
-		final SharedPreferences prefs;
+		final SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
 		switch (preference.getTitleRes()) {
 		case R.string.goal:
 			builder = new AlertDialog.Builder(getActivity());
 			final NumberPicker np = new NumberPicker(getActivity());
-			prefs = getPreferenceManager().getSharedPreferences();
 			np.setMinValue(1);
 			np.setMaxValue(100000);
 			np.setValue(prefs.getInt("goal", 10000));
@@ -145,7 +143,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					np.clearFocus();
-					prefs.edit().putInt("goal", np.getValue()).apply();
+					prefs.edit().putInt("goal", np.getValue()).commit();
 					preference.setSummary(getString(R.string.goal_summary, np.getValue()));
 					dialog.dismiss();
 					getActivity().startService(
@@ -164,7 +162,6 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			break;
 		case R.string.step_size:
 			builder = new AlertDialog.Builder(getActivity());
-			prefs = getPreferenceManager().getSharedPreferences();
 			v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);
 			final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
 			final EditText value = (EditText) v.findViewById(R.id.value);

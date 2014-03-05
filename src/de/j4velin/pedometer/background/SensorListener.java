@@ -40,7 +40,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 
 /**
  * Background service which keeps the step-sensor listener alive to always get
@@ -100,17 +99,21 @@ public class SensorListener extends Service implements SensorEventListener {
 				today_offset = -steps;
 			notificationBuilder.setProgress(goal, today_offset + steps, false);
 			if (today_offset + steps < goal) {
-				notificationBuilder.setContentText(getString(R.string.notification_text,
-						NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps))));
+				notificationBuilder.setContentText(getString(
+						R.string.notification_text,
+						NumberFormat.getInstance(Locale.getDefault()).format(
+								(goal - today_offset - steps))));
 			} else {
 				notificationBuilder.setContentText(getString(R.string.goal_reached_notification,
-						NumberFormat.getInstance(Locale.getDefault()).format((today_offset + steps))));
+						NumberFormat.getInstance(Locale.getDefault())
+								.format((today_offset + steps))));
 			}
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationBuilder.build());
+			((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1,
+					notificationBuilder.build());
 		}
 		if (steps % 500 == 0) {
-			PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("backup_steps", steps)
-					.putLong("backup_date", Util.getToday()).apply();
+			getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+					.putInt("backup_steps", steps).putLong("backup_date", Util.getToday()).apply();
 		}
 
 	}
@@ -125,8 +128,8 @@ public class SensorListener extends Service implements SensorEventListener {
 		IS_RUNNING = true;
 
 		if (Logger.LOG)
-			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null) + " flags: " + flags
-					+ " startid: " + startId);
+			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null)
+					+ " flags: " + flags + " startid: " + startId);
 		if (intent.getBooleanExtra("updateNotificationState", false)) {
 			updateNotificationState();
 		}
@@ -146,9 +149,10 @@ public class SensorListener extends Service implements SensorEventListener {
 		// Workaround as on Android 4.4.2 START_STICKY has currently no
 		// effect
 		// -> restart service every hour
-		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System
-				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
-				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
+		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(
+				AlarmManager.RTC, System.currentTimeMillis() + 1000 * 60 * 60, PendingIntent
+						.getService(getApplicationContext(), 2, new Intent(this,
+								SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
 		return START_STICKY;
 	}
@@ -158,8 +162,10 @@ public class SensorListener extends Service implements SensorEventListener {
 	 * goal and today_offset values (for example at midnight)
 	 */
 	private void updateNotificationState() {
-		if (getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getBoolean("notification", true)) {
-			goal = PreferenceManager.getDefaultSharedPreferences(this).getInt("goal", 10000);
+		if (getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getBoolean(
+				"notification", true)) {
+			goal = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt("goal",
+					10000);
 			Database db = new Database(this);
 			db.open();
 			today_offset = db.getSteps(Util.getToday());
@@ -169,14 +175,21 @@ public class SensorListener extends Service implements SensorEventListener {
 				if (today_offset == Integer.MIN_VALUE)
 					today_offset = -steps;
 				notificationBuilder.setProgress(goal, today_offset + steps, false).setContentText(
-						getString(R.string.notification_text,
-								NumberFormat.getInstance(Locale.getDefault()).format((goal - today_offset - steps))));
+						getString(
+								R.string.notification_text,
+								NumberFormat.getInstance(Locale.getDefault()).format(
+										(goal - today_offset - steps))));
 			} else {
-				notificationBuilder.setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
+				notificationBuilder
+						.setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
 			}
-			notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
+			notificationBuilder
+					.setPriority(Notification.PRIORITY_MIN)
+					.setShowWhen(false)
 					.setContentTitle(getString(R.string.notification_title))
-					.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
+					.setContentIntent(
+							PendingIntent.getActivity(this, 0,
+									new Intent(this, MainActivity.class), 0))
 					.setSmallIcon(R.drawable.ic_launcher).build();
 
 			// Workaround as on Android 4.4.2 START_STICKY has currently no
@@ -211,7 +224,8 @@ public class SensorListener extends Service implements SensorEventListener {
 		if (Logger.LOG)
 			Logger.log("sensor service task removed");
 		// Restart service in 500 ms
-		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System.currentTimeMillis() + 500,
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC,
+				System.currentTimeMillis() + 500,
 				PendingIntent.getService(this, 3, new Intent(this, SensorListener.class), 0));
 	}
 
