@@ -50,17 +50,19 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		findPreference("import").setOnPreferenceClickListener(this);
 		findPreference("export").setOnPreferenceClickListener(this);
 
-		findPreference("notification").setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
-						.putBoolean("notification", (Boolean) newValue).commit();
+		findPreference("notification").setOnPreferenceChangeListener(
+				new OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object newValue) {
+						getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+								.edit().putBoolean("notification", (Boolean) newValue).commit();
 
-				getActivity().startService(
-						new Intent(getActivity(), SensorListener.class).putExtra("updateNotificationState", true));
-				return true;
-			}
-		});
+						getActivity().startService(
+								new Intent(getActivity(), SensorListener.class).putExtra(
+										"updateNotificationState", true));
+						return true;
+					}
+				});
 
 		Preference account = findPreference("account");
 		account.setOnPreferenceClickListener(this);
@@ -71,11 +73,15 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		// saved in the savedInstanceState bundle
 		if ((savedInstanceState == null && ((MainActivity) getActivity()).getGC().isConnected())
 				|| (savedInstanceState != null && savedInstanceState.containsKey("player"))) {
-			account.setSummary(getString(R.string.signed_in, savedInstanceState == null ? ((MainActivity) getActivity()).getGC()
-					.getCurrentPlayer().getDisplayName() : savedInstanceState.getString("player")));
+			account.setSummary(getString(
+					R.string.signed_in,
+					savedInstanceState == null ? ((MainActivity) getActivity()).getGC()
+							.getCurrentPlayer().getDisplayName() : savedInstanceState
+							.getString("player")));
 		}
 
-		final SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+		final SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
+				Context.MODE_MULTI_PROCESS);
 
 		Preference goal = findPreference("goal");
 		goal.setOnPreferenceClickListener(this);
@@ -83,7 +89,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
 		Preference stepsize = findPreference("stepsize");
 		stepsize.setOnPreferenceClickListener(this);
-		stepsize.setSummary(getString(R.string.step_size_summary, prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE),
+		stepsize.setSummary(getString(R.string.step_size_summary,
+				prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE),
 				prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT)));
 
 		setHasOptionsMenu(true);
@@ -94,7 +101,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		super.onSaveInstanceState(outState);
 		try {
 			if (((MainActivity) getActivity()).getGC().isConnected())
-				outState.putString("player", ((MainActivity) getActivity()).getGC().getCurrentPlayer().getDisplayName());
+				outState.putString("player", ((MainActivity) getActivity()).getGC()
+						.getCurrentPlayer().getDisplayName());
 			else
 				outState.remove("player");
 		} catch (Exception e) {
@@ -129,7 +137,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 	public boolean onPreferenceClick(final Preference preference) {
 		AlertDialog.Builder builder;
 		View v;
-		final SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+		final SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
+				Context.MODE_MULTI_PROCESS);
 		switch (preference.getTitleRes()) {
 		case R.string.goal:
 			builder = new AlertDialog.Builder(getActivity());
@@ -147,17 +156,20 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					preference.setSummary(getString(R.string.goal_summary, np.getValue()));
 					dialog.dismiss();
 					getActivity().startService(
-							new Intent(getActivity(), SensorListener.class).putExtra("updateNotificationState", true));
+							new Intent(getActivity(), SensorListener.class).putExtra(
+									"updateNotificationState", true));
 				}
 			});
-			builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
+			builder.setNegativeButton(android.R.string.cancel,
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
 			Dialog dialog = builder.create();
-			dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+			dialog.getWindow().setSoftInputMode(
+					WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 			dialog.show();
 			break;
 		case R.string.step_size:
@@ -165,7 +177,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);
 			final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
 			final EditText value = (EditText) v.findViewById(R.id.value);
-			unit.check(prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm : R.id.ft);
+			unit.check(prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm
+					: R.id.ft);
 			value.setText(String.valueOf(prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE)));
 			builder.setView(v);
 			builder.setTitle(R.string.set_step_size);
@@ -173,9 +186,14 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					try {
-						prefs.edit().putFloat("stepsize_value", Float.valueOf(value.getText().toString()))
-								.putString("stepsize_unit", unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft").apply();
-						preference.setSummary(getString(R.string.step_size_summary, Float.valueOf(value.getText().toString()),
+						prefs.edit()
+								.putFloat("stepsize_value",
+										Float.valueOf(value.getText().toString()))
+								.putString("stepsize_unit",
+										unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft")
+								.apply();
+						preference.setSummary(getString(R.string.step_size_summary,
+								Float.valueOf(value.getText().toString()),
 								unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
 					} catch (NumberFormatException nfe) {
 						nfe.printStackTrace();
@@ -183,20 +201,21 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					dialog.dismiss();
 				}
 			});
-			builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
+			builder.setNegativeButton(android.R.string.cancel,
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
 			builder.create().show();
 			break;
 		case R.string.about:
 			builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle(R.string.about);
 			try {
-				builder.setMessage(getString(R.string.about_text,
-						getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName));
+				builder.setMessage(getString(R.string.about_text, getActivity().getPackageManager()
+						.getPackageInfo(getActivity().getPackageName(), 0).versionName));
 			} catch (NameNotFoundException e1) {
 				// should not happen as the app is definitely installed when
 				// seeing the dialog
@@ -214,15 +233,17 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			builder = new AlertDialog.Builder(getActivity());
 			v = getActivity().getLayoutInflater().inflate(R.layout.signin, null);
 			builder.setView(v);
-			builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
+			builder.setNegativeButton(android.R.string.cancel,
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
 			if (((MainActivity) getActivity()).getGC().isConnected()) {
-				((TextView) v.findViewById(R.id.signedin)).setText(getString(R.string.signed_in, ((MainActivity) getActivity())
-						.getGC().getCurrentPlayer().getDisplayName()));
+				((TextView) v.findViewById(R.id.signedin))
+						.setText(getString(R.string.signed_in, ((MainActivity) getActivity())
+								.getGC().getCurrentPlayer().getDisplayName()));
 				v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
 				builder.setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
 					@Override
@@ -252,7 +273,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 				File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
 				if (!f.exists() || !f.canRead()) {
-					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.file_cant_read, f.getAbsolutePath()))
+					new AlertDialog.Builder(getActivity())
+							.setMessage(getString(R.string.file_cant_read, f.getAbsolutePath()))
 							.setPositiveButton(android.R.string.ok, new OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
@@ -272,7 +294,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					while ((line = in.readLine()) != null) {
 						data = line.split(";");
 						try {
-							if (db.insertDayFromBackup(Long.valueOf(data[0]), Integer.valueOf(data[1])))
+							if (db.insertDayFromBackup(Long.valueOf(data[0]),
+									Integer.valueOf(data[1])))
 								inserted++;
 						} catch (NumberFormatException nfe) {
 							skips++;
@@ -280,7 +303,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 					}
 					in.close();
 				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage()))
+					new AlertDialog.Builder(getActivity())
+							.setMessage(getString(R.string.error_file, e.getMessage()))
 							.setPositiveButton(android.R.string.ok, new OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
@@ -295,15 +319,17 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				new AlertDialog.Builder(getActivity())
 						.setMessage(
 								skips > 0 ? getString(R.string.entries_imported, inserted) + "\n"
-										+ getString(R.string.entries_ignored, skips) : getString(R.string.entries_imported,
-										inserted)).setPositiveButton(android.R.string.ok, new OnClickListener() {
+										+ getString(R.string.entries_ignored, skips) : getString(
+										R.string.entries_imported, inserted))
+						.setPositiveButton(android.R.string.ok, new OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								dialog.dismiss();
 							}
 						}).create().show();
 			} else {
-				new AlertDialog.Builder(getActivity()).setMessage(R.string.error_external_storage_not_available)
+				new AlertDialog.Builder(getActivity())
+						.setMessage(R.string.error_external_storage_not_available)
 						.setPositiveButton(android.R.string.ok, new OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
@@ -314,57 +340,29 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			break;
 		case R.string.export_title:
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				BufferedWriter out = null;
-				File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
-				try {
-					f.createNewFile();
-					out = new BufferedWriter(new FileWriter(f));
-				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage()))
+				final File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
+				if (f.exists()) {
+					new AlertDialog.Builder(getActivity())
+							.setMessage(
+									"File already exists. Are you sure you want to overwrite it?")
 							.setPositiveButton(android.R.string.ok, new OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+									writeToFile(f);
+								}
+							}).setNegativeButton(android.R.string.cancel, new OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									dialog.dismiss();
 								}
 							}).create().show();
-					e.printStackTrace();
-					break;
+				} else {
+					writeToFile(f);
 				}
-				Database db = new Database(getActivity());
-				db.open();
-				Cursor c = db.query(new String[] { "date", "steps" }, null, null, null, null, "date", null);
-				try {
-					if (c != null && c.moveToFirst()) {
-						while (!c.isAfterLast()) {
-							out.append(c.getString(0) + ";" + c.getString(1) + "\n");
-							c.moveToNext();
-						}
-					}
-					out.close();
-				} catch (IOException e) {
-					new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.error_file, e.getMessage()))
-							.setPositiveButton(android.R.string.ok, new OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.dismiss();
-								}
-							}).create().show();
-					e.printStackTrace();
-					break;
-				} finally {
-					if (c != null)
-						c.close();
-					db.close();
-				}
-				new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.data_saved, f.getAbsolutePath()))
-						.setPositiveButton(android.R.string.ok, new OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								dialog.dismiss();
-							}
-						}).create().show();
 			} else {
-				new AlertDialog.Builder(getActivity()).setMessage(R.string.error_external_storage_not_available)
+				new AlertDialog.Builder(getActivity())
+						.setMessage(R.string.error_external_storage_not_available)
 						.setPositiveButton(android.R.string.ok, new OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
@@ -375,5 +373,59 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			break;
 		}
 		return false;
+	}
+
+	private void writeToFile(final File f) {
+		BufferedWriter out = null;
+		try {
+			f.createNewFile();
+			out = new BufferedWriter(new FileWriter(f));
+		} catch (IOException e) {
+			new AlertDialog.Builder(getActivity())
+					.setMessage(getString(R.string.error_file, e.getMessage()))
+					.setPositiveButton(android.R.string.ok, new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					}).create().show();
+			e.printStackTrace();
+			return;
+		}
+		Database db = new Database(getActivity());
+		db.open();
+		Cursor c = db.query(new String[] { "date", "steps" }, null, null, null, null, "date", null);
+		try {
+			if (c != null && c.moveToFirst()) {
+				while (!c.isAfterLast()) {
+					out.append(c.getString(0) + ";" + Math.max(0, c.getInt(1)) + "\n");
+					c.moveToNext();
+				}
+			}
+			out.close();
+		} catch (IOException e) {
+			new AlertDialog.Builder(getActivity())
+					.setMessage(getString(R.string.error_file, e.getMessage()))
+					.setPositiveButton(android.R.string.ok, new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					}).create().show();
+			e.printStackTrace();
+			return;
+		} finally {
+			if (c != null)
+				c.close();
+			db.close();
+		}
+		new AlertDialog.Builder(getActivity())
+				.setMessage(getString(R.string.data_saved, f.getAbsolutePath()))
+				.setPositiveButton(android.R.string.ok, new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create().show();
 	}
 }
