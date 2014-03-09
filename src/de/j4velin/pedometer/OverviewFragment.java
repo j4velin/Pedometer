@@ -101,12 +101,10 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		Database db = new Database(getActivity());
 		db.open();
 
-		if (todayOffset == 0) {
-			if (Logger.LOG)
-				db.logState();
-			// read todays offset
-			todayOffset = db.getSteps(Util.getToday());
-		}
+		if (Logger.LOG)
+			db.logState();
+		// read todays offset
+		todayOffset = db.getSteps(Util.getToday());
 
 		goal = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt(
 				"goal", 10000);
