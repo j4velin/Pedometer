@@ -16,8 +16,8 @@
 
 package de.j4velin.pedometer;
 
-import com.google.android.gms.games.GamesClient;
-
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -39,9 +39,9 @@ public class PlayServices {
 	 * @param totalSteps
 	 *            the new score = total steps walked
 	 */
-	private static void updateTotalLeaderboard(final GamesClient gc, final Context c, int totalSteps) {
+	private static void updateTotalLeaderboard(final GoogleApiClient gc, final Context c, int totalSteps) {
 		// some cheat detection needed?
-		gc.submitScore(c.getString(R.string.leaderboard_most_steps_walked), totalSteps);
+		Games.Leaderboards.submitScore(gc,c.getString(R.string.leaderboard_most_steps_walked), totalSteps);
 	}
 	
 	/**
@@ -54,9 +54,9 @@ public class PlayServices {
 	 * @param steps
 	 *            the new score = max number of steps walked in one day
 	 */
-	private static void updateOneDayLeaderboard(final GamesClient gc, final Context c, int steps) {
+	private static void updateOneDayLeaderboard(final GoogleApiClient gc, final Context c, int steps) {
 		// some cheat detection needed?
-		gc.submitScore(c.getString(R.string.leaderboard_most_steps_walked_in_one_day), steps);
+		Games.Leaderboards.submitScore(gc, c.getString(R.string.leaderboard_most_steps_walked_in_one_day), steps);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class PlayServices {
 	 * @param todayOffset
 	 *            step offset for today
 	 */
-	static void achievementsAndLeaderboard(final GamesClient gc, final Context context) {
+	static void achievementsAndLeaderboard(final GoogleApiClient gc, final Context context) {
 		if (gc.isConnected()) {
 			Database db = new Database(context);
 			db.open();
@@ -83,7 +83,7 @@ public class PlayServices {
 			if (!prefs.getBoolean("achievement_boot_are_made_for_walking", false)) {
 				Cursor c = db.query(new String[] { "steps" }, "steps >= 7500", null, null, null, null, "1");
 				if (c.getCount() >= 1) {
-					gc.unlockAchievement(context.getString(R.string.achievement_boots_made_for_walking));
+					unlockAchievement(gc, context.getString(R.string.achievement_boots_made_for_walking));
 					prefs.edit().putBoolean("achievement_boot_are_made_for_walking", true).apply();
 				}
 				c.close();
@@ -91,7 +91,7 @@ public class PlayServices {
 			if (!prefs.getBoolean("achievement_boot_are_made_for_walking2", false)) {
 				Cursor c = db.query(new String[] { "steps" }, "steps >= 10000", null, null, null, null, "1");
 				if (c.getCount() >= 1) {
-					gc.unlockAchievement(context.getString(R.string.achievement_boots_made_for_walking_ii));
+					unlockAchievement(gc, context.getString(R.string.achievement_boots_made_for_walking_ii));
 					prefs.edit().putBoolean("achievement_boot_are_made_for_walking2", true).apply();
 				}
 				c.close();
@@ -99,7 +99,7 @@ public class PlayServices {
 			if (!prefs.getBoolean("achievement_boot_are_made_for_walking3", false)) {
 				Cursor c = db.query(new String[] { "steps" }, "steps >= 15000", null, null, null, null, "1");
 				if (c.getCount() >= 1) {
-					gc.unlockAchievement(context.getString(R.string.achievement_boots_made_for_walking_iii));
+					unlockAchievement(gc, context.getString(R.string.achievement_boots_made_for_walking_iii));
 					prefs.edit().putBoolean("achievement_boot_are_made_for_walking3", true).apply();
 				}
 				c.close();
@@ -111,19 +111,19 @@ public class PlayServices {
 
 			if (!prefs.getBoolean("achievement_stamina", false)) {
 				if (daysForStamina >= 5) {
-					gc.unlockAchievement(context.getString(R.string.achievement_stamina));
+					unlockAchievement(gc, context.getString(R.string.achievement_stamina));
 					prefs.edit().putBoolean("achievement_stamina", true).apply();
 				}
 			}
 			if (!prefs.getBoolean("achievement_stamina2", false)) {
 				if (daysForStamina >= 10) {
-					gc.unlockAchievement(context.getString(R.string.achievement_stamina_ii));
+					unlockAchievement(gc, context.getString(R.string.achievement_stamina_ii));
 					prefs.edit().putBoolean("achievement_stamina2", true).apply();
 				}
 			}
 			if (!prefs.getBoolean("achievement_stamina3", false)) {
 				if (daysForStamina >= 15) {
-					gc.unlockAchievement(context.getString(R.string.achievement_stamina_iii));
+					unlockAchievement(gc, context.getString(R.string.achievement_stamina_iii));
 					prefs.edit().putBoolean("achievement_stamina3", true).apply();
 				}
 			}
@@ -132,19 +132,19 @@ public class PlayServices {
 
 			if (!prefs.getBoolean("achievement_marathon", false)) {
 				if (totalSteps > 100000) {
-					gc.unlockAchievement(context.getString(R.string.achievement_marathon));
+					unlockAchievement(gc, context.getString(R.string.achievement_marathon));
 					prefs.edit().putBoolean("achievement_marathon", true).apply();
 				}
 			}
 			if (!prefs.getBoolean("achievement_marathon2", false)) {
 				if (totalSteps > 200000) {
-					gc.unlockAchievement(context.getString(R.string.achievement_marathon_ii));
+					unlockAchievement(gc, context.getString(R.string.achievement_marathon_ii));
 					prefs.edit().putBoolean("achievement_marathon2", true).apply();
 				}
 			}
 			if (!prefs.getBoolean("achievement_marathon3", false)) {
 				if (totalSteps > 500000) {
-					gc.unlockAchievement(context.getString(R.string.achievement_marathon_iii));
+					unlockAchievement(gc, context.getString(R.string.achievement_marathon_iii));
 					prefs.edit().putBoolean("achievement_marathon3", true).apply();
 				}
 			}
@@ -155,5 +155,8 @@ public class PlayServices {
 			
 			db.close();
 		}
+	}
+	private static void unlockAchievement(GoogleApiClient gc, String achivmentName){
+		Games.Achievements.unlock(gc, achivmentName);
 	}
 }
