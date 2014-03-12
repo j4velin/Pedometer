@@ -8,9 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
 
+import com.google.android.gms.games.Games;
+
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -72,8 +73,8 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		// saved in the savedInstanceState bundle
 		if ((savedInstanceState == null && ((MainActivity) getActivity()).getGC().isConnected())
 				|| (savedInstanceState != null && savedInstanceState.containsKey("player"))) {
-			account.setSummary(getString(R.string.signed_in, savedInstanceState == null ? ((MainActivity) getActivity()).getGC()
-					.getCurrentPlayer().getDisplayName() : savedInstanceState.getString("player")));
+			account.setSummary(getString(R.string.signed_in, savedInstanceState == null ? Games.Players.getCurrentPlayer(((MainActivity) getActivity()).getGC())
+					.getDisplayName() : savedInstanceState.getString("player")));
 		}
 
 		final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
@@ -95,7 +96,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		super.onSaveInstanceState(outState);
 		try {
 			if (((MainActivity) getActivity()).getGC().isConnected())
-				outState.putString("player", ((MainActivity) getActivity()).getGC().getCurrentPlayer().getDisplayName());
+				outState.putString("player", Games.Players.getCurrentPlayer(((MainActivity) getActivity()).getGC()).getDisplayName());
 			else
 				outState.remove("player");
 		} catch (Exception e) {
@@ -224,8 +225,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 				}
 			});
 			if (((MainActivity) getActivity()).getGC().isConnected()) {
-				((TextView) v.findViewById(R.id.signedin)).setText(getString(R.string.signed_in, ((MainActivity) getActivity())
-						.getGC().getCurrentPlayer().getDisplayName()));
+				((TextView) v.findViewById(R.id.signedin)).setText(getString(R.string.signed_in,
+						Games.Players.getCurrentPlayer(((MainActivity) getActivity())
+						.getGC()).getDisplayName()));
 				v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
 				builder.setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
 					@Override

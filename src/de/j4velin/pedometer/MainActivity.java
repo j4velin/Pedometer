@@ -16,11 +16,12 @@
 
 package de.j4velin.pedometer;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesClient;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
 import de.j4velin.pedometer.background.SensorListener;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -57,11 +58,11 @@ public class MainActivity extends BaseGameActivity {
 
 	@Override
 	public void onSignInSucceeded() {
-		PlayServices.achievementsAndLeaderboard(getGamesClient(), this);
+		PlayServices.achievementsAndLeaderboard(getApiClient(), this);
 	}
 
-	public GamesClient getGC() {
-		return getGamesClient();
+	public GoogleApiClient getGC() {
+		return getApiClient();
 	}
 
 	public void beginSignIn() {
@@ -92,9 +93,9 @@ public class MainActivity extends BaseGameActivity {
 			break;
 		case R.id.action_leaderboard:
 		case R.id.action_achievements:
-			if (getGamesClient().isConnected()) {
-				startActivityForResult(item.getItemId() == R.id.action_achievements ? getGamesClient().getAchievementsIntent()
-						: getGamesClient().getAllLeaderboardsIntent(), 1);
+			if (getApiClient().isConnected()) {
+				startActivityForResult(item.getItemId() == R.id.action_achievements ? Games.Achievements.getAchievementsIntent(getApiClient())
+						: Games.Leaderboards.getAllLeaderboardsIntent(getApiClient()), 1);
 			} else {
 				AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
 				builder2.setTitle(R.string.sign_in_necessary);
