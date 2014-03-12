@@ -85,6 +85,8 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public void onAccuracyChanged(final Sensor sensor, int accuracy) {
+		if (Logger.LOG)
+			Logger.log("accuracy changed: "+accuracy);
 	}
 
 	@Override
@@ -153,6 +155,10 @@ public class SensorListener extends Service implements SensorEventListener {
 				AlarmManager.RTC, System.currentTimeMillis() + 1000 * 60 * 60, PendingIntent
 						.getService(getApplicationContext(), 2, new Intent(this,
 								SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
+		
+		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
 
 		return START_STICKY;
 	}
@@ -211,9 +217,6 @@ public class SensorListener extends Service implements SensorEventListener {
 		super.onCreate();
 		if (Logger.LOG)
 			Logger.log("service created");
-		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
 
 		updateNotificationState();
 	}
