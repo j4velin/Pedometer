@@ -94,7 +94,7 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		if (event.values[0] == 0) // unlikly to be a real value
+		if (event.values[0] == 0) // unlikely to be a real value
 			return;
 		steps = (int) event.values[0];
 
