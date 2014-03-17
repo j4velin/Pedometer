@@ -1,5 +1,6 @@
 package de.j4velin.pedometer;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import com.echo.holographlibrary.PieSlice;
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -44,16 +45,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class OverviewFragment extends Fragment implements SensorEventListener {
 
-	private TextView stepsView, totalView, averageView;
+	private TextView stepsView, totalView, averageView, partialDateView, partialStepsView;
+	private Button partialButton;
 	private PieSlice sliceGoal, sliceCurrent;
 	private PieGraph pg;
-	private int todayOffset, total_start, goal, since_boot, total_days;
+	private int todayOffset, total_start, goal, since_boot, total_days, partial_step_ini;
 	public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
-	private boolean showSteps = true;
+	public final static DateFormat dateFortmatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT,Locale.getDefault());
+	private boolean showSteps = true, partialStarted = false;
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
@@ -67,6 +71,9 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		stepsView = (TextView) v.findViewById(R.id.steps);
 		totalView = (TextView) v.findViewById(R.id.total);
 		averageView = (TextView) v.findViewById(R.id.average);
+		partialDateView = (TextView) v.findViewById(R.id.date_partial_counter);
+		partialStepsView = (TextView) v.findViewById(R.id.steps_partial_counter);
+		partialButton = (Button) v.findViewById(R.id.button_partial_counter);
 
 		pg = (PieGraph) v.findViewById(R.id.graph);
 
@@ -89,7 +96,42 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 				stepsDistanceChanged();
 			}
 		});
+		partialStarted = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+				.getBoolean("partial_active", false);
+		partial_step_ini = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+				.getInt("partial_stepsOffset", 0);
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+				.getLong("partial_start_date", 0));
+		if (partialStarted){
+			partialButton.setText(R.string.button_stop_partial);
+			partialDateView.setText(dateFortmatter.format(cal));
+		} else {
+			partialButton.setText(R.string.button_start_partial);
+		}
 
+		partialButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				SharedPreferences pref = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+				Editor prefEditor = pref.edit();
+				Calendar cal = Calendar.getInstance();
+				if (partialStarted){//stop
+					partialButton.setText(R.string.button_start_partial);
+					partialDateView.setText("");
+				} else {//start
+					partialButton.setText(R.string.button_stop_partial);
+					partialDateView.setText(dateFortmatter.format(cal));
+					prefEditor.putLong("partial_start_date", cal.getTimeInMillis());
+					partial_step_ini = Math.max(total_start + todayOffset + since_boot, 0);
+					prefEditor.putInt("partial_stepsOffset", partial_step_ini);
+				}
+				partialStarted = !partialStarted;
+				prefEditor.putBoolean("partial_active", partialStarted).commit();
+				stepsDistanceChanged();
+			}
+		});
 		return v;
 	}
 
@@ -111,37 +153,37 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 
 		getActivity().bindService(new Intent(getActivity(), SensorListener.class),
 				new ServiceConnection() {
-					@Override
-					public void onServiceDisconnected(ComponentName name) {
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
 
-					}
+			}
 
-					@SuppressLint("HandlerLeak")
-					@Override
-					public void onServiceConnected(ComponentName name, IBinder service) {
-						Messenger messenger = new Messenger(service);
-						try {
-							final ServiceConnection conn = this;
-							Messenger incoming = new Messenger(new Handler() {
-								public void handleMessage(Message msg) {
-									if (Logger.LOG)
-										Logger.log("SensorListener.steps: " + msg.arg1);
-									since_boot = msg.arg1;
-									updatePie();
-									if (getActivity() != null)
-										getActivity().unbindService(conn);
-								}
-							});
-							Message msg = Message.obtain();
-							msg.replyTo = incoming;
-							messenger.send(msg);
-						} catch (RemoteException e) {
+			@SuppressLint("HandlerLeak")
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder service) {
+				Messenger messenger = new Messenger(service);
+				try {
+					final ServiceConnection conn = this;
+					Messenger incoming = new Messenger(new Handler() {
+						public void handleMessage(Message msg) {
 							if (Logger.LOG)
-								Logger.log(e);
-							e.printStackTrace();
+								Logger.log("SensorListener.steps: " + msg.arg1);
+							since_boot = msg.arg1;
+							updatePie();
+							if (getActivity() != null)
+								getActivity().unbindService(conn);
 						}
-					}
-				}, 0);
+					});
+					Message msg = Message.obtain();
+					msg.replyTo = incoming;
+					messenger.send(msg);
+				} catch (RemoteException e) {
+					if (Logger.LOG)
+						Logger.log(e);
+					e.printStackTrace();
+				}
+			}
+		}, 0);
 
 		// register a sensorlistener to live update the UI if a step is taken
 		SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -166,7 +208,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		} else {
 			String unit = getActivity().getSharedPreferences("pedometer",
 					Context.MODE_MULTI_PROCESS).getString("stepsize_unit",
-					SettingsFragment.DEFAULT_STEP_UNIT);
+							SettingsFragment.DEFAULT_STEP_UNIT);
 			if (unit.equals("cm")) {
 				unit = "km";
 			} else {
@@ -252,6 +294,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			stepsView.setText(formatter.format(steps_today));
 			totalView.setText(formatter.format(total_start + steps_today));
 			averageView.setText(formatter.format((total_start + steps_today) / total_days));
+			partialStepsView.setText(partialStarted?formatter.format(total_start + steps_today - partial_step_ini):"");
 		} else {
 			// update only every 10 steps when displaying distance
 			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
@@ -259,16 +302,20 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			float stepsize = prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
 			float distance_today = steps_today * stepsize;
 			float distance_total = (total_start + steps_today) * stepsize;
+			float distance_partial = (total_start + steps_today - partial_step_ini) * stepsize;
 			if (prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT).equals("cm")) {
 				distance_today /= 100000;
 				distance_total /= 100000;
+				distance_partial /= 100000;
 			} else {
 				distance_today /= 5280;
 				distance_total /= 5280;
+				distance_partial /= 5280;
 			}
 			stepsView.setText(formatter.format(distance_today));
 			totalView.setText(formatter.format(distance_total));
 			averageView.setText(formatter.format(distance_total / total_days));
+			partialStepsView.setText(partialStarted?formatter.format(distance_partial):"");
 		}
 	}
 
