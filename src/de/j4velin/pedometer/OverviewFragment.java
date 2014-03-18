@@ -100,8 +100,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 				.getBoolean("partial_active", false);
 		partial_step_ini = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
 				.getInt("partial_stepsOffset", 0);
-		Date cal = new Date();
-		cal.setTimeInMillis(getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+		Date cal = new Date(getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
 				.getLong("partial_start_date", 0));
 		if (partialStarted){
 			partialButton.setText(R.string.button_stop_partial);
