@@ -56,7 +56,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 	private PieGraph pg;
 	private int todayOffset, total_start, goal, since_boot, total_days, partial_step_ini;
 	public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
-	public final static DateFormat dateFortmatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT,Locale.getDefault());
+	public final static DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT,Locale.getDefault());
 	private boolean showSteps = true, partialStarted = false;
 
 	@Override
@@ -100,12 +100,12 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 				.getBoolean("partial_active", false);
 		partial_step_ini = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
 				.getInt("partial_stepsOffset", 0);
-		Calendar cal = Calendar.getInstance();
+		Date cal = new Date();
 		cal.setTimeInMillis(getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
 				.getLong("partial_start_date", 0));
 		if (partialStarted){
 			partialButton.setText(R.string.button_stop_partial);
-			partialDateView.setText(dateFortmatter.format(cal));
+			partialDateView.setText(dateFormatter.format(cal));
 		} else {
 			partialButton.setText(R.string.button_start_partial);
 		}
@@ -122,7 +122,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 					partialDateView.setText("");
 				} else {//start
 					partialButton.setText(R.string.button_stop_partial);
-					partialDateView.setText(dateFortmatter.format(cal));
+					partialDateView.setText(dateFormatter.format(cal));
 					prefEditor.putLong("partial_start_date", cal.getTimeInMillis());
 					partial_step_ini = Math.max(total_start + todayOffset + since_boot, 0);
 					prefEditor.putInt("partial_stepsOffset", partial_step_ini);
