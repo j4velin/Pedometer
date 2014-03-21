@@ -19,7 +19,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,7 +26,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -49,7 +47,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 		super.onCreate(savedInstanceState);
 
 		addPreferencesFromResource(R.xml.settings);
-		findPreference("about").setOnPreferenceClickListener(this);
 		findPreference("import").setOnPreferenceClickListener(this);
 		findPreference("export").setOnPreferenceClickListener(this);
 
@@ -125,7 +122,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 		menu.findItem(R.id.action_settings).setVisible(false);
 		// don't show split count setting as the split count dialog is only
 		// accessible from the overview fragment
-		menu.findItem(R.id.split_count).setVisible(false);
+		menu.findItem(R.id.action_split_count).setVisible(false);
 	}
 
 	@Override
@@ -194,30 +191,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 			builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			builder.create().show();
-			break;
-		case R.string.about:
-			builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle(R.string.about);
-			TextView tv = new TextView(getActivity());
-			tv.setPadding(10, 10, 10, 10);
-			tv.setText(R.string.about_text_links);
-			try {
-				tv.append(getString(R.string.about_app_version,
-						getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName));
-			} catch (NameNotFoundException e1) {
-				// should not happen as the app is definitely installed when
-				// seeing the dialog
-				e1.printStackTrace();
-			}
-			tv.setMovementMethod(LinkMovementMethod.getInstance());
-			builder.setView(tv);
-			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(final DialogInterface dialog, int which) {
 					dialog.dismiss();
 				}
 			});

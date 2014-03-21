@@ -26,8 +26,5 @@
         android:key="import"
         android:summary="@string/import_summary"
         android:title="@string/import_title" />
-    <Preference
-        android:key="about"
-        android:title="@string/about" />
 
 </PreferenceScreen>
