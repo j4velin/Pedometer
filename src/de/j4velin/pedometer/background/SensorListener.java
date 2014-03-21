@@ -20,7 +20,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.MainActivity;
+import de.j4velin.pedometer.Activity_Main;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
@@ -186,7 +186,7 @@ public class SensorListener extends Service implements SensorEventListener {
 			}
 			notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
 					.setContentTitle(getString(R.string.notification_title))
-					.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
+					.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, Activity_Main.class), 0))
 					.setSmallIcon(R.drawable.ic_launcher).build();
 
 			// Workaround as on Android 4.4.2 START_STICKY has currently no

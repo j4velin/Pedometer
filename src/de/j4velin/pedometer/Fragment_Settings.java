@@ -35,7 +35,7 @@ import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class SettingsFragment extends PreferenceFragment implements OnPreferenceClickListener {
+public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
 
 	final static int DEFAULT_GOAL = 10000;
 	final static float DEFAULT_STEP_SIZE = Locale.getDefault() == Locale.US ? 2.5f : 75f;
@@ -71,9 +71,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 		// change for example), then the fragment's onCreate is called before
 		// the new GamesClient is setup. In this case, just use the player name
 		// saved in the savedInstanceState bundle
-		if ((savedInstanceState == null && ((MainActivity) getActivity()).getGC().isConnected())
+		if ((savedInstanceState == null && ((Activity_Main) getActivity()).getGC().isConnected())
 				|| (savedInstanceState != null && savedInstanceState.containsKey("player"))) {
-			account.setSummary(getString(R.string.signed_in, savedInstanceState == null ? Games.Players.getCurrentPlayer(((MainActivity) getActivity()).getGC())
+			account.setSummary(getString(R.string.signed_in, savedInstanceState == null ? Games.Players.getCurrentPlayer(((Activity_Main) getActivity()).getGC())
 					.getDisplayName() : savedInstanceState.getString("player")));
 		}
 
@@ -97,9 +97,9 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		try {
-			if (((MainActivity) getActivity()).getGC().isConnected())
+			if (((Activity_Main) getActivity()).getGC().isConnected())
 				outState.putString("player", Games.Players.getCurrentPlayer(
-				((MainActivity) getActivity()).getGC()).getDisplayName());
+				((Activity_Main) getActivity()).getGC()).getDisplayName());
 			else
 				outState.remove("player");
 		} catch (Exception e) {
@@ -127,7 +127,7 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-		return ((MainActivity) getActivity()).optionsItemSelected(item);
+		return ((Activity_Main) getActivity()).optionsItemSelected(item);
 	}
 
 	@Override
@@ -237,15 +237,15 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 							dialog.dismiss();
 						}
 					});
-			if (((MainActivity) getActivity()).getGC().isConnected()) {
+			if (((Activity_Main) getActivity()).getGC().isConnected()) {
 				((TextView) v.findViewById(R.id.signedin)).setText(getString(R.string.signed_in,
-						Games.Players.getCurrentPlayer(((MainActivity) getActivity())
+						Games.Players.getCurrentPlayer(((Activity_Main) getActivity())
 						.getGC()).getDisplayName()));
 				v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
 				builder.setPositiveButton(R.string.sign_out, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						((MainActivity) getActivity()).signOut();
+						((Activity_Main) getActivity()).signOut();
 						preference.setSummary(getString(R.string.sign_in));
 						dialog.dismiss();
 					}
@@ -253,13 +253,13 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
 			}
 			final Dialog d = builder.create();
 
-			if (!((MainActivity) getActivity()).getGC().isConnected()) {
+			if (!((Activity_Main) getActivity()).getGC().isConnected()) {
 				v.findViewById(R.id.signedin).setVisibility(View.GONE);
 				v.findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(final View v) {
 						// start the asynchronous sign in flow
-						((MainActivity) getActivity()).beginSignIn();
+						((Activity_Main) getActivity()).beginSignIn();
 						d.dismiss();
 					}
 				});

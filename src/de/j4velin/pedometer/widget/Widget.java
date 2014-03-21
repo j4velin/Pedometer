@@ -16,7 +16,7 @@
 
 package de.j4velin.pedometer.widget;
 
-import de.j4velin.pedometer.MainActivity;
+import de.j4velin.pedometer.Activity_Main;
 import de.j4velin.pedometer.R;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -38,7 +38,7 @@ public class Widget extends AppWidgetProvider {
 		final SharedPreferences prefs = context.getSharedPreferences("Widgets",
 				Context.MODE_PRIVATE);
 		final PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId,
-				new Intent(context, MainActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
+				new Intent(context, Activity_Main.class), Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
 		views.setOnClickPendingIntent(R.id.widget, pendingIntent);

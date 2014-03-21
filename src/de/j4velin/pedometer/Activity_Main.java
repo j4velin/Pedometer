@@ -30,7 +30,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-public class MainActivity extends BaseGameActivity {
+public class Activity_Main extends BaseGameActivity {
 
 	@Override
 	protected void onCreate(final Bundle b) {
@@ -38,7 +38,7 @@ public class MainActivity extends BaseGameActivity {
 		startService(new Intent(this, SensorListener.class));
 		if (b == null) {
 			// Create new fragment and transaction
-			Fragment newFragment = new OverviewFragment();
+			Fragment newFragment = new Fragment_Overview();
 			FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 			// Replace whatever is in the fragment_container view with this
@@ -87,7 +87,7 @@ public class MainActivity extends BaseGameActivity {
 			getFragmentManager().popBackStackImmediate();
 			break;
 		case R.id.action_settings:
-			getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).addToBackStack(null)
+			getFragmentManager().beginTransaction().replace(android.R.id.content, new Fragment_Settings()).addToBackStack(null)
 					.commit();
 			break;
 		case R.id.action_leaderboard:
@@ -103,7 +103,7 @@ public class MainActivity extends BaseGameActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
-						getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
+						getFragmentManager().beginTransaction().replace(android.R.id.content, new Fragment_Settings()).commit();
 					}
 				});
 				builder2.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
