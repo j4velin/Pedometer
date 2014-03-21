@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
+
 import com.google.android.gms.games.Games;
+
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import android.app.AlertDialog;
@@ -25,6 +27,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -210,14 +213,19 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 		case R.string.about:
 			builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle(R.string.about);
+			TextView tv = new TextView(getActivity());
+			tv.setPadding(10, 10, 10, 10);
+			tv.setText(R.string.about_text_links);
 			try {
-				builder.setMessage(getString(R.string.about_text, getActivity().getPackageManager()
-						.getPackageInfo(getActivity().getPackageName(), 0).versionName));
+				tv.append(getString(R.string.about_app_version,
+						getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName));
 			} catch (NameNotFoundException e1) {
 				// should not happen as the app is definitely installed when
 				// seeing the dialog
 				e1.printStackTrace();
 			}
+			tv.setMovementMethod(LinkMovementMethod.getInstance());
+			builder.setView(tv);
 			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(final DialogInterface dialog, int which) {
