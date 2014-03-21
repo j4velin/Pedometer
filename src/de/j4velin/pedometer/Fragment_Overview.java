@@ -15,7 +15,6 @@ import com.echo.holographlibrary.PieSlice;
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
-
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.ComponentName;
@@ -190,7 +189,14 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-		return ((Activity_Main) getActivity()).optionsItemSelected(item);
+		switch (item.getItemId()) {
+		case R.id.split_count:
+			Dialog_Split.getDialog(getActivity(), total_start + Math.max(todayOffset + since_boot, 0)).show();
+			return true;
+		default:
+			return ((Activity_Main) getActivity()).optionsItemSelected(item);
+		}
+
 	}
 
 	@Override
