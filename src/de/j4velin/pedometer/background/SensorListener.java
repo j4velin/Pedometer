@@ -134,7 +134,7 @@ public class SensorListener extends Service implements SensorEventListener {
 		if (Logger.LOG)
 			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null) + " flags: " + flags
 					+ " startid: " + startId);
-		if (intent.getBooleanExtra("updateNotificationState", false)) {
+		if (intent != null && intent.getBooleanExtra("updateNotificationState", false)) {
 			updateNotificationState();
 		}
 
