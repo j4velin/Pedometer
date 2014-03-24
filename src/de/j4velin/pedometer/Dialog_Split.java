@@ -32,7 +32,7 @@ public class Dialog_Split {
 		}
 		((TextView) d.findViewById(R.id.distance)).setText(Fragment_Overview.formatter.format(distance));
 		((TextView) d.findViewById(R.id.date)).setText(c.getString(R.string.since, java.text.DateFormat.getDateTimeInstance()
-				.format(System.currentTimeMillis())));
+				.format(split_date)));
 
 		final View started = d.findViewById(R.id.started);
 		final View stopped = d.findViewById(R.id.stopped);
