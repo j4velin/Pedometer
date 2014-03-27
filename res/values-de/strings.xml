@@ -17,7 +17,6 @@
     <string name="notification">Zeige Benachrichtigung</string>
     <string name="set_goal">Ziel setzen</string>
     <string name="set_step_size">Schrittweite ändern</string>
-    <string name="about_text">Diese App wurde von Thomas Hoffmann (www.j4velin-development.de) geschrieben und verwendet \'HoloGraphLibrary\' von Daniel Nadeau und \'ColorPickerPreference\' von Sergey Margaritov.\n\nApp-Version: %s\n\nSchrittzähler ist ein Open-Source Projekt, der Quellcode kann unter https://github.com/j4velin/Pedometer abgerufen werden</string>
     <string name="sign_out">Ausloggen</string>
     <string name="file_cant_read">Fehler: %s kann nicht gelesen werden</string>
     <string name="error_file">Fehler beim Zugriff auf die Datei: %s</string>
@@ -46,4 +45,14 @@
     <string name="average_last_7_days">Durchschnitt der letzten 7 Tage</string>
     <string name="total_this_month">Gesamt diesen Monat</string>
     <string name="average_this_month">Durchschnitt diesen Monat</string>
+    <string name="file_already_exists">Datei existiert bereits. Bist du sicher, dass du diese überschreiben willst?</string>
+    <string name="about_text_links">Diese App wurde von Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) erstellt und verwendet <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> von Daniel Nadeau und <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> von Sergey Margaritov.\n\nDie App ist Open-Source! Der Quellcode und die vollständige Liste alle Mitwirkenden kann auf <a href="https://github.com/j4velin/Pedometer">GitHub</a> eingesehen werden.\n\n</string>
+    <string name="about_app_version">App Version: %s</string>
+    <string name="since">Seit %s</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="close">schließen</string>
+    <string name="no_split_active">Kein Split-Counter aktiv. Klicke auf Start um die Schritte ab jetzt zu zählen.</string>
+    <string name="split_count">Split-Counter</string>
+
 </resources>
