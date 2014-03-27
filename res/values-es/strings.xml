@@ -17,7 +17,6 @@
     <string name="notification">Mostrar notificación</string>
     <string name="set_goal">Establecer objetivo</string>
     <string name="set_step_size">Establecer longitud de paso</string>
-    <string name="about_text">Esta aplicación ha sido creada por Thomas Hoffmann (www.j4velin-development.de) y utiliza \'HoloGraphLibrary\' de Daniel Nadeau y \'ColorPickerPreference\' de Sergey Margaritov.\n\nVersión de la aplicación: %s\n\n¡Podómetro es código libre! Obtén el código de https://github.com/j4velin/Pedometer</string>
     <string name="sign_out">Cerrar sesión</string>
     <string name="file_cant_read">Error: no se puede leer %s </string>
     <string name="error_file">Error accediendo al archivo: %s</string>
@@ -46,5 +45,14 @@
     <string name="average_last_7_days">Media últimos 7 días</string>
     <string name="total_this_month">Total este mes</string>
     <string name="average_this_month">Media este mes</string>
+    <string name="file_already_exists">El archivo ya existe. ¿Estás seguro de querer sobreescribirlo?</string>
+    <string name="about_text_links">Esta aplicación fue creada por Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) y utiliza <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> de Daniel Nadeau y <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> de Sergey Margaritov.\n\n¡Podómetro es código libre! Consigue el código y la lista completa de contribuciones de <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">Versión: %s</string>
+    <string name="since">Desde %s</string>
+    <string name="start">Iniciar</string>
+    <string name="stop">Parar</string>
+    <string name="close">cerrar</string>
+    <string name="no_split_active">No hay contador parcial activo. Pulsa iniciar para contar los pasos a partir de este momento</string>
+    <string name="split_count">Contador parcial</string>
     
 </resources>
