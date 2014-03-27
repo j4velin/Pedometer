@@ -22,7 +22,6 @@ import de.j4velin.pedometer.util.Util;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 
 public class ShutdownRecevier extends BroadcastReceiver {
 
@@ -44,7 +43,8 @@ public class ShutdownRecevier extends BroadcastReceiver {
 		// broadcast might not be send. Therefore, the app will check this
 		// setting on the next boot and displays an error message if it's not
 		// set to true
-		PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("correctShutdown", true).commit();
+		context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+				.putBoolean("correctShutdown", true).commit();
 	}
 
 }

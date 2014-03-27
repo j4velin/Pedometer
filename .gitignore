@@ -32,3 +32,6 @@ proguard/
 /libs
 /proguard-project.txt
 /project.properties
+
+# dashclock jar
+dashclock-api-*

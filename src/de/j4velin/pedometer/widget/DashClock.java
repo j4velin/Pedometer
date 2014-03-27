@@ -30,8 +30,8 @@ import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.MainActivity;
-import de.j4velin.pedometer.OverviewFragment;
+import de.j4velin.pedometer.Activity_Main;
+import de.j4velin.pedometer.Fragment_Overview;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
@@ -66,8 +66,8 @@ public class DashClock extends DashClockExtension {
 							Database db = new Database(DashClock.this);
 							db.open();
 							int steps = Math.max(msg.arg1 + db.getSteps(Util.getToday()), 0);
-							data.visible(true).status(OverviewFragment.formatter.format(steps)).icon(R.drawable.ic_dashclock)
-									.clickIntent(new Intent(DashClock.this, MainActivity.class));
+							data.visible(true).status(Fragment_Overview.formatter.format(steps)).icon(R.drawable.ic_dashclock)
+									.clickIntent(new Intent(DashClock.this, Activity_Main.class));
 							db.close();
 							publishUpdate(data);
 							unbindService(conn);

@@ -16,7 +16,7 @@
 
 package de.j4velin.pedometer.widget;
 
-import de.j4velin.pedometer.MainActivity;
+import de.j4velin.pedometer.Activity_Main;
 import de.j4velin.pedometer.R;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -28,23 +28,25 @@ import android.graphics.Color;
 import android.widget.RemoteViews;
 
 public class Widget extends AppWidgetProvider {
-	
+
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		context.startService(new Intent(context, WidgetUpdateService.class));
 	}
 
 	static RemoteViews updateWidget(final int appWidgetId, final Context context, final int steps) {
-		final SharedPreferences prefs = context.getSharedPreferences("Widgets", Context.MODE_PRIVATE);
-		final PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, new Intent(context,
-				MainActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
+		final SharedPreferences prefs = context.getSharedPreferences("Widgets",
+				Context.MODE_PRIVATE);
+		final PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId,
+				new Intent(context, Activity_Main.class), Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
 		views.setOnClickPendingIntent(R.id.widget, pendingIntent);
 		views.setTextColor(R.id.widgetsteps, prefs.getInt("color_" + appWidgetId, Color.WHITE));
 		views.setTextViewText(R.id.widgetsteps, String.valueOf(steps));
 		views.setTextColor(R.id.widgettext, prefs.getInt("color_" + appWidgetId, Color.WHITE));
-		views.setInt(R.id.widget, "setBackgroundColor", prefs.getInt("background_" + appWidgetId, Color.TRANSPARENT));
+		views.setInt(R.id.widget, "setBackgroundColor",
+				prefs.getInt("background_" + appWidgetId, Color.TRANSPARENT));
 		return views;
 	}
 

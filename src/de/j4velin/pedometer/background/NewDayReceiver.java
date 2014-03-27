@@ -37,7 +37,7 @@ public class NewDayReceiver extends BroadcastReceiver {
 			Logger.log("Steps: " + SensorListener.steps);
 		}
 
-		if (SensorListener.IS_RUNNING) {
+		if (SensorListener.steps > 0) {
 			// Save the steps made yesterday and create a new
 			// row for today
 			Database db = new Database(context);
@@ -56,7 +56,7 @@ public class NewDayReceiver extends BroadcastReceiver {
 
 		} else {
 			// start the SensorListener first. SensorListener will then start
-			// this Receiver again as it see that there is no entry for today
+			// this Receiver again as it sees that there is no entry for today
 			// yet
 			context.startService(new Intent(context, SensorListener.class));
 		}

@@ -17,7 +17,6 @@
     <string name="notification">Show notification</string>
     <string name="set_goal">Set goal</string>
     <string name="set_step_size">Set step size</string>
-    <string name="about_text">This app was created by Thomas Hoffmann (www.j4velin-development.de) and uses \'HoloGraphLibrary\' by Daniel Nadeau and \'ColorPickerPreference\' by Sergey Margaritov.\n\nApp version: %s\n\nPedometer is open source! Get the code from https://github.com/j4velin/Pedometer</string>
     <string name="sign_out">Sign out</string>
     <string name="file_cant_read">Error: %s can not be read</string>
     <string name="error_file">Error accessing the file: %s</string>
@@ -46,5 +45,14 @@
     <string name="average_last_7_days">Average last 7 days</string>
     <string name="total_this_month">Total this month</string>
     <string name="average_this_month">Average this month</string>
+    <string name="file_already_exists">File already exists. Are you sure you want to overwrite it?</string>
+    <string name="about_text_links">This app was created by Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) and uses <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> by Daniel Nadeau and <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov.\n\nPedometer is open source! Get the code and the full list of contributors from <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">App version: %s</string>
+    <string name="since">Since %s</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="close">close</string>
+    <string name="no_split_active">No split counter active. Click start to count the steps from now on</string>
+    <string name="split_count">Split count</string>
 
 </resources>

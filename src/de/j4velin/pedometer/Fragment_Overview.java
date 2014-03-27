@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014 Thomas Hoffmann
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.j4velin.pedometer;
 
 import java.text.NumberFormat;
@@ -15,9 +30,7 @@ import com.echo.holographlibrary.PieSlice;
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
-
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
@@ -35,8 +48,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,10 +55,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.TextView;
 
-public class OverviewFragment extends Fragment implements SensorEventListener {
+public class Fragment_Overview extends Fragment implements SensorEventListener {
 
 	private TextView stepsView, totalView, averageView;
 	private PieSlice sliceGoal, sliceCurrent;
@@ -102,14 +112,12 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		Database db = new Database(getActivity());
 		db.open();
 
-		if (todayOffset == 0) {
-			if (Logger.LOG)
-				db.logState();
-			// read todays offset
-			todayOffset = db.getSteps(Util.getToday());
-		}
+		if (Logger.LOG)
+			db.logState();
+		// read todays offset
+		todayOffset = db.getSteps(Util.getToday());
 
-		goal = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("goal", 10000);
+		goal = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt("goal", 10000);
 
 		getActivity().bindService(new Intent(getActivity(), SensorListener.class), new ServiceConnection() {
 			@Override
@@ -164,8 +172,8 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		if (showSteps) {
 			((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
 		} else {
-			String unit = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("stepsize_unit",
-					SettingsFragment.DEFAULT_STEP_UNIT);
+			String unit = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getString("stepsize_unit",
+					Fragment_Settings.DEFAULT_STEP_UNIT);
 			if (unit.equals("cm")) {
 				unit = "km";
 			} else {
@@ -196,7 +204,14 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-		return ((MainActivity) getActivity()).optionsItemSelected(item);
+		switch (item.getItemId()) {
+		case R.id.action_split_count:
+			Dialog_Split.getDialog(getActivity(), total_start + Math.max(todayOffset + since_boot, 0)).show();
+			return true;
+		default:
+			return ((Activity_Main) getActivity()).optionsItemSelected(item);
+		}
+
 	}
 
 	@Override
@@ -251,11 +266,11 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			averageView.setText(formatter.format((total_start + steps_today) / total_days));
 		} else {
 			// update only every 10 steps when displaying distance
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-			float stepsize = prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
+			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+			float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
 			float distance_today = steps_today * stepsize;
 			float distance_total = (total_start + steps_today) * stepsize;
-			if (prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT).equals("cm")) {
+			if (prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT).equals("cm")) {
 				distance_today /= 100000;
 				distance_total /= 100000;
 			} else {
@@ -284,13 +299,13 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 		SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
 		yesterday.add(Calendar.DAY_OF_YEAR, -6);
 		int steps;
-		float distance, stepsize = SettingsFragment.DEFAULT_STEP_SIZE;
+		float distance, stepsize = Fragment_Settings.DEFAULT_STEP_SIZE;
 		boolean stepsize_cm = true;
 		if (!showSteps) {
 			// load some more settings if distance is needed
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-			stepsize = prefs.getFloat("stepsize_value", SettingsFragment.DEFAULT_STEP_SIZE);
-			stepsize_cm = prefs.getString("stepsize_unit", SettingsFragment.DEFAULT_STEP_UNIT).equals("cm");
+			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+			stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
+			stepsize_cm = prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT).equals("cm");
 		}
 		for (int i = 0; i < 7; i++) {
 			steps = db.getSteps(yesterday.getTimeInMillis());
@@ -324,43 +339,7 @@ public class OverviewFragment extends Fragment implements SensorEventListener {
 			g.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					final Dialog d = new Dialog(getActivity());
-					d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-					d.setContentView(R.layout.statistics);
-					d.findViewById(R.id.close).setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							d.dismiss();
-						}
-					});
-					Database db = new Database(getActivity());
-					db.open();
-
-					Pair<Date, Integer> record = db.getRecordData();
-
-					Calendar date = Calendar.getInstance();
-					date.setTimeInMillis(Util.getToday());
-					int daysThisMonth = date.get(Calendar.DAY_OF_MONTH);
-
-					date.add(Calendar.DATE, -7);
-
-					int thisWeek = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis()) + since_boot;
-
-					date.setTimeInMillis(Util.getToday());
-					date.set(Calendar.DAY_OF_MONTH, 1);
-					int thisMonth = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis()) + since_boot;
-
-					((TextView) d.findViewById(R.id.record)).setText(formatter.format(record.second) + " @ "
-							+ java.text.DateFormat.getDateInstance().format(record.first));
-
-					((TextView) d.findViewById(R.id.totalthisweek)).setText(formatter.format(thisWeek));
-					((TextView) d.findViewById(R.id.totalthismonth)).setText(formatter.format(thisMonth));
-
-					((TextView) d.findViewById(R.id.averagethisweek)).setText(formatter.format(thisWeek / 7));
-					((TextView) d.findViewById(R.id.averagethismonth)).setText(formatter.format(thisMonth / daysThisMonth));
-
-					db.close();
-					d.show();
+					Dialog_Statistics.getDialog(getActivity(), since_boot).show();
 				}
 			});
 		} else {

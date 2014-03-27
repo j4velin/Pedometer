@@ -59,15 +59,17 @@ public class WidgetUpdateService extends Service {
 								Logger.log("SensorListener.steps for widget: " + msg.arg1);
 							Database db = new Database(WidgetUpdateService.this);
 							db.open();
-							int steps = Math.max(msg.arg1 + db.getSteps(Util.getToday()),0);
+							int steps = Math.max(msg.arg1 + db.getSteps(Util.getToday()), 0);
 							db.close();
 							unbindService(conn);
-							final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
-							int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this,
-									Widget.class));
+							final AppWidgetManager appWidgetManager = AppWidgetManager
+									.getInstance(WidgetUpdateService.this);
+							int[] appWidgetIds = appWidgetManager
+									.getAppWidgetIds(new ComponentName(WidgetUpdateService.this,
+											Widget.class));
 							for (int appWidgetId : appWidgetIds) {
-								appWidgetManager.updateAppWidget(appWidgetId,
-										Widget.updateWidget(appWidgetId, WidgetUpdateService.this, steps));
+								appWidgetManager.updateAppWidget(appWidgetId, Widget.updateWidget(
+										appWidgetId, WidgetUpdateService.this, steps));
 							}
 							stopSelf();
 						}

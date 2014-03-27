@@ -15,10 +15,20 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/leaderboard"/>
-       <item
+    <item
         android:id="@+id/action_faq"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/faq"/>
+    <item
+        android:id="@+id/action_split_count"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/split_count"/>
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/about"/>
 
 </menu>

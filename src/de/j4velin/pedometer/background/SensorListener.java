@@ -20,7 +20,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.MainActivity;
+import de.j4velin.pedometer.Activity_Main;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
@@ -40,7 +40,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 
 /**
  * Background service which keeps the step-sensor listener alive to always get
@@ -52,7 +51,10 @@ import android.preference.PreferenceManager;
  */
 public class SensorListener extends Service implements SensorEventListener {
 
-	static boolean IS_RUNNING;
+	/**
+	 * Set this flag to start the NewDayReceiver once the SensorValue changes
+	 */
+	private static boolean DO_INSERT_NEW_DAY;
 
 	/**
 	 * The steps since boot as returned by the step-sensor
@@ -86,11 +88,13 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public void onAccuracyChanged(final Sensor sensor, int accuracy) {
+		if (Logger.LOG)
+			Logger.log("accuracy changed: " + accuracy);
 	}
 
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		if (event.values[0] == 0) // unlikly to be a real value
+		if (event.values[0] == 0) // unlikely to be a real value
 			return;
 		steps = (int) event.values[0];
 
@@ -109,8 +113,13 @@ public class SensorListener extends Service implements SensorEventListener {
 			((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationBuilder.build());
 		}
 		if (steps % 500 == 0) {
-			PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("backup_steps", steps)
+			getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit().putInt("backup_steps", steps)
 					.putLong("backup_date", Util.getToday()).apply();
+		}
+		if (DO_INSERT_NEW_DAY) {
+			// no entry for today yet
+			sendBroadcast(new Intent(this, NewDayReceiver.class));
+			DO_INSERT_NEW_DAY = false;
 		}
 
 	}
@@ -122,26 +131,14 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public int onStartCommand(final Intent intent, int flags, int startId) {
-		IS_RUNNING = true;
-
 		if (Logger.LOG)
 			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null) + " flags: " + flags
 					+ " startid: " + startId);
-		if (intent.getBooleanExtra("updateNotificationState", false)) {
+		if (intent != null && intent.getBooleanExtra("updateNotificationState", false)) {
 			updateNotificationState();
 		}
 
 		NewDayReceiver.sheduleAlarmForNextDay(this);
-
-		// check if NewDayReceiver was called for the current day
-		Database db = new Database(this);
-		db.open();
-		int steps_today = db.getSteps(Util.getToday());
-		db.close();
-		if (steps_today == Integer.MIN_VALUE) {
-			// no entry for today yet
-			sendBroadcast(new Intent(this, NewDayReceiver.class));
-		}
 
 		// Workaround as on Android 4.4.2 START_STICKY has currently no
 		// effect
@@ -149,6 +146,19 @@ public class SensorListener extends Service implements SensorEventListener {
 		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System
 				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
 				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
+
+		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+
+		// check if NewDayReceiver was called for the current day
+		Database db = new Database(this);
+		db.open();
+		int steps_today = db.getSteps(Util.getToday());
+		db.close();
+		// setting the DO_INSERT_NEW_DAY will insert a new day in the database
+		// once we got a real step value
+		DO_INSERT_NEW_DAY = steps_today == Integer.MIN_VALUE;
 
 		return START_STICKY;
 	}
@@ -159,7 +169,7 @@ public class SensorListener extends Service implements SensorEventListener {
 	 */
 	private void updateNotificationState() {
 		if (getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getBoolean("notification", true)) {
-			goal = PreferenceManager.getDefaultSharedPreferences(this).getInt("goal", 10000);
+			goal = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt("goal", 10000);
 			Database db = new Database(this);
 			db.open();
 			today_offset = db.getSteps(Util.getToday());
@@ -176,7 +186,7 @@ public class SensorListener extends Service implements SensorEventListener {
 			}
 			notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
 					.setContentTitle(getString(R.string.notification_title))
-					.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
+					.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, Activity_Main.class), 0))
 					.setSmallIcon(R.drawable.ic_launcher).build();
 
 			// Workaround as on Android 4.4.2 START_STICKY has currently no
@@ -198,9 +208,6 @@ public class SensorListener extends Service implements SensorEventListener {
 		super.onCreate();
 		if (Logger.LOG)
 			Logger.log("service created");
-		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
 
 		updateNotificationState();
 	}
@@ -226,7 +233,6 @@ public class SensorListener extends Service implements SensorEventListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		IS_RUNNING = false;
 		stopForeground(true);
 	}
 }

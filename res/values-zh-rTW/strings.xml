@@ -46,7 +46,6 @@
     <string name="average_last_7_days">本週平均</string>
     <string name="total_this_month">本月總計</string>
     <string name="average_this_month">本月平均</string>
-
-
+    <string name="file_already_exists">已有相同檔案，您確定要取代它嗎？</string>
 
 </resources>
