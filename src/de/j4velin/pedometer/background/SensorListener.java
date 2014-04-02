@@ -132,8 +132,7 @@ public class SensorListener extends Service implements SensorEventListener {
 	@Override
 	public int onStartCommand(final Intent intent, int flags, int startId) {
 		if (Logger.LOG)
-			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null) + " flags: " + flags
-					+ " startid: " + startId);
+			Logger.log("service started. steps: " + steps + " intent=null? " + (intent == null) + " startid: " + startId);
 		if (intent != null && intent.getBooleanExtra("updateNotificationState", false)) {
 			updateNotificationState();
 		}
@@ -148,8 +147,14 @@ public class SensorListener extends Service implements SensorEventListener {
 				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-		Sensor s = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-		sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+		try {
+			sm.unregisterListener(this);
+		} catch (Exception e) {
+			if (Logger.LOG)
+				Logger.log(e);
+			e.printStackTrace();
+		}
+		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
 
 		// check if NewDayReceiver was called for the current day
 		Database db = new Database(this);
@@ -231,6 +236,8 @@ public class SensorListener extends Service implements SensorEventListener {
 			SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 			sm.unregisterListener(this);
 		} catch (Exception e) {
+			if (Logger.LOG)
+				Logger.log(e);
 			e.printStackTrace();
 		}
 		stopForeground(true);
