@@ -154,7 +154,8 @@ public class SensorListener extends Service implements SensorEventListener {
 				Logger.log(e);
 			e.printStackTrace();
 		}
-		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
+		// Batch latency = 5 min 
+		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL, 5 * 60 * 1000);
 
 		// check if NewDayReceiver was called for the current day
 		Database db = new Database(this);
