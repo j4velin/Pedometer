@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -52,6 +53,8 @@ public class Activity_Main extends BaseGameActivity {
 			// Commit the transaction
 			transaction.commit();
 		}
+		getGameHelper().setConnectOnStart(
+				getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).getBoolean("autosignin", true));
 	}
 
 	@Override
@@ -61,6 +64,7 @@ public class Activity_Main extends BaseGameActivity {
 	@Override
 	public void onSignInSucceeded() {
 		PlayServices.achievementsAndLeaderboard(getApiClient(), this);
+		getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).edit().putBoolean("autosignin", true).apply();
 	}
 
 	public GoogleApiClient getGC() {
@@ -73,6 +77,7 @@ public class Activity_Main extends BaseGameActivity {
 
 	public void signOut() {
 		super.signOut();
+		getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).edit().putBoolean("autosignin", false).apply();
 	}
 
 	@Override
