@@ -83,6 +83,8 @@ public class SensorListener extends Service implements SensorEventListener {
 					Logger.log(e);
 				e.printStackTrace();
 			}
+			if (Logger.LOG)
+				Logger.log("SensorListener reply with steps: " + m.arg1);
 		};
 	});
 
@@ -94,7 +96,9 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		if (event.values[0] == 0) // unlikely to be a real value
+		if (Logger.LOG)
+			Logger.log("sensorlistener update: " + event.values[0]);
+		if (event.values[0] < steps) // should always be increasing
 			return;
 		steps = (int) event.values[0];
 
@@ -154,7 +158,7 @@ public class SensorListener extends Service implements SensorEventListener {
 				Logger.log(e);
 			e.printStackTrace();
 		}
-		// Batch latency = 5 min 
+		// Batch latency = 5 min
 		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL, 5 * 60 * 1000);
 
 		// check if NewDayReceiver was called for the current day
@@ -190,10 +194,13 @@ public class SensorListener extends Service implements SensorEventListener {
 			} else {
 				notificationBuilder.setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
 			}
-			notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
+			notificationBuilder
+					.setPriority(Notification.PRIORITY_MIN)
+					.setShowWhen(false)
 					.setContentTitle(getString(R.string.notification_title))
-					.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, Activity_Main.class), 0))
-					.setSmallIcon(R.drawable.ic_launcher).build();
+					.setContentIntent(
+							PendingIntent.getActivity(this, 0, new Intent(this, Activity_Main.class),
+									Intent.FLAG_ACTIVITY_NEW_TASK)).setSmallIcon(R.drawable.ic_launcher).build();
 
 			// Workaround as on Android 4.4.2 START_STICKY has currently no
 			// effect
