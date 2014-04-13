@@ -54,7 +54,7 @@ public class Activity_Main extends BaseGameActivity {
 			transaction.commit();
 		}
 		getGameHelper().setConnectOnStart(
-				getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).getBoolean("autosignin", true));
+				getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).getBoolean("autosignin", false));
 	}
 
 	@Override
