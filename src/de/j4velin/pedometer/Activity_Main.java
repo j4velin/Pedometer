@@ -112,7 +112,8 @@ public class Activity_Main extends BaseGameActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
-						getFragmentManager().beginTransaction().replace(android.R.id.content, new Fragment_Settings()).commit();
+						getFragmentManager().beginTransaction().replace(android.R.id.content, new Fragment_Settings())
+								.addToBackStack(null).commit();
 					}
 				});
 				builder2.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
