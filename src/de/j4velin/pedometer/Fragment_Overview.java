@@ -154,7 +154,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
 		// register a sensorlistener to live update the UI if a step is taken
 		SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI);
+		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI, 0);
 
 		total_start = db.getTotalWithoutToday();
 		total_days = db.getDays();
@@ -221,10 +221,10 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		if (event.values[0] == 0)
-			return;
 		if (Logger.LOG)
 			Logger.log("sensorChanged | todayOffset: " + todayOffset + " since boot: " + event.values[0]);
+		if (event.values[0] == 0)
+			return;
 		if (todayOffset == Integer.MIN_VALUE) {
 			// no values for today
 			// we dont know when the reboot was, so set todays steps to 0 by

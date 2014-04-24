@@ -96,10 +96,12 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		if (Logger.LOG)
-			Logger.log("sensorlistener update: " + event.values[0]);
-		if (event.values[0] < steps) // should always be increasing
+		if (event.values[0] < steps) { // should always be increasing
+			if (Logger.LOG)
+				Logger.log("error with sensorlistener update: received " + event.values[0] + " but steps is already set to "
+						+ steps);
 			return;
+		}
 		steps = (int) event.values[0];
 
 		// update only every 100 steps
@@ -158,8 +160,23 @@ public class SensorListener extends Service implements SensorEventListener {
 				Logger.log(e);
 			e.printStackTrace();
 		}
+
+		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL, 0);
+
+		// sensor batching is somehow broken - excerpt of the log:
+		// sensorlistener update: 17707.0
+		// sensorlistener update: 10081.0
+		// sensorlistener update: 17708.0
+		// accuracy changed: 3
+		// sensorlistener update: 17708.0
+		// sensorlistener update: 10081.0
+		// accuracy changed: 3
+		// sensorlistener update: 10081.0
+		//
 		// Batch latency = 5 min
-		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL, 5 * 60 * 1000);
+		// sm.registerListener(this,
+		// sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+		// SensorManager.SENSOR_DELAY_NORMAL, 5 * 60 * 1000);
 
 		// check if NewDayReceiver was called for the current day
 		Database db = new Database(this);
