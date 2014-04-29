@@ -40,8 +40,6 @@ public class BootReceiver extends BroadcastReceiver {
 												// a
 												// row for today
 
-		context.startService(new Intent(context, SensorListener.class));
-
 		SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
 		if (!prefs.getBoolean("correctShutdown", false)) {
 			// DEVICE_SHUTDOWN was not sent on shutdown -> display error message
@@ -73,5 +71,6 @@ public class BootReceiver extends BroadcastReceiver {
 		db.close();
 		prefs.edit().remove("correctShutdown").apply();
 
+		context.startService(new Intent(context, SensorListener.class));
 	}
 }
