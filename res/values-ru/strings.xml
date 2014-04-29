@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Pedometer</string>
+    <string name="goal">Цель</string>
+    <string name="step_size">Размер шага</string>
+    <string name="about">О программе</string>
+    <string name="account">Учётная запись</string>
+    <string name="goal_summary">Текущая цель: %,d шагов</string>
+    <string name="step_size_summary">Текущий размер шага: %1$.2f %2$s</string>
+    <string name="sign_in">Войдите с помощью учётной записи Google для использования Достижений и таблицы лидеров</string>
+    <string name="signed_in">Вход выполнен как %s</string>
+    <string name="export_summary">Сохранить ваши данные в .csv файле</string>
+    <string name="export_title">Экспорт/Резервное копирование</string>
+    <string name="import_summary">Импорт сохранённых данных</string>
+    <string name="import_title">Импорт/Восстановление</string>
+    <string name="notification">Показывать уведомление</string>
+    <string name="set_goal">Установить цель</string>
+    <string name="set_step_size">Указать размер шага</string>
+    <string name="sign_out">Выйти</string>
+    <string name="file_cant_read">Ошибка: %s не может быть прочитан</string>
+    <string name="error_file">Ошибка доступа к файлу: %s</string>
+    <string name="error_external_storage_not_available">Ошибка: Внешнее хранилище не доступно</string>
+    <string name="data_saved">Данные сохранены в %s</string>
+    <string name="entries_imported">%d записей импортировано</string>
+    <string name="entries_ignored">%d записей было проигнорировано, т.к. они не содержат корректных данных</string>
+    <string name="sign_in_necessary">Необходимо выполнить вход</string>
+    <string name="please_sign_in_with_your_google_account">Войдите с помощью учётной записи Google+ для использования данной функции.</string>
+    <string name="steps">шагов</string>
+    <string name="text_color">Цвет текста:</string>
+    <string name="background_color">Цвет фона:</string>
+    <string name="settings">Настройки</string>
+    <string name="achievements">Достижения</string>
+    <string name="leaderboard">Лидеры</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">Цель достигнута! %s шагов и их число растёт</string>
+    <string name="notification_text">%s шагов до цели</string>
+    <string name="yesterday">Вчера</string>
+    <string name="total">Всего</string>
+    <string name="notification_title">Pedometer считает шаги</string>
+    <string name="your_progress_will_be_shown_here_soon">Ваш прогресс будет показан здесь в ближайшее время</string>
+    <string name="average">Среднее</string>
+    <string name="record">Рекорд</string>
+    <string name="total_last_7_days">Всего за 7 дней</string>
+    <string name="average_last_7_days">В среднем за 7 дней</string>
+    <string name="total_this_month">Всего за месяц</string>
+    <string name="average_this_month">В среднем за месяц</string>
+    <string name="file_already_exists">Файл уже существует. Вы точно хотите перезаписать его?</string>
+    <string name="about_text_links">Это приложение создано Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) и использует библиотеки <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> созданную Daniel Nadeau и <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> созданную Sergey Margaritov.\n\nPedometer - приложение с открытым исходным кодом! Получить исходные коды и полный список участников можно на <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">Версия: %s</string>
+    <string name="since">Начиная с %s</string>
+    <string name="start">Начать</string>
+    <string name="stop">Остановить</string>
+    <string name="close">закрыть</string>
+    <string name="no_split_active">Выделенный счётчик неактивен. Нажмите начать для учёта шагов с этого момента</string>
+    <string name="split_count">Разделить</string>
+
+</resources>
