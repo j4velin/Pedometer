@@ -180,7 +180,6 @@ public class SensorListener extends Service implements SensorEventListener {
 
 		// check if NewDayReceiver was called for the current day
 		Database db = new Database(this);
-		db.open();
 		int steps_today = db.getSteps(Util.getToday());
 		db.close();
 		// setting the DO_INSERT_NEW_DAY will insert a new day in the database
@@ -198,7 +197,6 @@ public class SensorListener extends Service implements SensorEventListener {
 		if (getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getBoolean("notification", true)) {
 			goal = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt("goal", 10000);
 			Database db = new Database(this);
-			db.open();
 			today_offset = db.getSteps(Util.getToday());
 			db.close();
 			notificationBuilder = new Notification.Builder(this);

@@ -263,7 +263,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 					break;
 				}
 				Database db = new Database(getActivity());
-				db.open();
 				String line;
 				String[] data;
 				int skips = 0, inserted = 0;
@@ -364,7 +363,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 			return;
 		}
 		Database db = new Database(getActivity());
-		db.open();
 		Cursor c = db.query(new String[] { "date", "steps" }, null, null, null, null, "date", null);
 		try {
 			if (c != null && c.moveToFirst()) {

@@ -35,7 +35,6 @@ public class BootReceiver extends BroadcastReceiver {
 		if (Logger.LOG)
 			Logger.log("booted");
 		Database db = new Database(context);
-		db.open();
 		db.insertNewDay(Util.getToday(), 0); // device just booted; wont do
 											// anything if there is already a
 											// row for today

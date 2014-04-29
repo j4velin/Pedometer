@@ -33,7 +33,6 @@ public class ShutdownRecevier extends BroadcastReceiver {
 		// sensor stores steps since boot, so this value will be reset upon the
 		// next boot and therefore has to be saved now
 		Database db = new Database(context);
-		db.open();
 		db.updateSteps(Util.getToday(), SensorListener.steps);
 		db.close();
 		if (Logger.LOG)

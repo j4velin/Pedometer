@@ -110,7 +110,6 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 
 		Database db = new Database(getActivity());
-		db.open();
 
 		if (Logger.LOG)
 			db.logState();
@@ -289,7 +288,6 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 	 */
 	private void updateBars() {
 		Database db = new Database(getActivity());
-		db.open();
 		Calendar yesterday = Calendar.getInstance();
 		yesterday.setTimeInMillis(Util.getToday());
 		yesterday.add(Calendar.DAY_OF_YEAR, -1);

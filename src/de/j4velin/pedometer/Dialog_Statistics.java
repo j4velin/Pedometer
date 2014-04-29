@@ -40,7 +40,6 @@ public class Dialog_Statistics {
 			}
 		});
 		Database db = new Database(c);
-		db.open();
 
 		Pair<Date, Integer> record = db.getRecordData();
 

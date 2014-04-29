@@ -64,7 +64,6 @@ public class DashClock extends DashClockExtension {
 								Logger.log("SensorListener.steps for dashclock: " + msg.arg1);
 							ExtensionData data = new ExtensionData();
 							Database db = new Database(DashClock.this);
-							db.open();
 							int steps = Math.max(msg.arg1 + db.getSteps(Util.getToday()), 0);
 							data.visible(true).status(Fragment_Overview.formatter.format(steps)).icon(R.drawable.ic_dashclock)
 									.clickIntent(new Intent(DashClock.this, Activity_Main.class));

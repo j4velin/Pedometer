@@ -58,7 +58,6 @@ public class WidgetUpdateService extends Service {
 							if (Logger.LOG)
 								Logger.log("SensorListener.steps for widget: " + msg.arg1);
 							Database db = new Database(WidgetUpdateService.this);
-							db.open();
 							int steps = Math.max(msg.arg1 + db.getSteps(Util.getToday()), 0);
 							db.close();
 							unbindService(conn);

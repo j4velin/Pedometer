@@ -41,14 +41,7 @@ public class Database extends SQLiteOpenHelper {
 
 	public Database(final Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
-	}
-
-	public void open() {
 		database = getWritableDatabase();
-	}
-
-	public void close() {
-		database.close();
 	}
 
 	@Override

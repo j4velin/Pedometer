@@ -41,7 +41,6 @@ public class NewDayReceiver extends BroadcastReceiver {
 			// Save the steps made yesterday and create a new
 			// row for today
 			Database db = new Database(context);
-			db.open();
 			// start the new days step with the offset of the
 			// current step-value.
 			//
