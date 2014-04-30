@@ -90,8 +90,10 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public void onAccuracyChanged(final Sensor sensor, int accuracy) {
+		// nobody knows what happens here: step value might magically decrease
+		// when this method is called...
 		if (Logger.LOG)
-			Logger.log("accuracy changed: " + accuracy);
+			Logger.log(sensor.getName() + " accuracy changed: " + accuracy + " saved step value: " + steps);
 	}
 
 	@Override
@@ -103,6 +105,24 @@ public class SensorListener extends Service implements SensorEventListener {
 			return;
 		}
 		steps = (int) event.values[0];
+
+		// it seems like sometimes the sensor reports a lower value then it was
+		// a midnight, even if there was no reboot in between. If this happens,
+		// reset the offset for today (steps until now will be lost)
+		if (today_offset > Integer.MIN_VALUE && today_offset + steps < 0) {
+			Database db = new Database(this);
+			// add the difference (which is negative) to the current database
+			// value, so that the steps for today are not 0 (instead of some
+			// negative step value)
+			db.updateSteps(Util.getToday(), -(today_offset + steps));
+			db.close();
+			// today_offset - (today_offset + steps) = -steps
+			// --> old db value: today_offset. new value: -steps
+			today_offset = -steps;
+			if (Logger.LOG) {
+				Logger.log("reset todays offset to " + today_offset);
+			}
+		}
 
 		// update only every 100 steps
 		if (notificationBuilder != null && steps % 100 == 0) {
