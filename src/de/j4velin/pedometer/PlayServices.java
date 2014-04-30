@@ -58,6 +58,21 @@ public class PlayServices {
 		// some cheat detection needed?
 		Games.Leaderboards.submitScore(gc, c.getString(R.string.leaderboard_most_steps_walked_in_one_day), steps);
 	}
+	
+	/**
+	 * Updates the 'hightest average' leaderboard score
+	 * 
+	 * @param gc
+	 *            the GamesClient
+	 * @param c
+	 *            the Context
+	 * @param average
+	 *            the new score = current average
+	 */
+	private static void updateAverageLeaderboard(final GoogleApiClient gc, final Context c, float avg) {
+		// some cheat detection needed?
+		Games.Leaderboards.submitScore(gc, c.getString(R.string.leaderboard_highest_average), (long) avg);
+	}
 
 	/**
 	 * Check the conditions for not-yet-unlocked achievements and unlock them if
@@ -214,6 +229,7 @@ public class PlayServices {
 						prefs.edit().putBoolean("achievement_continual3", true).apply();
 					}
 				}
+				updateAverageLeaderboard(gc, context, average);
 			}
 
 			updateTotalLeaderboard(gc, context, totalSteps);
