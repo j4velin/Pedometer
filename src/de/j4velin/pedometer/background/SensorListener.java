@@ -142,7 +142,7 @@ public class SensorListener extends Service implements SensorEventListener {
 			getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit().putInt("backup_steps", steps)
 					.putLong("backup_date", Util.getToday()).apply();
 		}
-		if (DO_INSERT_NEW_DAY) {
+		if (DO_INSERT_NEW_DAY && steps > 0) {
 			// no entry for today yet
 			sendBroadcast(new Intent(this, NewDayReceiver.class));
 			DO_INSERT_NEW_DAY = false;
