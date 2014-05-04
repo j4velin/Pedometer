@@ -46,5 +46,13 @@
     <string name="average_last_7_days">Genomsnitt senaste 7 dagarna</string>
     <string name="total_this_month">Totalt den här månaden</string>
     <string name="average_this_month">Genomsnitt den här månaden</string>
-	
+    <string name="file_already_exists">Filen existerar redan. Är du säker på att du vill skriva över den?</string>
+    <string name="about_text_links">Den här appen skapades av Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) och använder <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> av Daniel Nadeau och <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> av Sergey Margaritov.\n\nPedometer är öppen källkod! Hämta koden och en fullständig lista på de som bidragit på <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">Appens version: %s</string>
+    <string name="since">Sedan %s</string>
+    <string name="start">Start</string>
+    <string name="stop">Stopp</string>
+    <string name="close">stäng</string>
+    <string name="no_split_active">Ingen delad räknare aktiv. Tryck start för att räkna stegen från och med nu</string>
+    <string name="split_count">Dela räknare</string>	
 </resources>
