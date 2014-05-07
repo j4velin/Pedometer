@@ -17,6 +17,7 @@
 package de.j4velin.pedometer.background;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import de.j4velin.pedometer.Database;
@@ -71,6 +72,9 @@ public class SensorListener extends Service implements SensorEventListener {
 	 */
 	private static int goal, today_offset;
 
+	private static int consecutiveIncorrectValues = 0;
+	private static int lastIncorrectValue;
+
 	private static Messenger messenger = new Messenger(new Handler() {
 		// received a message, reply with the current step value
 		public void handleMessage(Message msg) {
@@ -96,33 +100,49 @@ public class SensorListener extends Service implements SensorEventListener {
 			Logger.log(sensor.getName() + " accuracy changed: " + accuracy + " saved step value: " + steps);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		if (event.values[0] < steps) { // should always be increasing
+		if (event.values[0] < steps) { // should always be
+										// increasing
 			if (Logger.LOG)
-				Logger.log("error with sensorlistener update: received " + event.values[0] + " but steps is already set to "
-						+ steps);
-			return;
+				Logger.log(event.sensor.getName() + event + " error with sensorlistener update: received " + event.values[0]
+						+ " but steps was already set to " + steps + " | acc " + event.accuracy + " time "
+						+ new Date(event.timestamp).toLocaleString());
+			consecutiveIncorrectValues++;
+			if (consecutiveIncorrectValues >= 10 && lastIncorrectValue < event.values[0]) {
+				// received 10 incorrect step values in a row and this value is increasing
+				// --> assume this is now the correct value
+				// --> don't return method to get to the reset part
+				consecutiveIncorrectValues = 0;
+			} else {
+				lastIncorrectValue = (int) event.values[0];
+				return;
+			}
+		} else {
+			consecutiveIncorrectValues = 0;
 		}
-		steps = (int) event.values[0];
 
 		// it seems like sometimes the sensor reports a lower value then it was
 		// a midnight, even if there was no reboot in between. If this happens,
-		// reset the offset for today (steps until now will be lost)
-		if (today_offset > Integer.MIN_VALUE && today_offset + steps < 0) {
+		// reset the offset for today
+		if (today_offset > Integer.MIN_VALUE && today_offset + (int) event.values[0] < 0) {
+			// try to save already taken steps
+			int alreadyTaken = today_offset + steps;
+
 			Database db = new Database(this);
 			// add the difference (which is negative) to the current database
-			// value, so that the steps for today are not 0 (instead of some
-			// negative step value)
-			db.updateSteps(Util.getToday(), -(today_offset + steps));
+			// value, so that the steps for today are now 0 (instead of some
+			// negative step value). Then add the 'already taken' steps
+			db.updateSteps(Util.getToday(), -(today_offset + (int) event.values[0]) + alreadyTaken);
 			db.close();
-			// today_offset - (today_offset + steps) = -steps
-			// --> old db value: today_offset. new value: -steps
-			today_offset = -steps;
+			today_offset = -(int) event.values[0];
 			if (Logger.LOG) {
-				Logger.log("reset todays offset to " + today_offset);
+				Logger.log("reset todays offset to " + today_offset + " already taken steps today: " + alreadyTaken);
 			}
 		}
+
+		steps = (int) event.values[0];
 
 		// update only every 100 steps
 		if (notificationBuilder != null && steps % 100 == 0) {
