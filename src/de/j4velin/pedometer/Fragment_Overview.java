@@ -27,15 +27,10 @@ import com.echo.holographlibrary.BarGraph;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 
-import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
-import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -43,11 +38,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -116,44 +106,16 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 		// read todays offset
 		todayOffset = db.getSteps(Util.getToday());
 
-		goal = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt("goal", 10000);
+		SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
+				Context.MODE_MULTI_PROCESS);
 
-		getActivity().bindService(new Intent(getActivity(), SensorListener.class), new ServiceConnection() {
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-
-			}
-
-			@SuppressLint("HandlerLeak")
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				Messenger messenger = new Messenger(service);
-				try {
-					final ServiceConnection conn = this;
-					Messenger incoming = new Messenger(new Handler() {
-						public void handleMessage(Message msg) {
-							if (Logger.LOG)
-								Logger.log("SensorListener.steps: " + msg.arg1);
-							since_boot = msg.arg1;
-							updatePie();
-							if (getActivity() != null)
-								getActivity().unbindService(conn);
-						}
-					});
-					Message msg = Message.obtain();
-					msg.replyTo = incoming;
-					messenger.send(msg);
-				} catch (RemoteException e) {
-					if (Logger.LOG)
-						Logger.log(e);
-					e.printStackTrace();
-				}
-			}
-		}, 0);
+		goal = prefs.getInt("goal", 10000);
+		since_boot = prefs.getInt("steps", 0);
 
 		// register a sensorlistener to live update the UI if a step is taken
 		SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI, 0);
+		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+				SensorManager.SENSOR_DELAY_UI, 0);
 
 		total_start = db.getTotalWithoutToday();
 		total_days = db.getDays();
@@ -171,7 +133,8 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 		if (showSteps) {
 			((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
 		} else {
-			String unit = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getString("stepsize_unit",
+			String unit = getActivity().getSharedPreferences("pedometer",
+					Context.MODE_MULTI_PROCESS).getString("stepsize_unit",
 					Fragment_Settings.DEFAULT_STEP_UNIT);
 			if (unit.equals("cm")) {
 				unit = "km";
@@ -189,11 +152,14 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 	public void onPause() {
 		super.onPause();
 		try {
-			SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+			SensorManager sm = (SensorManager) getActivity().getSystemService(
+					Context.SENSOR_SERVICE);
 			sm.unregisterListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit().putInt(
+				"steps", since_boot).apply();
 	}
 
 	@Override
@@ -205,7 +171,8 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_split_count:
-			Dialog_Split.getDialog(getActivity(), total_start + Math.max(todayOffset + since_boot, 0)).show();
+			Dialog_Split.getDialog(getActivity(),
+					total_start + Math.max(todayOffset + since_boot, 0)).show();
 			return true;
 		default:
 			return ((Activity_Main) getActivity()).optionsItemSelected(item);
@@ -221,7 +188,8 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
 		if (Logger.LOG)
-			Logger.log("sensorChanged | todayOffset: " + todayOffset + " since boot: " + event.values[0]);
+			Logger.log("UI - sensorChanged | todayOffset: " + todayOffset + " since boot: "
+					+ event.values[0]);
 		if (event.values[0] == 0)
 			return;
 		if (todayOffset == Integer.MIN_VALUE) {
@@ -241,7 +209,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 	 */
 	private void updatePie() {
 		if (Logger.LOG)
-			Logger.log("update steps: " + since_boot);
+			Logger.log("UI - update steps: " + since_boot);
 		// todayOffset might still be Integer.MIN_VALUE on first start
 		int steps_today = Math.max(todayOffset + since_boot, 0);
 		sliceCurrent.setValue(steps_today);
@@ -265,7 +233,8 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 			averageView.setText(formatter.format((total_start + steps_today) / total_days));
 		} else {
 			// update only every 10 steps when displaying distance
-			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
+					Context.MODE_MULTI_PROCESS);
 			float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
 			float distance_today = steps_today * stepsize;
 			float distance_total = (total_start + steps_today) * stepsize;
@@ -301,9 +270,11 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 		boolean stepsize_cm = true;
 		if (!showSteps) {
 			// load some more settings if distance is needed
-			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+			SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
+					Context.MODE_MULTI_PROCESS);
 			stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-			stepsize_cm = prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT).equals("cm");
+			stepsize_cm = prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT)
+					.equals("cm");
 		}
 		for (int i = 0; i < 7; i++) {
 			steps = db.getSteps(yesterday.getTimeInMillis());

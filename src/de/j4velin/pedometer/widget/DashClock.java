@@ -16,16 +16,8 @@
 
 package de.j4velin.pedometer.widget;
 
-import android.annotation.SuppressLint;
-import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
-
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
@@ -33,8 +25,6 @@ import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.Activity_Main;
 import de.j4velin.pedometer.Fragment_Overview;
 import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.background.SensorListener;
-import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
 /**
@@ -46,42 +36,16 @@ public class DashClock extends DashClockExtension {
 
 	@Override
 	protected void onUpdateData(int reason) {
-		bindService(new Intent(this, SensorListener.class), new ServiceConnection() {
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-
-			}
-
-			@SuppressLint("HandlerLeak")
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				Messenger messenger = new Messenger(service);
-				try {
-					final ServiceConnection conn = this;
-					Messenger incoming = new Messenger(new Handler() {
-						public void handleMessage(Message msg) {
-							if (Logger.LOG)
-								Logger.log("SensorListener.steps for dashclock: " + msg.arg1);
-							ExtensionData data = new ExtensionData();
-							Database db = new Database(DashClock.this);
-							int steps = Math.max(msg.arg1 + db.getSteps(Util.getToday()), 0);
-							data.visible(true).status(Fragment_Overview.formatter.format(steps)).icon(R.drawable.ic_dashclock)
-									.clickIntent(new Intent(DashClock.this, Activity_Main.class));
-							db.close();
-							publishUpdate(data);
-							unbindService(conn);
-						}
-					});
-					Message msg = Message.obtain();
-					msg.replyTo = incoming;
-					messenger.send(msg);
-				} catch (RemoteException e) {
-					if (Logger.LOG)
-						Logger.log(e);
-					e.printStackTrace();
-				}
-			}
-		}, 0);
+		ExtensionData data = new ExtensionData();
+		Database db = new Database(DashClock.this);
+		int steps = Math.max(
+				getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt("steps", 0)
+						+ db.getSteps(Util.getToday()), 0);
+		data.visible(true).status(Fragment_Overview.formatter.format(steps))
+				.icon(R.drawable.ic_dashclock)
+				.clickIntent(new Intent(DashClock.this, Activity_Main.class));
+		db.close();
+		publishUpdate(data);
 	}
 
 }

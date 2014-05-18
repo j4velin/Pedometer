@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.j4velin.pedometer"
-    android:versionCode="117"
-    android:versionName="1.1.7 Beta" >
+    android:versionCode="120"
+    android:versionName="1.2 Beta" >
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
@@ -61,9 +61,6 @@
                 <action android:name="de.j4velin.ACTION_SHUTDOWN" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="de.j4velin.pedometer.background.NewDayReceiver"
-            android:process=":background" />
 
         <service
             android:name="de.j4velin.pedometer.widget.DashClock"
