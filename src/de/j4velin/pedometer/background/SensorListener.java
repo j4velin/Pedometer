@@ -40,6 +40,8 @@ import android.os.IBinder;
  * 
  */
 public class SensorListener extends Service implements SensorEventListener {
+	
+	private static int steps;
 
 	@Override
 	public void onAccuracyChanged(final Sensor sensor, int accuracy) {
@@ -51,16 +53,7 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		int steps = (int) event.values[0];
-		if (Logger.LOG)
-			Logger.log("steps received: " + steps);
-		SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
-		long today = Util.getToday();
-		if (today != prefs.getLong("date", 0)) {
-			insertNewDay(steps);
-		}
-		prefs.edit().putInt("steps", steps).putLong("date", today).apply();
-		stopSelf();
+		steps = (int) event.values[0];
 	}
 
 	private void insertNewDay(int offset) {
@@ -82,7 +75,22 @@ public class SensorListener extends Service implements SensorEventListener {
 				AlarmManager.RTC, System.currentTimeMillis() + 1000 * 60 * 60, PendingIntent
 						.getService(getApplicationContext(), 2, new Intent(this,
 								SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
+		
+		if (Logger.LOG)
+			Logger.log("saving steps: " + steps);
+		SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+		long today = Util.getToday();
+		if (today != prefs.getLong("date", 0)) {
+			insertNewDay(steps);
+		}
+		prefs.edit().putInt("steps", steps).putLong("date", today).apply();
 
+		return START_STICKY;
+	}
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		try {
 			sm.unregisterListener(this);
@@ -94,8 +102,6 @@ public class SensorListener extends Service implements SensorEventListener {
 
 		sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
 				SensorManager.SENSOR_DELAY_NORMAL);
-
-		return START_STICKY;
 	}
 
 	@Override
