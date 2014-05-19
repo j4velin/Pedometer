@@ -106,20 +106,36 @@ public class SensorListener extends Service implements SensorEventListener {
 		if (event.values[0] < steps) { // should always be
 										// increasing
 			if (Logger.LOG)
-				Logger.log(event.sensor.getName() + event + " error with sensorlistener update: received " + event.values[0]
-						+ " but steps was already set to " + steps + " | acc " + event.accuracy + " time "
-						+ new Date(event.timestamp).toLocaleString());
+				Logger.log(event.sensor.getName() + " invalid received " + event.values[0] + " steps was set to " + steps
+						+ " | acc " + event.accuracy + " time " + new Date(event.timestamp / 1000000).toLocaleString());
 			consecutiveIncorrectValues++;
 			if (consecutiveIncorrectValues >= 10 && lastIncorrectValue < event.values[0]) {
-				// received 10 incorrect step values in a row and this value is increasing
+				// received 10 incorrect step values in a row and this value is
+				// increasing
 				// --> assume this is now the correct value
 				// --> don't return method to get to the reset part
 				consecutiveIncorrectValues = 0;
+			} else if (consecutiveIncorrectValues >= 10 && lastIncorrectValue == event.values[0]) {
+				if (Logger.LOG)
+					Logger.log("re-register");
+				SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+				try {
+					sm.unregisterListener(this);
+				} catch (Exception e) {
+					if (Logger.LOG)
+						Logger.log(e);
+					e.printStackTrace();
+				}
+				sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL, 0);
+				return;
 			} else {
 				lastIncorrectValue = (int) event.values[0];
 				return;
 			}
 		} else {
+			if (consecutiveIncorrectValues > 1 && Logger.LOG)
+				Logger.log(event.sensor.getName() + " correct received " + event.values[0] + " steps was set to " + steps
+						+ " | acc " + event.accuracy + " time " + new Date(event.timestamp / 1000000).toLocaleString());
 			consecutiveIncorrectValues = 0;
 		}
 
@@ -128,7 +144,7 @@ public class SensorListener extends Service implements SensorEventListener {
 		// reset the offset for today
 		if (today_offset > Integer.MIN_VALUE && today_offset + (int) event.values[0] < 0) {
 			// try to save already taken steps
-			int alreadyTaken = today_offset + steps;
+			int alreadyTaken = Math.max(0, today_offset + steps);
 
 			Database db = new Database(this);
 			// add the difference (which is negative) to the current database
