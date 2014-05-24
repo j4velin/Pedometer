@@ -18,7 +18,6 @@ package de.j4velin.pedometer;
 
 import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
-import de.j4velin.pedometer.util.Util;
 import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -34,11 +33,6 @@ public class BootReceiver extends BroadcastReceiver {
 	public void onReceive(final Context context, final Intent intent) {
 		if (Logger.LOG)
 			Logger.log("booted");
-		Database db = new Database(context);
-		db.insertNewDay(Util.getToday(), 0); // device just booted; wont do
-												// anything if there is already
-												// a
-												// row for today
 
 		SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
 		if (!prefs.getBoolean("correctShutdown", false)) {
@@ -59,15 +53,11 @@ public class BootReceiver extends BroadcastReceiver {
 													.parse("http://j4velin-systems.de/faq/index.php?app=pm"))
 													.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), 0)).setShowWhen(false)
 							.setSmallIcon(R.drawable.ic_launcher).build());
-
-			// add the saved backup to reduce actual loss
-			db.updateSteps(prefs.getLong("backup_date", 0), prefs.getInt("backup_steps", 0));
-			prefs.edit().putInt("backup_steps", 0).apply(); // reset backup
 		}
 		// last entry might still have a negative step value, so remove that
 		// row if that's the case
+		Database db = new Database(context);
 		db.removeNegativeEntries();
-
 		db.close();
 		prefs.edit().remove("correctShutdown").apply();
 

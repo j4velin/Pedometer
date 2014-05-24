@@ -15,7 +15,6 @@
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="notification"
-        android:summary="WARNING: Due to a bug in Android 4.4.2, the app might not reliably count your steps without the notification!"
         android:title="@string/notification" />
 
     <Preference

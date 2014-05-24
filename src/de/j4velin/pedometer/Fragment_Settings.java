@@ -23,10 +23,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
 
-import com.google.android.gms.games.Games;
-
-import de.j4velin.pedometer.background.SensorListener;
-import de.j4velin.pedometer.util.Logger;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -39,8 +35,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceFragment;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,6 +46,11 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.games.Games;
+
+import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.util.Logger;
 
 public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
 

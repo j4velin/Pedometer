@@ -16,9 +16,7 @@
 
 package de.j4velin.pedometer.background;
 
-import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.util.Logger;
-import de.j4velin.pedometer.util.Util;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,13 +28,7 @@ public class ShutdownRecevier extends BroadcastReceiver {
 		if (Logger.LOG)
 			Logger.log("shutting down");
 
-		// sensor stores steps since boot, so this value will be reset upon the
-		// next boot and therefore has to be saved now
-		Database db = new Database(context);
-		db.updateSteps(Util.getToday(), SensorListener.steps);
-		db.close();
-		if (Logger.LOG)
-			Logger.log("last step value before shutdown: " + SensorListener.steps);
+		context.startService(new Intent(context, SensorListener.class));
 
 		// if the user used a root script for shutdown, the DEVICE_SHUTDOWN
 		// broadcast might not be send. Therefore, the app will check this
