@@ -83,14 +83,16 @@ public class SensorListener extends Service implements SensorEventListener {
 				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
 				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
-		if (Logger.LOG)
-			Logger.log("saving steps: " + steps);
-		SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
-		long today = Util.getToday();
-		if (today != prefs.getLong("date", 0)) {
-			insertNewDay(steps);
+		if (steps > 0) {
+			if (Logger.LOG)
+				Logger.log("saving steps: " + steps);
+			SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+			long today = Util.getToday();
+			if (today != prefs.getLong("date", 0)) {
+				insertNewDay(steps);
+			}
+			prefs.edit().putInt("steps", steps).putLong("date", today).apply();
 		}
-		prefs.edit().putInt("steps", steps).putLong("date", today).apply();
 
 		updateNotificationState();
 

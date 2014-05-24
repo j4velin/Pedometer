@@ -71,23 +71,29 @@ public class Database extends SQLiteOpenHelper {
 	 *            new day; must be >= 0
 	 */
 	public void insertNewDay(long date, int steps) {
-		Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
-				null, null);
-		if (c.getCount() == 0 && steps >= 0) {
-			ContentValues values = new ContentValues();
-			values.put("date", date);
-			// use the negative steps as offset
-			values.put("steps", -steps);
-			database.insert(DB_NAME, null, values);
+		database.beginTransaction();
+		try {
+			Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
+					null, null);
+			if (c.getCount() == 0 && steps >= 0) {
+				ContentValues values = new ContentValues();
+				values.put("date", date);
+				// use the negative steps as offset
+				values.put("steps", -steps);
+				database.insert(DB_NAME, null, values);
 
-			// add 'steps' to yesterdays count
-			date -= 24 * 60 * 60 * 1000;
-			updateSteps(date, steps);
-		}
-		c.close();
-		if (Logger.LOG) {
-			Logger.log("insertDay " + date + " / " + steps);
-			logState();
+				// add 'steps' to yesterdays count
+				date -= 24 * 60 * 60 * 1000;
+				updateSteps(date, steps);
+			}
+			c.close();
+			if (Logger.LOG) {
+				Logger.log("insertDay " + date + " / " + steps);
+				logState();
+			}
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
 		}
 	}
 
@@ -106,16 +112,23 @@ public class Database extends SQLiteOpenHelper {
 	 *         entry for 'date'
 	 */
 	public boolean insertDayFromBackup(long date, int steps) {
-		Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
-				null, null);
-		boolean re = c.getCount() == 0 && steps >= 0;
-		if (re) {
-			ContentValues values = new ContentValues();
-			values.put("date", date);
-			values.put("steps", steps);
-			database.insert(DB_NAME, null, values);
+		database.beginTransaction();
+		boolean re;
+		try {
+			Cursor c = database.query(DB_NAME, new String[] { "date" }, "date = ?", new String[] { String.valueOf(date) }, null,
+					null, null);
+			re = c.getCount() == 0 && steps >= 0;
+			if (re) {
+				ContentValues values = new ContentValues();
+				values.put("date", date);
+				values.put("steps", steps);
+				database.insert(DB_NAME, null, values);
+			}
+			c.close();
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
 		}
-		c.close();
 		return re;
 	}
 
