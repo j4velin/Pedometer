@@ -63,6 +63,8 @@ public class SensorListener extends Service implements SensorEventListener {
 	}
 
 	private void insertNewDay(int offset) {
+		if (Logger.LOG)
+			Logger.log("new day, saving offset: " + offset);
 		Database db = new Database(this);
 		db.insertNewDay(Util.getToday(), offset);
 		db.close();
@@ -89,7 +91,7 @@ public class SensorListener extends Service implements SensorEventListener {
 			insertNewDay(steps);
 		}
 		prefs.edit().putInt("steps", steps).putLong("date", today).apply();
-		
+
 		updateNotificationState();
 
 		return START_STICKY;
@@ -98,6 +100,8 @@ public class SensorListener extends Service implements SensorEventListener {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		if (Logger.LOG)
+			Logger.log("SensorListener onCreate");
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		try {
 			sm.unregisterListener(this);
@@ -123,6 +127,8 @@ public class SensorListener extends Service implements SensorEventListener {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		if (Logger.LOG)
+			Logger.log("SensorListener onDestroy");
 		try {
 			SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 			sm.unregisterListener(this);

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.j4velin.pedometer"
     android:versionCode="120"
-    android:versionName="1.2 Beta" >
+    android:versionName="1.2 Test-Build" >
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"

@@ -26,7 +26,7 @@ import android.os.Environment;
 
 public class Logger {
 
-	public final static boolean LOG = true;
+	public final static boolean LOG = false;
 
 	private static FileWriter fw;
 	private static Date date = new Date();

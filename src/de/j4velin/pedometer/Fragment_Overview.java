@@ -27,10 +27,12 @@ import com.echo.holographlibrary.BarGraph;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 
+import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -105,6 +107,10 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 			db.logState();
 		// read todays offset
 		todayOffset = db.getSteps(Util.getToday());
+		
+		// no entry for today? Start SensorListener to create one
+		if (todayOffset == Integer.MIN_VALUE)
+			getActivity().startService(new Intent(getActivity(), SensorListener.class));
 
 		SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
 				Context.MODE_MULTI_PROCESS);
