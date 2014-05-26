@@ -16,10 +16,13 @@
 
 package de.j4velin.pedometer.background;
 
+import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 public class ShutdownRecevier extends BroadcastReceiver {
 
@@ -30,12 +33,17 @@ public class ShutdownRecevier extends BroadcastReceiver {
 
 		context.startService(new Intent(context, SensorListener.class));
 
+		SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+
 		// if the user used a root script for shutdown, the DEVICE_SHUTDOWN
 		// broadcast might not be send. Therefore, the app will check this
 		// setting on the next boot and displays an error message if it's not
 		// set to true
-		context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
-				.putBoolean("correctShutdown", true).commit();
+		prefs.edit().putBoolean("correctShutdown", true).commit();
+
+		Database db = new Database(context);
+		db.updateSteps(Util.getToday(), prefs.getInt("steps", 0));
+		db.close();
 	}
 
 }
