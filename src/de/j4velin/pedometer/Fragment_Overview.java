@@ -116,7 +116,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 				Context.MODE_MULTI_PROCESS);
 
 		goal = prefs.getInt("goal", 10000);
-		since_boot = prefs.getInt("steps", 0);
+		since_boot = db.getCurrentSteps(); // do not use the value from the sharedPreferences
 
 		// register a sensorlistener to live update the UI if a step is taken
 		SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -164,8 +164,9 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit().putInt(
-				"steps", since_boot).apply();
+		Database db = new Database(getActivity());
+		db.saveCurrentSteps(since_boot);
+		db.close();
 	}
 
 	@Override

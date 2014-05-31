@@ -16,7 +16,6 @@
 
 package de.j4velin.pedometer.widget;
 
-import android.content.Context;
 import android.content.Intent;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
@@ -38,11 +37,8 @@ public class DashClock extends DashClockExtension {
 	protected void onUpdateData(int reason) {
 		ExtensionData data = new ExtensionData();
 		Database db = new Database(DashClock.this);
-		int steps = Math.max(
-				getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).getInt("steps", 0)
-						+ db.getSteps(Util.getToday()), 0);
-		data.visible(true).status(Fragment_Overview.formatter.format(steps))
-				.icon(R.drawable.ic_dashclock)
+		int steps = Math.max(db.getCurrentSteps() + db.getSteps(Util.getToday()), 0);
+		data.visible(true).status(Fragment_Overview.formatter.format(steps)).icon(R.drawable.ic_dashclock)
 				.clickIntent(new Intent(DashClock.this, Activity_Main.class));
 		db.close();
 		publishUpdate(data);

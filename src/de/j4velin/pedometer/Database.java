@@ -59,7 +59,7 @@ public class Database extends SQLiteOpenHelper {
 	 * value will be used as offset for the new date. Also adds 'steps' steps to
 	 * the previous day, if there is an entry for that date.
 	 * 
-	 * This method does nothing if there is already an entry for 'date'- use
+	 * This method does nothing if there is already an entry for 'date' - use
 	 * {@link #updateSteps} in this case.
 	 * 
 	 * To restore data from a backup, use {@link #insertDayFromBackup}
@@ -218,7 +218,10 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Get the number of steps taken for a specific date
+	 * Get the number of steps taken for a specific date.
+	 * 
+	 * If date is Util.getToday(), this method returns the offset which needs to
+	 * be added to the value returned by getCurrentSteps() to get todays steps.
 	 * 
 	 * @param date
 	 *            the date in millis since 1970
@@ -303,6 +306,37 @@ public class Database extends SQLiteOpenHelper {
 		int re = c.getInt(0) + 1;
 		c.close();
 		return re <= 0 ? 1 : re;
+	}
+
+	/**
+	 * Saves the current 'steps since boot' sensor value in the database.
+	 * 
+	 * @param steps
+	 *            since boot
+	 */
+	public void saveCurrentSteps(int steps) {
+		database.execSQL("UPDATE " + DB_NAME + " SET steps = " + steps + " WHERE date = -1");
+		if (Logger.LOG) {
+			Logger.log("saving steps in db: " + steps);
+		}
+	}
+
+	/**
+	 * Reads the latest saved value for the 'steps since boot' sensor value.
+	 * 
+	 * @return the current number of steps saved in the database
+	 */
+	public int getCurrentSteps() {
+		Cursor c = database.query(DB_NAME, new String[] { "steps" }, "date = -1", null, null, null, null);
+		int re;
+		if (c.getCount() == 0) {
+			re = 0;
+		} else {
+			c.moveToFirst();
+			re = c.getInt(0);
+		}
+		c.close();
+		return re;
 	}
 
 }

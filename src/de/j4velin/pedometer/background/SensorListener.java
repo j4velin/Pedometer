@@ -84,14 +84,17 @@ public class SensorListener extends Service implements SensorEventListener {
 				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
 		if (steps > 0) {
-			if (Logger.LOG)
-				Logger.log("saving steps: " + steps);
 			SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
 			long today = Util.getToday();
 			if (today != prefs.getLong("date", 0)) {
 				insertNewDay(steps);
 			}
 			prefs.edit().putInt("steps", steps).putLong("date", today).apply();
+			// also save to database as there are some issues with
+			// sharedPreferences when access from different processes
+			Database db = new Database(this);
+			db.saveCurrentSteps(steps);
+			db.close();
 		}
 
 		updateNotificationState();
