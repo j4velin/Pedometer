@@ -62,14 +62,6 @@ public class SensorListener extends Service implements SensorEventListener {
 		steps = (int) event.values[0];
 	}
 
-	private void insertNewDay(int offset) {
-		if (Logger.LOG)
-			Logger.log("new day, saving offset: " + offset);
-		Database db = new Database(this);
-		db.insertNewDay(Util.getToday(), offset);
-		db.close();
-	}
-
 	@Override
 	public IBinder onBind(final Intent intent) {
 		return null;
@@ -77,22 +69,17 @@ public class SensorListener extends Service implements SensorEventListener {
 
 	@Override
 	public int onStartCommand(final Intent intent, int flags, int startId) {
-
+		
 		// restart service every hour to get the current step count
 		((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System
 				.currentTimeMillis() + 1000 * 60 * 60, PendingIntent.getService(getApplicationContext(), 2, new Intent(this,
 				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
 		if (steps > 0) {
-			SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
-			long today = Util.getToday();
-			if (today != prefs.getLong("date", 0)) {
-				insertNewDay(steps);
-			}
-			prefs.edit().putInt("steps", steps).putLong("date", today).apply();
-			// also save to database as there are some issues with
-			// sharedPreferences when access from different processes
 			Database db = new Database(this);
+			if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
+				db.insertNewDay(Util.getToday(), steps);
+			}
 			db.saveCurrentSteps(steps);
 			db.close();
 		}
