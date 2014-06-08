@@ -54,6 +54,22 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * Query the 'steps' table. Remember to close the cursor!
+	 * 
+	 * @param columns
+	 * @param selection
+	 * @param selectionArgs
+	 * @param groupBy
+	 * @param having
+	 * @param orderBy
+	 * @return the cursor
+	 */
+	Cursor query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy,
+			final String having, final String orderBy, final String limit) {
+		return database.query(DB_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+	}
+
+	/**
 	 * Inserts a new entry in the database, if there is no entry for the given
 	 * date yet. Steps should be the current number of steps and it's negative
 	 * value will be used as offset for the new date. Also adds 'steps' steps to
@@ -144,22 +160,6 @@ public class Database extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Query the 'steps' table. Remember to close the cursor!
-	 * 
-	 * @param columns
-	 * @param selection
-	 * @param selectionArgs
-	 * @param groupBy
-	 * @param having
-	 * @param orderBy
-	 * @return the cursor
-	 */
-	Cursor query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy,
-			final String having, final String orderBy, final String limit) {
-		return database.query(DB_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
-	}
-
-	/**
 	 * Adds 'steps' steps to the row for the date 'date'. Won't do anything if
 	 * there isn't a row for the given date
 	 * 
@@ -182,8 +182,8 @@ public class Database extends SQLiteOpenHelper {
 	 * @return number of steps taken, ignoring today
 	 */
 	int getTotalWithoutToday() {
-		Cursor c = database
-				.rawQuery("SELECT SUM(steps) FROM " + DB_NAME + " WHERE steps > 0 AND date < " + Util.getToday(), null);
+		Cursor c = database.query(DB_NAME, new String[] { "SUM(steps)" }, "steps > 0 AND date > 0 AND date < ?",
+				new String[] { String.valueOf(Util.getToday()) }, null, null, null);
 		c.moveToFirst();
 		int re = c.getInt(0);
 		c.close();
@@ -196,7 +196,7 @@ public class Database extends SQLiteOpenHelper {
 	 * @return the maximum number of steps walked in one day
 	 */
 	int getRecord() {
-		Cursor c = database.rawQuery("SELECT MAX(steps) FROM " + DB_NAME, null);
+		Cursor c = database.query(DB_NAME, new String[] { "MAX(steps)" }, "date > 0", null, null, null, null);
 		c.moveToFirst();
 		int re = c.getInt(0);
 		c.close();
@@ -210,7 +210,7 @@ public class Database extends SQLiteOpenHelper {
 	 *         step value (Integer)
 	 */
 	Pair<Date, Integer> getRecordData() {
-		Cursor c = database.query(DB_NAME, new String[] { "date, steps" }, null, null, null, null, "steps DESC", "1");
+		Cursor c = database.query(DB_NAME, new String[] { "date, steps" }, "date > 0", null, null, null, "steps DESC", "1");
 		c.moveToFirst();
 		Pair<Date, Integer> p = new Pair<Date, Integer>(new Date(c.getLong(0)), c.getInt(1));
 		c.close();
@@ -299,8 +299,8 @@ public class Database extends SQLiteOpenHelper {
 	 * @return the number of days with a step value > 0, return will be >= 1
 	 */
 	int getDays() {
-		Cursor c = database.query(DB_NAME, new String[] { "COUNT(*)" }, "steps > ? AND date < ?",
-				new String[] { String.valueOf(0), String.valueOf(Util.getToday()) }, null, null, null);
+		Cursor c = database.query(DB_NAME, new String[] { "COUNT(*)" }, "steps > ? AND date < ? AND date > 0", new String[] {
+				String.valueOf(0), String.valueOf(Util.getToday()) }, null, null, null);
 		c.moveToFirst();
 		// todays is not counted yet
 		int re = c.getInt(0) + 1;
@@ -315,7 +315,12 @@ public class Database extends SQLiteOpenHelper {
 	 *            since boot
 	 */
 	public void saveCurrentSteps(int steps) {
-		database.execSQL("UPDATE " + DB_NAME + " SET steps = " + steps + " WHERE date = -1");
+		ContentValues values = new ContentValues();
+		values.put("steps", steps);
+		if (database.update(DB_NAME, values, "date = -1", null) == 0) {
+			values.put("date", -1);
+			database.insert(DB_NAME, null, values);
+		}
 		if (Logger.LOG) {
 			Logger.log("saving steps in db: " + steps);
 		}
@@ -324,19 +329,12 @@ public class Database extends SQLiteOpenHelper {
 	/**
 	 * Reads the latest saved value for the 'steps since boot' sensor value.
 	 * 
-	 * @return the current number of steps saved in the database
+	 * @return the current number of steps saved in the database or 0 if there
+	 *         is no entry
 	 */
 	public int getCurrentSteps() {
-		Cursor c = database.query(DB_NAME, new String[] { "steps" }, "date = -1", null, null, null, null);
-		int re;
-		if (c.getCount() == 0) {
-			re = 0;
-		} else {
-			c.moveToFirst();
-			re = c.getInt(0);
-		}
-		c.close();
-		return re;
+		int re = getSteps(-1);
+		return re == Integer.MIN_VALUE ? 0 : re;
 	}
 
 }
