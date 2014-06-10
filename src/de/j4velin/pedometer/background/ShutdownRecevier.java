@@ -40,6 +40,7 @@ public class ShutdownRecevier extends BroadcastReceiver {
 
 		Database db = new Database(context);
 		db.updateSteps(Util.getToday(), db.getCurrentSteps());
+		// current steps will be reset on boot @see BootReceiver
 		db.close();
 	}
 

@@ -58,6 +58,7 @@ public class BootReceiver extends BroadcastReceiver {
 		// row if that's the case
 		Database db = new Database(context);
 		db.removeNegativeEntries();
+		db.saveCurrentSteps(0);
 		db.close();
 		prefs.edit().remove("correctShutdown").apply();
 
