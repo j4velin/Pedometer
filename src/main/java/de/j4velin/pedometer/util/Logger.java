@@ -24,11 +24,11 @@ import java.util.Date;
 import android.database.Cursor;
 import android.os.Environment;
 
+import de.j4velin.pedometer.BuildConfig;
+
 public class Logger {
 
-	public final static boolean LOG = true;
-
-	private static FileWriter fw;
+    private static FileWriter fw;
 	private static Date date = new Date();
 	private final static String APP = "Pedometer";
 
@@ -40,7 +40,7 @@ public class Logger {
 	}
 
 	public static void log(final Cursor c) {
-		if (!Logger.LOG)
+		if (!BuildConfig.DEBUG)
 			return;
 		c.moveToFirst();
 		String title = "";
@@ -58,7 +58,7 @@ public class Logger {
 
 	@SuppressWarnings("deprecation")
 	public static void log(String msg) {
-		if (!Logger.LOG)
+		if (!BuildConfig.DEBUG)
 			return;
 		// if (BuildConfig.DEBUG)
 		android.util.Log.d(APP, msg);

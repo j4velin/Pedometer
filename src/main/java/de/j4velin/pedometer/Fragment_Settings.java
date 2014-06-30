@@ -116,7 +116,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 			else
 				outState.remove("player");
 		} catch (Exception e) {
-			if (Logger.LOG)
+			if (BuildConfig.DEBUG)
 				Logger.log(e);
 		}
 	}

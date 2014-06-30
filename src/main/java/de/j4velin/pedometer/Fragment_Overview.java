@@ -27,12 +27,10 @@ import com.echo.holographlibrary.BarGraph;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 
-import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -103,14 +101,10 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
 		Database db = new Database(getActivity());
 
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			db.logState();
 		// read todays offset
 		todayOffset = db.getSteps(Util.getToday());
-		
-		// no entry for today? Start SensorListener to create one
-		if (todayOffset == Integer.MIN_VALUE)
-			getActivity().startService(new Intent(getActivity(), SensorListener.class));
 
 		SharedPreferences prefs = getActivity().getSharedPreferences("pedometer",
 				Context.MODE_MULTI_PROCESS);
@@ -194,7 +188,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			Logger.log("UI - sensorChanged | todayOffset: " + todayOffset + " since boot: "
 					+ event.values[0]);
 		if (event.values[0] == 0)
@@ -204,6 +198,9 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 			// we dont know when the reboot was, so set todays steps to 0 by
 			// initializing them with -STEPS_SINCE_BOOT
 			todayOffset = -(int) event.values[0];
+            Database db = new Database(getActivity());
+            db.insertNewDay(Util.getToday(), (int) event.values[0]);
+            db.close();
 		}
 		since_boot = (int) event.values[0];
 		updatePie();
@@ -215,7 +212,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 	 * count to distance.
 	 */
 	private void updatePie() {
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			Logger.log("UI - update steps: " + since_boot);
 		// todayOffset might still be Integer.MIN_VALUE on first start
 		int steps_today = Math.max(todayOffset + since_boot, 0);

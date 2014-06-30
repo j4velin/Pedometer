@@ -16,6 +16,7 @@
 
 package de.j4velin.pedometer.background;
 
+import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
@@ -27,7 +28,7 @@ public class ShutdownRecevier extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			Logger.log("shutting down");
 
 		context.startService(new Intent(context, SensorListener.class));

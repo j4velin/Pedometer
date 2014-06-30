@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import de.j4velin.pedometer.Activity_Main;
+import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.Logger;
@@ -53,7 +54,7 @@ public class SensorListener extends Service implements SensorEventListener {
 	public void onAccuracyChanged(final Sensor sensor, int accuracy) {
 		// nobody knows what happens here: step value might magically decrease
 		// when this method is called...
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			Logger.log(sensor.getName() + " accuracy changed: " + accuracy);
 	}
 
@@ -92,13 +93,13 @@ public class SensorListener extends Service implements SensorEventListener {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			Logger.log("SensorListener onCreate");
 		SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		try {
 			sm.unregisterListener(this);
 		} catch (Exception e) {
-			if (Logger.LOG)
+			if (BuildConfig.DEBUG)
 				Logger.log(e);
 			e.printStackTrace();
 		}
@@ -109,7 +110,7 @@ public class SensorListener extends Service implements SensorEventListener {
 	@Override
 	public void onTaskRemoved(final Intent rootIntent) {
 		super.onTaskRemoved(rootIntent);
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			Logger.log("sensor service task removed");
 		// Restart service in 500 ms
 		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC, System.currentTimeMillis() + 500,
@@ -119,13 +120,13 @@ public class SensorListener extends Service implements SensorEventListener {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			Logger.log("SensorListener onDestroy");
 		try {
 			SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 			sm.unregisterListener(this);
 		} catch (Exception e) {
-			if (Logger.LOG)
+			if (BuildConfig.DEBUG)
 				Logger.log(e);
 			e.printStackTrace();
 		}
@@ -164,7 +165,7 @@ public class SensorListener extends Service implements SensorEventListener {
 			// service
 			startForeground(1, notificationBuilder.build());
 
-			if (Logger.LOG)
+			if (BuildConfig.DEBUG)
 				Logger.log("start foreground");
 
 		} else {

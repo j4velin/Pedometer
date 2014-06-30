@@ -21,6 +21,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
             zipAlign true
         }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.release
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            zipAlign true
+        }
     }
 }
 

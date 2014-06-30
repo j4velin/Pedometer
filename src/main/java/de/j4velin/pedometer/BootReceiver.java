@@ -31,7 +31,7 @@ public class BootReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
-		if (Logger.LOG)
+		if (BuildConfig.DEBUG)
 			Logger.log("booted");
 
 		SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);

@@ -103,7 +103,7 @@ public class Database extends SQLiteOpenHelper {
 				updateSteps(date, steps);
 			}
 			c.close();
-			if (Logger.LOG) {
+			if (BuildConfig.DEBUG) {
 				Logger.log("insertDay " + date + " / " + steps);
 				logState();
 			}
@@ -152,7 +152,7 @@ public class Database extends SQLiteOpenHelper {
 	 * Writes the current steps database to the log
 	 */
 	public void logState() {
-		if (Logger.LOG) {
+		if (BuildConfig.DEBUG) {
 			Cursor c = database.query(DB_NAME, null, null, null, null, null, "date DESC", "5");
 			Logger.log(c);
 			c.close();
@@ -170,7 +170,7 @@ public class Database extends SQLiteOpenHelper {
 	 */
 	public void updateSteps(final long date, int steps) {
 		database.execSQL("UPDATE " + DB_NAME + " SET steps = steps + " + steps + " WHERE date = " + date);
-		if (Logger.LOG) {
+		if (BuildConfig.DEBUG) {
 			Logger.log("updateSteps " + date + " / " + steps);
 			logState();
 		}
@@ -321,7 +321,7 @@ public class Database extends SQLiteOpenHelper {
 			values.put("date", -1);
 			database.insert(DB_NAME, null, values);
 		}
-		if (Logger.LOG) {
+		if (BuildConfig.DEBUG) {
 			Logger.log("saving steps in db: " + steps);
 		}
 	}
