@@ -1,0 +1,45 @@
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "de.j4velin.pedometer"
+        minSdkVersion 19
+        targetSdkVersion 19
+    }
+
+    signingConfigs {
+        release
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            zipAlign true
+        }
+    }
+}
+
+dependencies {
+    compile project(':baseGameUtils')
+    compile project(':colorpicker')
+    compile project(':holoGraphLibrary')
+    compile 'com.google.android.gms:play-services:+'
+    compile files('../libs/dashclock-api-r2.0.jar')
+}
+
+def props = new Properties()
+
+props.load(new FileInputStream(project.file("key.properties")))
+
+android.signingConfigs.release.storeFile rootProject.file(props.keyStore)
+
+android.signingConfigs.release.storePassword props.keyStorePassword
+
+android.signingConfigs.release.keyAlias props.keyAlias
+
+android.signingConfigs.release.keyPassword props.keyAliasPassword

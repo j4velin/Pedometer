@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Schrittzähler</string>
+    <string name="goal">Ziel</string>
+    <string name="step_size">Schrittweite</string>
+    <string name="about">Info</string>
+    <string name="account">Konto</string>
+    <string name="goal_summary">Aktuelles Ziel: %,d Schritte</string>
+    <string name="step_size_summary">Aktuelle Schrittweite: %1$.2f %2$s</string>
+    <string name="sign_in">Logge dich mit deinem Google Konto ein um Erfolge zu sammeln und die Bestenslisten zu nutzen</string>
+    <string name="signed_in">Eingeloggt als %s</string>
+    <string name="export_summary">Sichere deine Daten in einer .csv Datei</string>
+    <string name="export_title">Exportieren</string>
+    <string name="import_summary">Lade Daten aus einer .csv Datei</string>
+    <string name="import_title">Importieren</string>
+    <string name="notification">Zeige Benachrichtigung</string>
+    <string name="set_goal">Ziel setzen</string>
+    <string name="set_step_size">Schrittweite ändern</string>
+    <string name="sign_out">Ausloggen</string>
+    <string name="file_cant_read">Fehler: %s kann nicht gelesen werden</string>
+    <string name="error_file">Fehler beim Zugriff auf die Datei: %s</string>
+    <string name="error_external_storage_not_available">Fehler: Externer Speicher ist momentan nicht verfügbar</string>
+    <string name="data_saved">Daten gespeichert in %s</string>
+    <string name="entries_imported">%d Einträge wurden importiert</string>
+    <string name="entries_ignored">%d Einträge wurden ignoriert, da diese in keinem gültigen Format vorlagen</string>
+    <string name="sign_in_necessary">Login erforderlich</string>
+    <string name="please_sign_in_with_your_google_account">Bitte logge dich mit deinem Google+ Konto ein um diese Funktion zu nutzen.</string>
+    <string name="steps">Schritte</string>
+    <string name="text_color">Text-Farbe:</string>
+    <string name="background_color">Hintergrund-Farbe:</string>
+    <string name="settings">Einstellungen</string>
+    <string name="achievements">Errungenschaften</string>
+    <string name="leaderboard">Bestenliste</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">Ziel erreicht! Schon über %s Schritte</string>
+    <string name="notification_text">Ziel wird in %s Schritte erreicht</string>
+    <string name="yesterday">Gestern</string>
+    <string name="total">Gesamt</string>
+    <string name="notification_title">Schrittzähler aktiv</string>
+    <string name="your_progress_will_be_shown_here_soon">Dein Fortschritt wird bald aktualisiert</string>
+    <string name="average">Durchschnitt</string>
+    <string name="record">Rekord</string>
+    <string name="total_last_7_days">Gesamt letzte 7 Tage</string>
+    <string name="average_last_7_days">Durchschnitt der letzten 7 Tage</string>
+    <string name="total_this_month">Gesamt diesen Monat</string>
+    <string name="average_this_month">Durchschnitt diesen Monat</string>
+    <string name="file_already_exists">Datei existiert bereits. Bist du sicher, dass du diese überschreiben willst?</string>
+    <string name="about_text_links">Diese App wurde von Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) erstellt und verwendet <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> von Daniel Nadeau und <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> von Sergey Margaritov.\n\nDie App ist Open-Source! Der Quellcode und die vollständige Liste alle Mitwirkenden kann auf <a href="https://github.com/j4velin/Pedometer">GitHub</a> eingesehen werden.\n\n</string>
+    <string name="about_app_version">App Version: %s</string>
+    <string name="since">Seit %s</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="close">schließen</string>
+    <string name="no_split_active">Kein Split-Counter aktiv. Klicke auf Start um die Schritte ab jetzt zu zählen.</string>
+    <string name="split_count">Split-Counter</string>
+
+</resources>

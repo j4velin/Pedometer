@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/stopped"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_split_active" />
+
+        <RelativeLayout
+            android:id="@+id/started"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/distance"
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:id="@+id/distanceunit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/distance"
+                android:layout_alignBottom="@+id/distance"
+                android:layout_alignParentRight="true" />
+
+            <TextView
+                android:id="@+id/steps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/steps"
+                android:layout_centerHorizontal="true"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/steps"
+                android:layout_alignParentRight="true"
+                android:text="@string/steps" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="0dp"
+        android:background="?android:attr/dividerVertical" />
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/start"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/close"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/close" />
+    </LinearLayout>
+
+</LinearLayout>

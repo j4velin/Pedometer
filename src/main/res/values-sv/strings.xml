@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Pedometer</string>
+    <string name="goal">Mål</string>
+    <string name="step_size">Steglängd</string>
+    <string name="about">Om</string>
+    <string name="account">Konto</string>
+    <string name="goal_summary">Nuvarande mål: %,d steg</string>
+    <string name="step_size_summary">Nuvarande steglängd: %1$.2f %2$s</string>
+    <string name="sign_in">Logga in med ditt Googlekonto för att använda prestationer och topplistor</string>
+    <string name="signed_in">Inloggad som %s</string>
+    <string name="export_summary">Spara data i CSV-format</string>
+    <string name="export_title">Exportera/Säkerhetskopiera</string>
+    <string name="import_summary">Importera tidigare sparad data</string>
+    <string name="import_title">Importera/Återställa</string>
+    <string name="notification">Visa notifiering</string>
+    <string name="set_goal">Ange mål</string>
+    <string name="set_step_size">Ange steglängd</string>
+    <string name="sign_out">Logga ut</string>
+    <string name="file_cant_read">Fel: %s kan inte läsas</string>
+    <string name="error_file">Fel vid filåtkomst: %s</string>
+    <string name="error_external_storage_not_available">Fel: Extern lagring inte tillgänglig</string>
+    <string name="data_saved">Data sparad i %s</string>
+    <string name="entries_imported">%d poster importerade</string>
+    <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
+    <string name="sign_in_necessary">Inloggning nödvändig</string>
+    <string name="please_sign_in_with_your_google_account">Logga in med ditt konto på Google+ för att använda den här funktionen.</string>
+    <string name="steps">steg</string>
+    <string name="text_color">Textfärg:</string>
+    <string name="background_color">Bakgrundsfärg:</string>
+    <string name="settings">Inställningar</string>
+    <string name="achievements">Prestationer</string>
+    <string name="leaderboard">Topplistor</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">Mål nått! %s steg hittills</string>
+    <string name="notification_text">%s steg kvar</string>
+    <string name="yesterday">Igår</string>
+    <string name="total">Totalt</string>
+    <string name="notification_title">Pedometer är aktiv</string>
+    <string name="your_progress_will_be_shown_here_soon">Dina framsteg kommer att visas här snart</string>
+    <string name="average">Genomsnitt</string>
+    <string name="record">Rekord</string>
+    <string name="total_last_7_days">Totalt senaste 7 dagarna</string>
+    <string name="average_last_7_days">Genomsnitt senaste 7 dagarna</string>
+    <string name="total_this_month">Totalt den här månaden</string>
+    <string name="average_this_month">Genomsnitt den här månaden</string>
+    <string name="file_already_exists">Filen existerar redan. Är du säker på att du vill skriva över den?</string>
+    <string name="about_text_links">Den här appen skapades av Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) och använder <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> av Daniel Nadeau och <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> av Sergey Margaritov.\n\nPedometer är öppen källkod! Hämta koden och en fullständig lista på de som bidragit på <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">Appens version: %s</string>
+    <string name="since">Sedan %s</string>
+    <string name="start">Start</string>
+    <string name="stop">Stopp</string>
+    <string name="close">stäng</string>
+    <string name="no_split_active">Ingen delad räknare aktiv. Tryck start för att räkna stegen från och med nu</string>
+    <string name="split_count">Dela räknare</string>	
+</resources>

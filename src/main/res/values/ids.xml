@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >
+
+    <string name="app_id">121539218942</string>
+    <string name="achievement_boots_made_for_walking">CgkI_pu14sQDEAIQAQ</string>
+    <string name="achievement_boots_made_for_walking_ii">CgkI_pu14sQDEAIQBw</string>
+    <string name="achievement_boots_made_for_walking_iii">CgkI_pu14sQDEAIQCA</string>
+    <string name="achievement_boots_made_for_walking_iv">CgkI_pu14sQDEAIQEg</string>
+    <string name="achievement_boots_made_for_walking_v">CgkI_pu14sQDEAIQEw</string>
+    <string name="achievement_stamina">CgkI_pu14sQDEAIQAg</string>
+    <string name="achievement_stamina_ii">CgkI_pu14sQDEAIQCQ</string>
+    <string name="achievement_stamina_iii">CgkI_pu14sQDEAIQCg</string>
+    <string name="achievement_stamina_iv">CgkI_pu14sQDEAIQFA</string>
+    <string name="achievement_stamina_v">CgkI_pu14sQDEAIQFQ</string>
+    <string name="achievement_stamina_vi">CgkI_pu14sQDEAIQFg</string>
+    <string name="achievement_marathon">CgkI_pu14sQDEAIQAw</string>
+    <string name="achievement_marathon_ii">CgkI_pu14sQDEAIQCw</string>
+    <string name="achievement_marathon_iii">CgkI_pu14sQDEAIQDA</string>
+    <string name="achievement_marathon_iv">CgkI_pu14sQDEAIQFw</string>
+    <string name="achievement_marathon_v">CgkI_pu14sQDEAIQGA</string>
+    <string name="achievement_continual_i">CgkI_pu14sQDEAIQGw</string>
+    <string name="achievement_continual_ii">CgkI_pu14sQDEAIQHA</string>
+    <string name="achievement_continual_iii">CgkI_pu14sQDEAIQHQ</string>
+    <string name="leaderboard_most_steps_walked">CgkI_pu14sQDEAIQGQ</string>
+    <string name="leaderboard_most_steps_walked_in_one_day">CgkI_pu14sQDEAIQGg</string>
+    <string name="leaderboard_highest_average">CgkI_pu14sQDEAIQHg</string>
+
+</resources>
