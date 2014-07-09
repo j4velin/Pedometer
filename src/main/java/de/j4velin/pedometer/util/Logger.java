@@ -60,9 +60,7 @@ public class Logger {
 	public static void log(String msg) {
 		if (!BuildConfig.DEBUG)
 			return;
-		// if (BuildConfig.DEBUG)
 		android.util.Log.d(APP, msg);
-		// else {
 		try {
 			if (fw == null) {
 				fw = new FileWriter(new File(Environment
