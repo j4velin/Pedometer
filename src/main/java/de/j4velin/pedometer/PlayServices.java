@@ -134,8 +134,8 @@ public class PlayServices {
 				c.close();
 			}
 
-			Cursor c = db.query(new String[] { "steps" }, "steps >= 10000", null, null, null, null, "15");
-			int daysForStamina = c.getCount();
+			Cursor c = db.query(new String[] { "COUNT(*)" }, "steps >= 10000", null, null, null, null, null);
+			int daysForStamina = c.getInt(0);
 			c.close();
 
 			if (!prefs.getBoolean("achievement_stamina", false)) {
