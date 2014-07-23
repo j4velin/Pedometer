@@ -66,7 +66,7 @@ public class PlayServices {
 	 *            the GamesClient
 	 * @param c
 	 *            the Context
-	 * @param average
+	 * @param avg
 	 *            the new score = current average
 	 */
 	private static void updateAverageLeaderboard(final GoogleApiClient gc, final Context c, float avg) {
@@ -80,12 +80,8 @@ public class PlayServices {
 	 * 
 	 * @param gc
 	 *            the GamesClient
-	 * @param db
-	 *            the Database
 	 * @param context
 	 *            the Context
-	 * @param todayOffset
-	 *            step offset for today
 	 */
 	static void achievementsAndLeaderboard(final GoogleApiClient gc, final Context context) {
 		if (gc.isConnected()) {
@@ -135,6 +131,7 @@ public class PlayServices {
 			}
 
 			Cursor c = db.query(new String[] { "COUNT(*)" }, "steps >= 10000", null, null, null, null, null);
+            c.moveToFirst();
 			int daysForStamina = c.getInt(0);
 			c.close();
 
