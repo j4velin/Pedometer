@@ -24,8 +24,7 @@ android {
         debug {
             debuggable true
             signingConfig signingConfigs.release
-            runProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            runProguard false
             zipAlign true
         }
     }
@@ -37,6 +36,7 @@ dependencies {
     compile project(':holoGraphLibrary')
     compile 'com.google.android.gms:play-services:+'
     compile files('../libs/dashclock-api-r2.0.jar')
+    compile 'com.github.blackfizz:eazegraph:1.0.10-SNAPSHOT@aar'
 }
 
 def props = new Properties()
