@@ -79,7 +79,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
 		// slice for the "missing" steps until reaching the goal
 		sliceGoal = new PieSlice();
-		sliceGoal.setColor(Color.parseColor("#990000"));
+		sliceGoal.setColor(Color.parseColor("#FF4444"));
 		sliceGoal.setValue(1);
 		pg.addSlice(sliceGoal);
 
@@ -287,7 +287,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 				if (steps > goal)
 					d.setColor(Color.parseColor("#99CC00"));
 				else
-					d.setColor(Color.parseColor("#0099cc"));
+					d.setColor(Color.parseColor("#0099CC"));
 				d.setName(df.format(new Date(yesterday.getTimeInMillis())));
 				// steps or distance?
 				if (showSteps) {
