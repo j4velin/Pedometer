@@ -27,20 +27,20 @@ import android.widget.TextView;
 
 public class ColorPreview extends TextView {
 
-	public ColorPreview(Context context) {
-		super(context);
-	}
+    public ColorPreview(Context context) {
+        super(context);
+    }
 
-	public ColorPreview(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public ColorPreview(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	public ColorPreview(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
-	
-	@SuppressLint("DrawAllocation")
-	@Override
+    public ColorPreview(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+    @SuppressLint("DrawAllocation")
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Rect rect = new Rect();
@@ -49,7 +49,7 @@ public class ColorPreview extends TextView {
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(3);
         getLocalVisibleRect(rect);
-        canvas.drawRect(rect, paint);       
+        canvas.drawRect(rect, paint);
     }
 
 }

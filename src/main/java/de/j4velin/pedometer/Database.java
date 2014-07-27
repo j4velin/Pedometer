@@ -68,12 +68,12 @@ public class Database extends SQLiteOpenHelper {
     /**
      * Query the 'steps' table. Remember to close the cursor!
      *
-     * @param columns
-     * @param selection
-     * @param selectionArgs
-     * @param groupBy
-     * @param having
-     * @param orderBy
+     * @param columns the colums
+     * @param selection the selection
+     * @param selectionArgs the selction arguments
+     * @param groupBy the group by statement
+     * @param having the having statement
+     * @param orderBy the order by statement
      * @return the cursor
      */
     Cursor query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final String limit) {

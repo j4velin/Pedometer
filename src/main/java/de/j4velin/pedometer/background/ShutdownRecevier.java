@@ -20,29 +20,30 @@ import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 public class ShutdownRecevier extends BroadcastReceiver {
 
-	@Override
-	public void onReceive(final Context context, final Intent intent) {
-		if (BuildConfig.DEBUG)
-			Logger.log("shutting down");
+    @Override
+    public void onReceive(final Context context, final Intent intent) {
+        if (BuildConfig.DEBUG) Logger.log("shutting down");
 
-		context.startService(new Intent(context, SensorListener.class));
+        context.startService(new Intent(context, SensorListener.class));
 
-		// if the user used a root script for shutdown, the DEVICE_SHUTDOWN
-		// broadcast might not be send. Therefore, the app will check this
-		// setting on the next boot and displays an error message if it's not
-		// set to true
-		context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit().putBoolean("correctShutdown", true).commit();
+        // if the user used a root script for shutdown, the DEVICE_SHUTDOWN
+        // broadcast might not be send. Therefore, the app will check this
+        // setting on the next boot and displays an error message if it's not
+        // set to true
+        context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+                .putBoolean("correctShutdown", true).commit();
 
-		Database db = Database.getInstance(context);
-		db.updateSteps(Util.getToday(), db.getCurrentSteps());
-		// current steps will be reset on boot @see BootReceiver
-		db.close();
-	}
+        Database db = Database.getInstance(context);
+        db.updateSteps(Util.getToday(), db.getCurrentSteps());
+        // current steps will be reset on boot @see BootReceiver
+        db.close();
+    }
 
 }
