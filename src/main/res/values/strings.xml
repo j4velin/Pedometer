@@ -37,7 +37,6 @@
     <string name="faq">FAQ</string>
     <string name="goal_reached_notification">Goal reached! %s steps and counting</string>
     <string name="notification_text">%s steps to go</string>
-    <string name="yesterday">Yesterday</string>
     <string name="total">Total</string>
     <string name="notification_title">Pedometer is counting</string>
     <string name="your_progress_will_be_shown_here_soon">Your progress will be shown here soon</string>

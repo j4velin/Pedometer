@@ -35,7 +35,6 @@
     <string name="faq">Ayuda</string>
     <string name="goal_reached_notification">¡Objetivo alcanzado! %s pasos y contando</string>
     <string name="notification_text">Faltan %s pasos</string>
-    <string name="yesterday">Ayer</string>
     <string name="total">Total</string>
     <string name="notification_title">Podómetro está contando</string>
     <string name="your_progress_will_be_shown_here_soon">Tu progreso se mostrará aquí pronto</string>    

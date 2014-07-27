@@ -35,7 +35,6 @@
     <string name="faq">FAQ</string>
     <string name="goal_reached_notification">Mål nått! %s steg hittills</string>
     <string name="notification_text">%s steg kvar</string>
-    <string name="yesterday">Igår</string>
     <string name="total">Totalt</string>
     <string name="notification_title">Pedometer är aktiv</string>
     <string name="your_progress_will_be_shown_here_soon">Dina framsteg kommer att visas här snart</string>

@@ -78,7 +78,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         pg.addPieSlice(sliceCurrent);
 
         // slice for the "missing" steps until reaching the goal
-        sliceGoal = new PieModel("", 10000, Color.parseColor("#CC0000"));
+        sliceGoal = new PieModel("", Fragment_Settings.DEFAULT_GOAL, Color.parseColor("#CC0000"));
         pg.addPieSlice(sliceGoal);
 
         pg.setOnClickListener(new OnClickListener() {
@@ -109,7 +109,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
 
-        goal = prefs.getInt("goal", 10000);
+        goal = prefs.getInt("goal", Fragment_Settings.DEFAULT_GOAL);
         since_boot = db.getCurrentSteps(); // do not use the value from the sharedPreferences
 
         // register a sensorlistener to live update the UI if a step is taken
@@ -217,11 +217,11 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         sliceCurrent.setValue(steps_today);
         if (goal - steps_today > 0) {
             // goal not reached yet
-            //			if (pg.getSlices().size() == 1) {
-            //				// can happen if the goal value was changed: old goal value was
-            //				// reached but now there are some steps missing for the new goal
-            //				pg.addPieSlice(sliceGoal);
-            //			}
+            if (pg.getData().size() == 1) {
+                // can happen if the goal value was changed: old goal value was
+                // reached but now there are some steps missing for the new goal
+                pg.addPieSlice(sliceGoal);
+            }
             sliceGoal.setValue(goal - steps_today);
         } else {
             // goal reached

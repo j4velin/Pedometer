@@ -35,7 +35,6 @@
     <string name="faq">常见问题</string>
     <string name="goal_reached_notification">达成目标！已走了 %s 步</string>
     <string name="notification_text">还有 %s 步</string>
-    <string name="yesterday">昨天</string>
     <string name="total">共计</string>
     <string name="notification_title">Pedometer 正在记步</string>
     <string name="your_progress_will_be_shown_here_soon">您的进度很快会在这显示</string>

@@ -34,7 +34,6 @@
     <string name="faq">FAQ</string>
     <string name="goal_reached_notification">目標達成！%s 歩</string>
     <string name="notification_text">目標達成まであと %s 歩</string>
-    <string name="yesterday">昨日</string>
     <string name="total">合計</string>
     <string name="notification_title">歩数をカウント中</string>
     <string name="your_progress_will_be_shown_here_soon">歩数はもうすぐ表示されます</string>

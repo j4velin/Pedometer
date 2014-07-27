@@ -29,7 +29,7 @@ import de.j4velin.pedometer.BuildConfig;
 public class Logger {
 
     private static FileWriter fw;
-    private static Date date = new Date();
+    private static final Date date = new Date();
     private final static String APP = "Pedometer";
 
     public static void log(Throwable ex) {
