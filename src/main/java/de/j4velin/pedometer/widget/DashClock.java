@@ -36,7 +36,7 @@ public class DashClock extends DashClockExtension {
 	@Override
 	protected void onUpdateData(int reason) {
 		ExtensionData data = new ExtensionData();
-		Database db = new Database(DashClock.this);
+		Database db = Database.getInstance(this);
 		int steps = Math.max(db.getCurrentSteps() + db.getSteps(Util.getToday()), 0);
 		data.visible(true).status(Fragment_Overview.formatter.format(steps)).icon(R.drawable.ic_dashclock)
 				.clickIntent(new Intent(DashClock.this, Activity_Main.class));

@@ -33,7 +33,7 @@ public class WidgetUpdateService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Database db = new Database(this);
+		Database db = Database.getInstance(this);
 		int steps = Math.max(db.getCurrentSteps() + db.getSteps(Util.getToday()), 0);
 		db.close();
 		final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);

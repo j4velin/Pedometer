@@ -85,7 +85,7 @@ public class PlayServices {
 	 */
 	static void achievementsAndLeaderboard(final GoogleApiClient gc, final Context context) {
 		if (gc.isConnected()) {
-			Database db = new Database(context);
+			Database db = Database.getInstance(context);
 			db.removeInvalidEntries();
 
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

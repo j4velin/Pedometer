@@ -101,7 +101,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         super.onResume();
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 
-        Database db = new Database(getActivity());
+        Database db = Database.getInstance(getActivity());
 
         if (BuildConfig.DEBUG) db.logState();
         // read todays offset
@@ -159,7 +159,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Database db = new Database(getActivity());
+        Database db = Database.getInstance(getActivity());
         db.saveCurrentSteps(since_boot);
         db.close();
     }
@@ -198,7 +198,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             // we dont know when the reboot was, so set todays steps to 0 by
             // initializing them with -STEPS_SINCE_BOOT
             todayOffset = -(int) event.values[0];
-            Database db = new Database(getActivity());
+            Database db = Database.getInstance(getActivity());
             db.insertNewDay(Util.getToday(), (int) event.values[0]);
             db.close();
         }
@@ -260,7 +260,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
      * be called when switching from step count to distance.
      */
     private void updateBars() {
-        Database db = new Database(getActivity());
+        Database db = Database.getInstance(getActivity());
         Calendar yesterday = Calendar.getInstance();
         yesterday.setTimeInMillis(Util.getToday());
         yesterday.add(Calendar.DAY_OF_YEAR, -1);

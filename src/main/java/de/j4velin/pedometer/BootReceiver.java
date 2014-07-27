@@ -56,7 +56,7 @@ public class BootReceiver extends BroadcastReceiver {
 		}
 		// last entry might still have a negative step value, so remove that
 		// row if that's the case
-		Database db = new Database(context);
+		Database db = Database.getInstance(context);
 		db.removeNegativeEntries();
 		db.saveCurrentSteps(0);
 		db.close();

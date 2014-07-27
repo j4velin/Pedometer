@@ -39,7 +39,7 @@ public class Dialog_Statistics {
 				d.dismiss();
 			}
 		});
-		Database db = new Database(c);
+		Database db = Database.getInstance(c);
 
 		Pair<Date, Integer> record = db.getRecordData();
 

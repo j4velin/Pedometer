@@ -77,7 +77,7 @@ public class SensorListener extends Service implements SensorEventListener {
 				SensorListener.class), PendingIntent.FLAG_UPDATE_CURRENT));
 
 		if (steps > 0) {
-			Database db = new Database(this);
+			Database db = Database.getInstance(this);
 			if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
 				db.insertNewDay(Util.getToday(), steps);
 			}
@@ -136,7 +136,7 @@ public class SensorListener extends Service implements SensorEventListener {
 		SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
 		if (prefs.getBoolean("notification", true)) {
 			int goal = prefs.getInt("goal", 10000);
-			Database db = new Database(this);
+			Database db = Database.getInstance(this);
 			int today_offset = db.getSteps(Util.getToday());
 			db.close();
 			Notification.Builder notificationBuilder = new Notification.Builder(this);

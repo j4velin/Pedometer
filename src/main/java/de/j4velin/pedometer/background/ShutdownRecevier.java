@@ -39,7 +39,7 @@ public class ShutdownRecevier extends BroadcastReceiver {
 		// set to true
 		context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit().putBoolean("correctShutdown", true).commit();
 
-		Database db = new Database(context);
+		Database db = Database.getInstance(context);
 		db.updateSteps(Util.getToday(), db.getCurrentSteps());
 		// current steps will be reset on boot @see BootReceiver
 		db.close();
