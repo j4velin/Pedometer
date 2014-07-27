@@ -33,10 +33,9 @@ android {
 dependencies {
     compile project(':baseGameUtils')
     compile project(':colorpicker')
-    compile project(':holoGraphLibrary')
+    compile project(':EazeGraph')
     compile 'com.google.android.gms:play-services:+'
     compile files('../libs/dashclock-api-r2.0.jar')
-    compile 'com.github.blackfizz:eazegraph:1.0.10-SNAPSHOT@aar'
 }
 
 def props = new Properties()

@@ -65,9 +65,10 @@
     <orderEntry type="library" exported="" name="play-services-5.0.77" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
-    <orderEntry type="module" module-name="holoGraphLibrary" exported="" />
+    <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
     <orderEntry type="module" module-name="baseGameUtils" exported="" />
     <orderEntry type="module" module-name="colorpicker" exported="" />
+    <orderEntry type="module" module-name="EazeGraph" exported="" />
   </component>
 </module>
 
