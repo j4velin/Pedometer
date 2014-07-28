@@ -285,7 +285,6 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
                 bm = new BarModel(df.format(new Date(yesterday.getTimeInMillis())), 0,
                         steps > goal ? Color.parseColor("#99CC00") : Color.parseColor("#0099cc"));
                 if (showSteps) {
-                    // label = formatter.format(steps);
                     bm.setValue(steps);
                 } else {
                     distance = steps * stepsize;
@@ -294,10 +293,8 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
                     } else {
                         distance /= 5280;
                     }
-                    // label = formatter.format(distance);
                     bm.setValue(distance);
                 }
-                bm.setValue(steps);
                 barChart.addBar(bm);
             }
             yesterday.add(Calendar.DAY_OF_YEAR, 1);
