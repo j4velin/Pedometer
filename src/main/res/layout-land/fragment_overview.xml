@@ -36,42 +36,7 @@
         android:textSize="20sp"/>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_below="@id/linearLayout1">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="@string/average"/>
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="@string/total"/>
-    </LinearLayout>
-
-    <org.eazegraph.lib.charts.BarChart
-        xmlns:eaze="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/bargraph"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        eaze:egLegendHeight="30dp"
-        android:layout_toRightOf="@+id/graph"/>
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/averageandtotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/bargraph"
@@ -96,5 +61,41 @@
             android:textSize="20sp"
             android:textStyle="bold"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/averageandtotaltext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/averageandtotal"
+        android:layout_below="@id/averageandtotal">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/average"/>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/total"/>
+    </LinearLayout>
+
+    <org.eazegraph.lib.charts.BarChart
+        xmlns:eaze="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bargraph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/averageandtotaltext"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/graph"
+        eaze:egLegendHeight="35dp"
+        eaze:egShowValues="true"/>
 
 </RelativeLayout>
