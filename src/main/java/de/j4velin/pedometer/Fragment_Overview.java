@@ -228,7 +228,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             pg.clearChart();
             pg.addPieSlice(sliceCurrent);
         }
-        pg.invalidate();
+        pg.update();
         if (showSteps) {
             stepsView.setText(formatter.format(steps_today));
             totalView.setText(formatter.format(total_start + steps_today));
