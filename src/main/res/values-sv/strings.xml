@@ -45,7 +45,7 @@
     <string name="total_this_month">Totalt den här månaden</string>
     <string name="average_this_month">Genomsnitt den här månaden</string>
     <string name="file_already_exists">Filen existerar redan. Är du säker på att du vill skriva över den?</string>
-    <string name="about_text_links">Den här appen skapades av Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) och använder <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> av Daniel Nadeau och <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> av Sergey Margaritov.\n\nPedometer är öppen källkod! Hämta koden och en fullständig lista på de som bidragit på <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">Den här appen skapades av Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) och använder <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> av Paul Cech och <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> av Sergey Margaritov.\n\nPedometer är öppen källkod! Hämta koden och en fullständig lista på de som bidragit på <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Appens version: %s</string>
     <string name="since">Sedan %s</string>
     <string name="start">Start</string>

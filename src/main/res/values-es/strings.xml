@@ -45,7 +45,7 @@
     <string name="total_this_month">Total este mes</string>
     <string name="average_this_month">Media este mes</string>
     <string name="file_already_exists">El archivo ya existe. ¿Estás seguro de querer sobreescribirlo?</string>
-    <string name="about_text_links">Esta aplicación fue creada por Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) y utiliza <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> de Daniel Nadeau y <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> de Sergey Margaritov.\n\n¡Podómetro es código libre! Consigue el código y la lista completa de contribuciones de <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">Esta aplicación fue creada por Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) y utiliza <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> de Paul Cech y <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> de Sergey Margaritov.\n\n¡Podómetro es código libre! Consigue el código y la lista completa de contribuciones de <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Versión: %s</string>
     <string name="since">Desde %s</string>
     <string name="start">Iniciar</string>

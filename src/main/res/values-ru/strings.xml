@@ -45,7 +45,7 @@
     <string name="total_this_month">Всего за месяц</string>
     <string name="average_this_month">В среднем за месяц</string>
     <string name="file_already_exists">Файл уже существует. Вы точно хотите перезаписать его?</string>
-    <string name="about_text_links">Это приложение создано Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) и использует библиотеки <a href="https://bitbucket.org/danielnadeau/holographlibrary/wiki/Home">HoloGraphLibrary</a> созданную Daniel Nadeau и <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> созданную Sergey Margaritov.\n\nPedometer - приложение с открытым исходным кодом! Получить исходные коды и полный список участников можно на <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">Это приложение создано Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) и использует библиотеки <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> созданную Paul Cech и <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> созданную Sergey Margaritov.\n\nPedometer - приложение с открытым исходным кодом! Получить исходные коды и полный список участников можно на <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Версия: %s</string>
     <string name="since">Начиная с %s</string>
     <string name="start">Начать</string>
