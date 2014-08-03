@@ -28,6 +28,7 @@ import de.j4velin.pedometer.util.Util;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -72,8 +73,8 @@ public class SensorListener extends Service implements SensorEventListener {
 
         // restart service every hour to get the current step count
         ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
-                .set(AlarmManager.RTC, System.currentTimeMillis() + 1000 * 60 * 60, PendingIntent
-                        .getService(getApplicationContext(), 2,
+                .set(AlarmManager.RTC, System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
+                        PendingIntent.getService(getApplicationContext(), 2,
                                 new Intent(this, SensorListener.class),
                                 PendingIntent.FLAG_UPDATE_CURRENT));
 
@@ -81,6 +82,7 @@ public class SensorListener extends Service implements SensorEventListener {
             Database db = Database.getInstance(this);
             if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
                 db.insertNewDay(Util.getToday(), steps);
+                reRegisterSensor();
             }
             db.saveCurrentSteps(steps);
             db.close();
@@ -95,16 +97,7 @@ public class SensorListener extends Service implements SensorEventListener {
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) Logger.log("SensorListener onCreate");
-        SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-        try {
-            sm.unregisterListener(this);
-        } catch (Exception e) {
-            if (BuildConfig.DEBUG) Logger.log(e);
-            e.printStackTrace();
-        }
-
-        sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-                SensorManager.SENSOR_DELAY_NORMAL);
+        reRegisterSensor();
     }
 
     @Override
@@ -132,6 +125,8 @@ public class SensorListener extends Service implements SensorEventListener {
 
     private void updateNotificationState() {
         SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+        NotificationManager nm =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (prefs.getBoolean("notification", true)) {
             int goal = prefs.getInt("goal", 10000);
             Database db = Database.getInstance(this);
@@ -151,21 +146,28 @@ public class SensorListener extends Service implements SensorEventListener {
                 notificationBuilder
                         .setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
             }
-            notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
-                    .setContentTitle(getString(R.string.notification_title)).setContentIntent(
-                    PendingIntent.getActivity(this, 0, new Intent(this, Activity_Main.class), 0))
-                    .setSmallIcon(R.drawable.ic_launcher).build();
-
-            // Workaround as on Android 4.4.2 START_STICKY has currently no
-            // effect
-            // -> try keeping the service in memory by making it a foreground
-            // service
-            startForeground(1, notificationBuilder.build());
-
-            if (BuildConfig.DEBUG) Logger.log("start foreground");
-
+            nm.notify(1,
+                    notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
+                            .setContentTitle(getString(R.string.notification_title))
+                            .setContentIntent(PendingIntent
+                                    .getActivity(this, 0, new Intent(this, Activity_Main.class), 0))
+                            .setSmallIcon(R.drawable.ic_launcher).build());
         } else {
-            stopForeground(true);
+            nm.cancel(1);
         }
+    }
+
+    private void reRegisterSensor() {
+        if (BuildConfig.DEBUG) Logger.log("re-register sensor listener");
+        SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+        try {
+            sm.unregisterListener(this);
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) Logger.log(e);
+            e.printStackTrace();
+        }
+
+        sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                SensorManager.SENSOR_DELAY_NORMAL);
     }
 }
