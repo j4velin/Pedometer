@@ -76,13 +76,12 @@ public class WidgetConfig extends Activity implements OnClickListener {
 		dialog.setOnColorChangedListener(new OnColorChangedListener() {
 			@Override
 			public void onColorChanged(int color) {
-				findViewById(v.getId()).setTag(color);
 				v.setBackgroundColor(color);
 				v.setTag(color);
 				getSharedPreferences("Widgets", Context.MODE_PRIVATE)
 						.edit()
 						.putInt((v.getId() == R.id.bgcolor ? "background_" : "color_") + widgetId,
-								(Integer) findViewById(R.id.textcolor).getTag()).apply();
+                                color).apply();
 			}
 		});
 		dialog.show();
