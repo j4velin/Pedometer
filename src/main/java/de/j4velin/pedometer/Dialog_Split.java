@@ -69,12 +69,8 @@ public class Dialog_Split {
                 if (!split_active) {
                     prefs.edit().putLong("split_date", System.currentTimeMillis())
                             .putInt("split_steps", totalSteps).apply();
-                    ((TextView) d.findViewById(R.id.date)).setText(c.getString(R.string.since,
-                            java.text.DateFormat.getDateTimeInstance()
-                                    .format(System.currentTimeMillis())));
-                    started.setVisibility(View.VISIBLE);
-                    stopped.setVisibility(View.GONE);
                     split_active = true;
+                    d.dismiss();
                 } else {
                     started.setVisibility(View.GONE);
                     stopped.setVisibility(View.VISIBLE);
