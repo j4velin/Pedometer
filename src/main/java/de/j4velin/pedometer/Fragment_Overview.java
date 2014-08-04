@@ -111,11 +111,15 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
         goal = prefs.getInt("goal", Fragment_Settings.DEFAULT_GOAL);
         since_boot = db.getCurrentSteps(); // do not use the value from the sharedPreferences
+        int pauseDifference = since_boot - prefs.getInt("pauseCount", since_boot);
 
         // register a sensorlistener to live update the UI if a step is taken
-        SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-                SensorManager.SENSOR_DELAY_UI, 0);
+        if (!prefs.contains("pauseCount")) {
+            SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+            sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI, 0);
+        }
+
+        since_boot -= pauseDifference;
 
         total_start = db.getTotalWithoutToday();
         total_days = db.getDays();

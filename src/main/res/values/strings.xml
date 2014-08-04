@@ -55,5 +55,8 @@
     <string name="close">close</string>
     <string name="no_split_active">No split counter active. Click start to count the steps from now on</string>
     <string name="split_count">Split count</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="ispaused">Pedometer is paused</string>
 
 </resources>

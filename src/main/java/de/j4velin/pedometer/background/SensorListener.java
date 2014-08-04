@@ -49,6 +49,9 @@ import android.os.IBinder;
  */
 public class SensorListener extends Service implements SensorEventListener {
 
+    public final static String ACTION_PAUSE = "pause";
+
+    private static boolean WAIT_FOR_VALID_STEPS = false;
     private static int steps;
 
     @Override
@@ -61,6 +64,25 @@ public class SensorListener extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(final SensorEvent event) {
         steps = (int) event.values[0];
+        if (WAIT_FOR_VALID_STEPS && steps > 0) {
+            WAIT_FOR_VALID_STEPS = false;
+            Database db = Database.getInstance(this);
+            if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
+                int pauseDifference = steps -
+                        getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+                                .getInt("pauseCount", steps);
+                db.insertNewDay(Util.getToday(), steps - pauseDifference);
+                if (pauseDifference > 0) {
+                    // update pauseCount for the new day
+                    getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+                            .putInt("pauseCount", steps).commit();
+                }
+                reRegisterSensor();
+            }
+            db.saveCurrentSteps(steps);
+            db.close();
+            updateNotificationState();
+        }
     }
 
     @Override
@@ -70,6 +92,35 @@ public class SensorListener extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
+        if (ACTION_PAUSE.equals(intent.getStringExtra("action"))) {
+            if (BuildConfig.DEBUG)
+                Logger.log("onStartCommand action: " + intent.getStringExtra("action"));
+            if (steps == 0) {
+                Database db = Database.getInstance(this);
+                steps = db.getCurrentSteps();
+                db.close();
+            }
+            SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+            if (prefs.contains("pauseCount")) { // resume counting
+                int difference = steps -
+                        prefs.getInt("pauseCount", steps); // number of steps taken during the pause
+                Database db = Database.getInstance(this);
+                db.updateSteps(Util.getToday(), -difference);
+                db.close();
+                prefs.edit().remove("pauseCount").commit();
+                updateNotificationState();
+            } else { // pause counting
+                // cancel restart
+                ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
+                        .cancel(PendingIntent.getService(getApplicationContext(), 2,
+                                new Intent(this, SensorListener.class),
+                                PendingIntent.FLAG_UPDATE_CURRENT));
+                prefs.edit().putInt("pauseCount", steps).commit();
+                updateNotificationState();
+                stopSelf();
+                return START_NOT_STICKY;
+            }
+        }
 
         // restart service every hour to get the current step count
         ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
@@ -78,17 +129,7 @@ public class SensorListener extends Service implements SensorEventListener {
                                 new Intent(this, SensorListener.class),
                                 PendingIntent.FLAG_UPDATE_CURRENT));
 
-        if (steps > 0) {
-            Database db = Database.getInstance(this);
-            if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
-                db.insertNewDay(Util.getToday(), steps);
-                reRegisterSensor();
-            }
-            db.saveCurrentSteps(steps);
-            db.close();
-        }
-
-        updateNotificationState();
+        WAIT_FOR_VALID_STEPS = true;
 
         return START_STICKY;
     }
@@ -124,6 +165,7 @@ public class SensorListener extends Service implements SensorEventListener {
     }
 
     private void updateNotificationState() {
+        if (BuildConfig.DEBUG) Logger.log("SensorListener updateNotificationState");
         SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
         NotificationManager nm =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -146,12 +188,18 @@ public class SensorListener extends Service implements SensorEventListener {
                 notificationBuilder
                         .setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
             }
-            nm.notify(1,
-                    notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
-                            .setContentTitle(getString(R.string.notification_title))
-                            .setContentIntent(PendingIntent
-                                    .getActivity(this, 0, new Intent(this, Activity_Main.class), 0))
-                            .setSmallIcon(R.drawable.ic_launcher).build());
+            boolean isPaused = prefs.contains("pauseCount");
+            notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
+                    .setContentTitle(isPaused ? getString(R.string.ispaused) :
+                            getString(R.string.notification_title)).setContentIntent(PendingIntent
+                    .getActivity(this, 0, new Intent(this, Activity_Main.class),
+                            PendingIntent.FLAG_UPDATE_CURRENT)).setSmallIcon(R.drawable.ic_launcher)
+                    .addAction(isPaused ? R.drawable.ic_resume : R.drawable.ic_pause,
+                            isPaused ? getString(R.string.resume) : getString(R.string.pause),
+                            PendingIntent.getService(this, 4, new Intent(this, SensorListener.class)
+                                            .putExtra("action", ACTION_PAUSE),
+                                    PendingIntent.FLAG_UPDATE_CURRENT));
+            nm.notify(1, notificationBuilder.build());
         } else {
             nm.cancel(1);
         }
