@@ -101,6 +101,13 @@
         </receiver>
 
         <service android:name="de.j4velin.pedometer.widget.WidgetUpdateService"/>
+
+        <receiver
+            android:name="de.j4velin.pedometer.util.TimeZoneListener">
+            <intent-filter>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

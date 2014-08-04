@@ -35,6 +35,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 
+import java.util.TimeZone;
+
 public class Activity_Main extends BaseGameActivity {
 
     @Override
@@ -57,6 +59,11 @@ public class Activity_Main extends BaseGameActivity {
         getGameHelper().setConnectOnStart(
                 getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE)
                         .getBoolean("autosignin", false));
+
+        if (!getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).contains("timezone")) {
+            getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+                    .putString("timezone", TimeZone.getDefault().getID()).commit();
+        }
     }
 
     @Override
@@ -107,8 +114,8 @@ public class Activity_Main extends BaseGameActivity {
             case R.id.action_achievements:
                 if (getApiClient().isConnected()) {
                     startActivityForResult(item.getItemId() == R.id.action_achievements ?
-                                    Games.Achievements.getAchievementsIntent(getApiClient()) :
-                                    Games.Leaderboards.getAllLeaderboardsIntent(getApiClient()), 1);
+                            Games.Achievements.getAchievementsIntent(getApiClient()) :
+                            Games.Leaderboards.getAllLeaderboardsIntent(getApiClient()), 1);
                 } else {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
                     builder2.setTitle(R.string.sign_in_necessary);

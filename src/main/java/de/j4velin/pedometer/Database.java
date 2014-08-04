@@ -32,7 +32,7 @@ import de.j4velin.pedometer.util.Util;
 public class Database extends SQLiteOpenHelper {
 
     private final static String DB_NAME = "steps";
-    private final static int DB_VERSION = 1;
+    private final static int DB_VERSION = 2;
 
     private static Database instance;
     private static final AtomicInteger openCounter = new AtomicInteger();
@@ -63,17 +63,25 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion == 1) {
+            // drop PRIMARY KEY constraint
+            db.execSQL("CREATE TABLE " + DB_NAME + "2 (date INTEGER, steps INTEGER)");
+            db.execSQL("INSERT INTO " + DB_NAME + "2 (date, steps) SELECT date, steps FROM " +
+                    DB_NAME);
+            db.execSQL("DROP TABLE " + DB_NAME);
+            db.execSQL("ALTER TABLE " + DB_NAME + "2 RENAME TO " + DB_NAME + "");
+        }
     }
 
     /**
      * Query the 'steps' table. Remember to close the cursor!
      *
-     * @param columns the colums
-     * @param selection the selection
+     * @param columns       the colums
+     * @param selection     the selection
      * @param selectionArgs the selction arguments
-     * @param groupBy the group by statement
-     * @param having the having statement
-     * @param orderBy the order by statement
+     * @param groupBy       the group by statement
+     * @param having        the having statement
+     * @param orderBy       the order by statement
      * @return the cursor
      */
     Cursor query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final String limit) {
@@ -343,6 +351,18 @@ public class Database extends SQLiteOpenHelper {
     public int getCurrentSteps() {
         int re = getSteps(-1);
         return re == Integer.MIN_VALUE ? 0 : re;
+    }
+
+    /**
+     * Should be called when the timezone on the device changes. This will adjust the databas entries
+     * so that each entry still translates to midnight of a day.
+     *
+     * @param offsetDifference the difference in the rawOffsets of the two timeZones (new - old) in milliseconds
+     */
+    public void timeZoneChanged(int offsetDifference) {
+        getWritableDatabase()
+                .execSQL("UPDATE " + DB_NAME + " SET date = date - '" + offsetDifference +
+                        "' WHERE date > 0");
     }
 
 }
