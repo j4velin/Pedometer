@@ -198,7 +198,7 @@ public class SensorListener extends Service implements SensorEventListener {
                             isPaused ? getString(R.string.resume) : getString(R.string.pause),
                             PendingIntent.getService(this, 4, new Intent(this, SensorListener.class)
                                             .putExtra("action", ACTION_PAUSE),
-                                    PendingIntent.FLAG_UPDATE_CURRENT));
+                                    PendingIntent.FLAG_UPDATE_CURRENT)).setOngoing(true);
             nm.notify(1, notificationBuilder.build());
         } else {
             nm.cancel(1);
