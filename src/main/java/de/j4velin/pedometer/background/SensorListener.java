@@ -92,7 +92,7 @@ public class SensorListener extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-        if (ACTION_PAUSE.equals(intent.getStringExtra("action"))) {
+        if (intent != null && ACTION_PAUSE.equals(intent.getStringExtra("action"))) {
             if (BuildConfig.DEBUG)
                 Logger.log("onStartCommand action: " + intent.getStringExtra("action"));
             if (steps == 0) {
