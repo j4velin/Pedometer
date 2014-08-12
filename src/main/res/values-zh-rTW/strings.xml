@@ -53,5 +53,8 @@
     <string name="close">關閉</string>
     <string name="no_split_active">沒有啟用中的獨立計步器。請點擊啟動開始計步</string>
     <string name="split_count">獨立計步器</string>
+    <string name="pause">暫停</string>
+    <string name="resume">恢復</string>
+    <string name="ispaused">Pedometer 目前暫停中</string>
 
 </resources>
