@@ -115,8 +115,10 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
         // register a sensorlistener to live update the UI if a step is taken
         if (!prefs.contains("pauseCount")) {
-            SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-            sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI, 0);
+            SensorManager sm =
+                    (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+            sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                    SensorManager.SENSOR_DELAY_UI, 0);
         }
 
         since_boot -= pauseDifference;
@@ -282,6 +284,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             stepsize_cm = prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT)
                     .equals("cm");
         }
+        barChart.setShowDecimal(!showSteps); // show decimal in distance view only
         BarModel bm;
         for (int i = 0; i < 7; i++) {
             steps = db.getSteps(yesterday.getTimeInMillis());
@@ -297,6 +300,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
                     } else {
                         distance /= 5280;
                     }
+                    distance = Math.round(distance * 1000) / 1000f; // 3 decimals
                     bm.setValue(distance);
                 }
                 barChart.addBar(bm);
