@@ -139,6 +139,7 @@ public class SensorListener extends Service implements SensorEventListener {
         super.onCreate();
         if (BuildConfig.DEBUG) Logger.log("SensorListener onCreate");
         reRegisterSensor();
+        updateNotificationState();
     }
 
     @Override
