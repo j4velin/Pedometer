@@ -25,6 +25,7 @@ import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
+import de.j4velin.pedometer.widget.WidgetUpdateService;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -82,6 +83,7 @@ public class SensorListener extends Service implements SensorEventListener {
             db.saveCurrentSteps(steps);
             db.close();
             updateNotificationState();
+            startService(new Intent(this, WidgetUpdateService.class));
         }
     }
 
