@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "de.j4velin.pedometer"
         minSdkVersion 19
-        targetSdkVersion 19
+        targetSdkVersion 20
     }
 
     signingConfigs {
