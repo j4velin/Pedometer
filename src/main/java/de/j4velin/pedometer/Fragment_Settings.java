@@ -137,8 +137,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_settings).setVisible(false);
-        // don't show split count setting as the split count dialog is only
-        // accessible from the overview fragment
+        menu.findItem(R.id.action_pause).setVisible(false);
         menu.findItem(R.id.action_split_count).setVisible(false);
     }
 

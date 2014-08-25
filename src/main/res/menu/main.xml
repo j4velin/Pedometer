@@ -1,9 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/action_pause"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/pause"/>
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
         android:title="@string/settings"/>
     <item
         android:id="@+id/action_achievements"

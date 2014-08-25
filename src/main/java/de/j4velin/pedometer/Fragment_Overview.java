@@ -17,8 +17,11 @@ package de.j4velin.pedometer;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -44,6 +47,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
@@ -170,8 +174,20 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
+        MenuItem pause = menu.getItem(0);
+        Drawable d;
+        if (getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+                .contains("pauseCount")) { // currently paused
+            pause.setTitle(R.string.resume);
+            d = getResources().getDrawable(R.drawable.ic_resume);
+        } else {
+            pause.setTitle(R.string.pause);
+            d = getResources().getDrawable(R.drawable.ic_pause);
+        }
+        d.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        pause.setIcon(d);
     }
 
     @Override
@@ -181,14 +197,33 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
                 Dialog_Split.getDialog(getActivity(),
                         total_start + Math.max(todayOffset + since_boot, 0)).show();
                 return true;
+            case R.id.action_pause:
+                SensorManager sm =
+                        (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+                Drawable d;
+                if (getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+                        .contains("pauseCount")) { // currently paused -> now resumed
+                    sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                            SensorManager.SENSOR_DELAY_UI, 0);
+                    item.setTitle(R.string.pause);
+                    d = getResources().getDrawable(R.drawable.ic_pause);
+                } else {
+                    sm.unregisterListener(this);
+                    item.setTitle(R.string.resume);
+                    d = getResources().getDrawable(R.drawable.ic_resume);
+                }
+                d.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+                item.setIcon(d);
+                getActivity().startService(new Intent(getActivity(), SensorListener.class)
+                        .putExtra("action", SensorListener.ACTION_PAUSE));
+                return true;
             default:
                 return ((Activity_Main) getActivity()).optionsItemSelected(item);
         }
-
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public void onAccuracyChanged(final Sensor sensor, int accuracy) {
         // won't happen
     }
 
