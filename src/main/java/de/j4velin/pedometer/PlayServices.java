@@ -27,7 +27,7 @@ import android.preference.PreferenceManager;
 /**
  * Class to manage the Google Play achievements
  */
-public class PlayServices {
+class PlayServices {
 
     /**
      * Updates the 'most steps walked' leaderboard score

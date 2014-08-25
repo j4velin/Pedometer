@@ -27,7 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import de.j4velin.pedometer.util.Util;
 
-public class Dialog_Statistics {
+class Dialog_Statistics {
 
 	public static Dialog getDialog(final Context c, int since_boot) {
 		final Dialog d = new Dialog(c);

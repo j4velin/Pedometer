@@ -24,7 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Dialog_Split {
+class Dialog_Split {
 
     private static boolean split_active;
 
