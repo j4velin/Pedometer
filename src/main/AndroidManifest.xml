@@ -52,12 +52,10 @@
         </receiver>
 
         <service
-            android:name="de.j4velin.pedometer.background.SensorListener"
-            android:process=":background"/>
+            android:name="de.j4velin.pedometer.background.SensorListener"/>
 
         <receiver
-            android:name="de.j4velin.pedometer.background.ShutdownRecevier"
-            android:process=":background">
+            android:name="de.j4velin.pedometer.background.ShutdownRecevier">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
                 <action android:name="de.j4velin.ACTION_SHUTDOWN"/>
