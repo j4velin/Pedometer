@@ -58,7 +58,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + DB_NAME + " (date INTEGER PRIMARY KEY, steps INTEGER)");
+        db.execSQL("CREATE TABLE " + DB_NAME + " (date INTEGER, steps INTEGER)");
     }
 
     @Override
