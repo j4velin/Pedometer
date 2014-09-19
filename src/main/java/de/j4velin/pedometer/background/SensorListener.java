@@ -16,17 +16,6 @@
 
 package de.j4velin.pedometer.background;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-
-import de.j4velin.pedometer.Activity_Main;
-import de.j4velin.pedometer.BuildConfig;
-import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.util.Logger;
-import de.j4velin.pedometer.util.Util;
-import de.j4velin.pedometer.widget.WidgetUpdateService;
-
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -40,6 +29,17 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import de.j4velin.pedometer.Activity_Main;
+import de.j4velin.pedometer.BuildConfig;
+import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.R;
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
+import de.j4velin.pedometer.widget.WidgetUpdateService;
 
 /**
  * Background service which keeps the step-sensor listener alive to always get
@@ -176,6 +176,8 @@ public class SensorListener extends Service implements SensorEventListener {
             int goal = prefs.getInt("goal", 10000);
             Database db = Database.getInstance(this);
             int today_offset = db.getSteps(Util.getToday());
+            if (steps == 0)
+                steps = db.getCurrentSteps(); // use saved value if we haven't anything better
             db.close();
             Notification.Builder notificationBuilder = new Notification.Builder(this);
             if (steps > 0) {
@@ -187,7 +189,7 @@ public class SensorListener extends Service implements SensorEventListener {
                                 getString(R.string.notification_text,
                                         NumberFormat.getInstance(Locale.getDefault())
                                                 .format((goal - today_offset - steps))));
-            } else {
+            } else { // still no step value?
                 notificationBuilder
                         .setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
             }
@@ -196,7 +198,8 @@ public class SensorListener extends Service implements SensorEventListener {
                     .setContentTitle(isPaused ? getString(R.string.ispaused) :
                             getString(R.string.notification_title)).setContentIntent(PendingIntent
                     .getActivity(this, 0, new Intent(this, Activity_Main.class),
-                            PendingIntent.FLAG_UPDATE_CURRENT)).setSmallIcon(R.drawable.ic_notification)
+                            PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setSmallIcon(R.drawable.ic_notification)
                     .addAction(isPaused ? R.drawable.ic_resume : R.drawable.ic_pause,
                             isPaused ? getString(R.string.resume) : getString(R.string.pause),
                             PendingIntent.getService(this, 4, new Intent(this, SensorListener.class)
@@ -217,6 +220,10 @@ public class SensorListener extends Service implements SensorEventListener {
             if (BuildConfig.DEBUG) Logger.log(e);
             e.printStackTrace();
         }
+
+        if (BuildConfig.DEBUG)
+            Logger.log("step sensors: " + sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size() +
+                    " default: " + sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER).getName());
 
         sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
                 SensorManager.SENSOR_DELAY_NORMAL);
