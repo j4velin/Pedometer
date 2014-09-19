@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation" >
+    tools:ignore="MissingTranslation">
 
     <string name="app_name">Pedometer</string>
     <string name="goal">Goal</string>
@@ -47,7 +47,7 @@
     <string name="total_this_month">Total this month</string>
     <string name="average_this_month">Average this month</string>
     <string name="file_already_exists">File already exists. Are you sure you want to overwrite it?</string>
-    <string name="about_text_links">This app was created by Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) and uses <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech and <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov.\n\nPedometer is open source! Get the code and the full list of contributors from <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">This app was created by Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) and uses <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech and <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov.\n\nPedometer is open source! Get the code and the full list of contributors from <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">App version: %s</string>
     <string name="since">Since %s</string>
     <string name="start">Start</string>
