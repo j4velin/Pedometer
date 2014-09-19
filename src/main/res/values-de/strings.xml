@@ -45,7 +45,7 @@
     <string name="total_this_month">Gesamt diesen Monat</string>
     <string name="average_this_month">Durchschnitt diesen Monat</string>
     <string name="file_already_exists">Datei existiert bereits. Bist du sicher, dass du diese überschreiben willst?</string>
-    <string name="about_text_links">Diese App wurde von Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) erstellt und verwendet <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> von Paul Cech und <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> von Sergey Margaritov.\n\nDie App ist Open-Source! Der Quellcode und die vollständige Liste alle Mitwirkenden kann auf <a href="https://github.com/j4velin/Pedometer">GitHub</a> eingesehen werden.\n\n</string>
+    <string name="about_text_links">Diese App wurde von Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) erstellt und verwendet <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> von Paul Cech und <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> von Sergey Margaritov.\n\nDie App ist Open-Source! Der Quellcode und die vollständige Liste alle Mitwirkenden kann auf <a href="https://github.com/j4velin/Pedometer">GitHub</a> eingesehen werden.\n\n</string>
     <string name="about_app_version">App Version: %s</string>
     <string name="since">Seit %s</string>
     <string name="start">Start</string>
@@ -53,5 +53,8 @@
     <string name="close">schließen</string>
     <string name="no_split_active">Kein Split-Counter aktiv. Klicke auf Start um die Schritte ab jetzt zu zählen.</string>
     <string name="split_count">Split-Counter</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Forsetzen</string>
+    <string name="ispaused">Schrittzähler pausiert</string>
 
 </resources>
