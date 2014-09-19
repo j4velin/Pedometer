@@ -360,9 +360,14 @@ public class Database extends SQLiteOpenHelper {
      * @param offsetDifference the difference in the rawOffsets of the two timeZones (new - old) in milliseconds
      */
     public void timeZoneChanged(int offsetDifference) {
-        getWritableDatabase()
-                .execSQL("UPDATE " + DB_NAME + " SET date = date - '" + offsetDifference +
-                        "' WHERE date > 0");
+        try {
+            getWritableDatabase()
+                    .execSQL("UPDATE " + DB_NAME + " SET date = date - '" + offsetDifference +
+                            "' WHERE date > 0");
+        } catch (Exception e) {
+            // try calling the upgrade method again to drop the PRIMARY KEY constraint
+            onUpgrade(getWritableDatabase(), 1, 2);
+        }
     }
 
 }
