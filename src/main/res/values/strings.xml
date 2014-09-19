@@ -58,5 +58,6 @@
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
     <string name="ispaused">Pedometer is paused</string>
-
+    <string name="pause_on_power_title">Pause while charging</string>
+    <string name="pause_on_power_summary">Pause Pedometer while device is charging</string>
 </resources>

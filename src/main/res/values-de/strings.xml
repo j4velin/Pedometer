@@ -56,5 +56,6 @@
     <string name="pause">Pause</string>
     <string name="resume">Forsetzen</string>
     <string name="ispaused">Schrittzähler pausiert</string>
-
+    <string name="pause_on_power_title">Beim Laden pausieren</string>
+    <string name="pause_on_power_summary">Pausiere Schrittzähler während das Gerät geladen wird</string>
 </resources>
