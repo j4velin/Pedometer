@@ -53,5 +53,7 @@
     <string name="close">закрыть</string>
     <string name="no_split_active">Выделенный счётчик неактивен. Нажмите начать для учёта шагов с этого момента</string>
     <string name="split_count">Разделить</string>
+    <string name="pause_on_power_title">Пауза при зарядке</string>
+    <string name="pause_on_power_summary">Остановить шагомер во время зарядки устройства</string>
 
 </resources>
