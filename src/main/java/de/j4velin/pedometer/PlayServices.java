@@ -83,7 +83,7 @@ class PlayServices {
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 7500", null, null, null, null,
+                Cursor c = db.query(new String[]{"steps"}, "steps >= 7500 AND date > 0", null, null, null, null,
                         "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
@@ -93,7 +93,7 @@ class PlayServices {
                 c.close();
             }
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking2", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 10000", null, null, null, null,
+                Cursor c = db.query(new String[]{"steps"}, "steps >= 10000 AND date > 0", null, null, null, null,
                         "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
@@ -103,7 +103,7 @@ class PlayServices {
                 c.close();
             }
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking3", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 15000", null, null, null, null,
+                Cursor c = db.query(new String[]{"steps"}, "steps >= 15000 AND date > 0", null, null, null, null,
                         "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
@@ -113,7 +113,7 @@ class PlayServices {
                 c.close();
             }
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking4", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 20000", null, null, null, null,
+                Cursor c = db.query(new String[]{"steps"}, "steps >= 20000 AND date > 0", null, null, null, null,
                         "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
@@ -123,7 +123,7 @@ class PlayServices {
                 c.close();
             }
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking5", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 25000", null, null, null, null,
+                Cursor c = db.query(new String[]{"steps"}, "steps >= 25000 AND date > 0", null, null, null, null,
                         "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
@@ -133,7 +133,7 @@ class PlayServices {
                 c.close();
             }
 
-            Cursor c = db.query(new String[]{"COUNT(*)"}, "steps >= 10000", null, null, null, null,
+            Cursor c = db.query(new String[]{"COUNT(*)"}, "steps >= 10000 AND date > 0", null, null, null, null,
                     null);
             c.moveToFirst();
             int daysForStamina = c.getInt(0);
