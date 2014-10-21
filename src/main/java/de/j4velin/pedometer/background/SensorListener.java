@@ -64,26 +64,31 @@ public class SensorListener extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(final SensorEvent event) {
-        steps = (int) event.values[0];
-        if (WAIT_FOR_VALID_STEPS && steps > 0) {
-            WAIT_FOR_VALID_STEPS = false;
-            Database db = Database.getInstance(this);
-            if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
-                int pauseDifference = steps -
-                        getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
-                                .getInt("pauseCount", steps);
-                db.insertNewDay(Util.getToday(), steps - pauseDifference);
-                if (pauseDifference > 0) {
-                    // update pauseCount for the new day
-                    getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
-                            .putInt("pauseCount", steps).commit();
+        if (event.values[0] > Integer.MAX_VALUE) {
+            if (BuildConfig.DEBUG) Logger.log("probably not a real value: " + event.values[0]);
+            return;
+        } else {
+            steps = (int) event.values[0];
+            if (WAIT_FOR_VALID_STEPS && steps > 0) {
+                WAIT_FOR_VALID_STEPS = false;
+                Database db = Database.getInstance(this);
+                if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
+                    int pauseDifference = steps -
+                            getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+                                    .getInt("pauseCount", steps);
+                    db.insertNewDay(Util.getToday(), steps - pauseDifference);
+                    if (pauseDifference > 0) {
+                        // update pauseCount for the new day
+                        getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+                                .putInt("pauseCount", steps).commit();
+                    }
+                    reRegisterSensor();
                 }
-                reRegisterSensor();
+                db.saveCurrentSteps(steps);
+                db.close();
+                updateNotificationState();
+                startService(new Intent(this, WidgetUpdateService.class));
             }
-            db.saveCurrentSteps(steps);
-            db.close();
-            updateNotificationState();
-            startService(new Intent(this, WidgetUpdateService.class));
         }
     }
 
