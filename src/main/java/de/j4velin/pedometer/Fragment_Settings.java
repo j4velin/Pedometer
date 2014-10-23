@@ -286,107 +286,126 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 d.show();
                 break;
             case R.string.import_title:
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
-                    if (!f.exists() || !f.canRead()) {
-                        new AlertDialog.Builder(getActivity())
-                                .setMessage(getString(R.string.file_cant_read, f.getAbsolutePath()))
-                                .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }).create().show();
-                        break;
-                    }
-                    Database db = Database.getInstance(getActivity());
-                    String line;
-                    String[] data;
-                    int skips = 0, inserted = 0;
-                    BufferedReader in;
-                    try {
-                        in = new BufferedReader(new FileReader(f));
-                        while ((line = in.readLine()) != null) {
-                            data = line.split(";");
-                            try {
-                                if (db.insertDayFromBackup(Long.valueOf(data[0]),
-                                        Integer.valueOf(data[1]))) inserted++;
-                            } catch (NumberFormatException nfe) {
-                                skips++;
-                            }
-                        }
-                        in.close();
-                    } catch (IOException e) {
-                        new AlertDialog.Builder(getActivity())
-                                .setMessage(getString(R.string.error_file, e.getMessage()))
-                                .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }).create().show();
-                        e.printStackTrace();
-                        break;
-                    } finally {
-                        db.close();
-                    }
-                    new AlertDialog.Builder(getActivity()).setMessage(
-                            skips > 0 ? getString(R.string.entries_imported, inserted) + "\n" +
-                                    getString(R.string.entries_ignored, skips) :
-                                    getString(R.string.entries_imported, inserted))
-                            .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create().show();
-                } else {
-                    new AlertDialog.Builder(getActivity())
-                            .setMessage(R.string.error_external_storage_not_available)
-                            .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create().show();
-                }
+                importCsv();
                 break;
             case R.string.export_title:
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    final File f =
-                            new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
-                    if (f.exists()) {
-                        new AlertDialog.Builder(getActivity())
-                                .setMessage(R.string.file_already_exists)
-                                .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        writeToFile(f);
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.cancel, new OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }).create().show();
-                    } else {
-                        writeToFile(f);
-                    }
-                } else {
-                    new AlertDialog.Builder(getActivity())
-                            .setMessage(R.string.error_external_storage_not_available)
-                            .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create().show();
-                }
+                exportCsv();
                 break;
         }
         return false;
+    }
+
+    /**
+     * Creates the CSV file containing data about past days and the steps taken on them
+     * <p/>
+     * Requires external storage to be writeable
+     */
+    private void exportCsv() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            final File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
+            if (f.exists()) {
+                new AlertDialog.Builder(getActivity()).setMessage(R.string.file_already_exists)
+                        .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                writeToFile(f);
+                            }
+                        }).setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+            } else {
+                writeToFile(f);
+            }
+        } else {
+            new AlertDialog.Builder(getActivity())
+                    .setMessage(R.string.error_external_storage_not_available)
+                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+        }
+    }
+
+    /**
+     * Imports previously exported data from a csv file
+     * <p/>
+     * Requires external storage to be readable. Skips days for which there is already an entry in the database
+     */
+    private void importCsv() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
+            if (!f.exists() || !f.canRead()) {
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(getString(R.string.file_cant_read, f.getAbsolutePath()))
+                        .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+                return;
+            }
+            Database db = Database.getInstance(getActivity());
+            String line;
+            String[] data;
+            int ignored = 0, inserted = 0, skips = 0;
+            BufferedReader in;
+            try {
+                in = new BufferedReader(new FileReader(f));
+                while ((line = in.readLine()) != null) {
+                    data = line.split(";");
+                    try {
+                        if (db.insertDayFromBackup(Long.valueOf(data[0]),
+                                Integer.valueOf(data[1]))) {
+                            inserted++;
+                        } else {
+                            skips++;
+                        }
+                    } catch (NumberFormatException nfe) {
+                        ignored++;
+                    }
+                }
+                in.close();
+            } catch (IOException e) {
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(getString(R.string.error_file, e.getMessage()))
+                        .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+                e.printStackTrace();
+                return;
+            } finally {
+                db.close();
+            }
+            String message = getString(R.string.entries_imported, inserted);
+            if (skips > 0) message += "\n\n" + getString(R.string.entries_skipped, skips);
+            if (ignored > 0) message += "\n\n" + getString(R.string.entries_ignored, ignored);
+            new AlertDialog.Builder(getActivity()).setMessage(message)
+                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+        } else {
+            new AlertDialog.Builder(getActivity())
+                    .setMessage(R.string.error_external_storage_not_available)
+                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+        }
     }
 
     private void writeToFile(final File f) {

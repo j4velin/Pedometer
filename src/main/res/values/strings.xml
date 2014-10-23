@@ -26,6 +26,7 @@
     <string name="data_saved">Data saved in %s</string>
     <string name="entries_imported">%d entries imported</string>
     <string name="entries_ignored">%d entries were ignored as they did not contain valid data</string>
+    <string name="entries_skipped">%d entries were skipped as there already exists data for these days</string>
     <string name="sign_in_necessary">Sign in necessary</string>
     <string name="please_sign_in_with_your_google_account">Please sign in with your Google+ account to use this feature.</string>
     <string name="steps">steps</string>
