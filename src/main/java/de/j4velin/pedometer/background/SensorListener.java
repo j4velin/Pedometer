@@ -226,9 +226,11 @@ public class SensorListener extends Service implements SensorEventListener {
             e.printStackTrace();
         }
 
-        if (BuildConfig.DEBUG)
-            Logger.log("step sensors: " + sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size() +
-                    " default: " + sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER).getName());
+        if (BuildConfig.DEBUG) {
+            Logger.log("step sensors: " + sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size());
+            if (sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size() < 1) return; // emulator
+            Logger.log("default: " + sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER).getName());
+        }
 
         sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
                 SensorManager.SENSOR_DELAY_NORMAL);
