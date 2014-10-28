@@ -84,7 +84,7 @@ public class Database extends SQLiteOpenHelper {
      * @param orderBy       the order by statement
      * @return the cursor
      */
-    Cursor query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final String limit) {
+    public Cursor query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final String limit) {
         return getReadableDatabase()
                 .query(DB_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
     }
@@ -196,7 +196,7 @@ public class Database extends SQLiteOpenHelper {
      *
      * @return number of steps taken, ignoring today
      */
-    int getTotalWithoutToday() {
+    public int getTotalWithoutToday() {
         Cursor c = getReadableDatabase()
                 .query(DB_NAME, new String[]{"SUM(steps)"}, "steps > 0 AND date > 0 AND date < ?",
                         new String[]{String.valueOf(Util.getToday())}, null, null, null);
@@ -226,7 +226,7 @@ public class Database extends SQLiteOpenHelper {
      * @return a pair containing the date (Date) in millis since 1970 and the
      * step value (Integer)
      */
-    Pair<Date, Integer> getRecordData() {
+    public Pair<Date, Integer> getRecordData() {
         Cursor c = getReadableDatabase()
                 .query(DB_NAME, new String[]{"date, steps"}, "date > 0", null, null, null,
                         "steps DESC", "1");
@@ -313,7 +313,7 @@ public class Database extends SQLiteOpenHelper {
      *
      * @return the number of days with a step value > 0, return will be >= 1
      */
-    int getDays() {
+    public int getDays() {
         Cursor c = getReadableDatabase()
                 .query(DB_NAME, new String[]{"COUNT(*)"}, "steps > ? AND date < ? AND date > 0",
                         new String[]{String.valueOf(0), String.valueOf(Util.getToday())}, null,

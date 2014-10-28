@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer.background;
+package de.j4velin.pedometer;
 
-import de.j4velin.pedometer.BuildConfig;
-import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 

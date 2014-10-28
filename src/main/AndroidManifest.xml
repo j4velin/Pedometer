@@ -26,7 +26,7 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
-            android:name="de.j4velin.pedometer.Activity_Main"
+            android:name=".ui.Activity_Main"
             android:label="@string/app_name"
             android:launchMode="singleTask">
             <intent-filter>
@@ -36,22 +36,22 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="de.j4velin.pedometer.BootReceiver">
+        <receiver android:name=".BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="de.j4velin.pedometer.AppUpdatedReceiver">
+        <receiver android:name=".AppUpdatedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>
         </receiver>
 
         <service
-            android:name="de.j4velin.pedometer.background.SensorListener"/>
+            android:name=".SensorListener"/>
 
         <receiver
-            android:name="de.j4velin.pedometer.background.ShutdownRecevier">
+            android:name=".ShutdownRecevier">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
                 <action android:name="de.j4velin.ACTION_SHUTDOWN"/>
@@ -59,7 +59,7 @@
         </receiver>
 
         <service
-            android:name="de.j4velin.pedometer.widget.DashClock"
+            android:name=".widget.DashClock"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
             <intent-filter>
                 <action android:name="com.google.android.apps.dashclock.Extension"/>
@@ -77,14 +77,14 @@
         </service>
 
         <activity
-            android:name="de.j4velin.pedometer.widget.WidgetConfig"
+            android:name=".widget.WidgetConfig"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
 
-        <receiver android:name="de.j4velin.pedometer.widget.Widget">
+        <receiver android:name=".widget.Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
@@ -94,17 +94,17 @@
                 android:resource="@xml/widget"/>
         </receiver>
 
-        <service android:name="de.j4velin.pedometer.widget.WidgetUpdateService"/>
+        <service android:name=".widget.WidgetUpdateService"/>
 
         <receiver
-            android:name="de.j4velin.pedometer.util.TimeZoneListener">
+            android:name=".util.TimeZoneListener">
             <intent-filter>
                 <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
             </intent-filter>
         </receiver>
 
         <receiver
-            android:name="de.j4velin.pedometer.PowerReceiver"
+            android:name=".PowerReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>

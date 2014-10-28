@@ -27,7 +27,7 @@ import android.preference.PreferenceManager;
 /**
  * Class to manage the Google Play achievements
  */
-class PlayServices {
+public class PlayServices {
 
     /**
      * Updates the 'most steps walked' leaderboard score
@@ -76,7 +76,7 @@ class PlayServices {
      * @param gc      the GamesClient
      * @param context the Context
      */
-    static void achievementsAndLeaderboard(final GoogleApiClient gc, final Context context) {
+    public static void achievementsAndLeaderboard(final GoogleApiClient gc, final Context context) {
         if (gc.isConnected()) {
             Database db = Database.getInstance(context);
             db.removeInvalidEntries();

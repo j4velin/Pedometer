@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer.background;
+package de.j4velin.pedometer;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -33,10 +33,7 @@ import android.os.IBinder;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import de.j4velin.pedometer.Activity_Main;
-import de.j4velin.pedometer.BuildConfig;
-import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.R;
+import de.j4velin.pedometer.ui.Activity_Main;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.widget.WidgetUpdateService;

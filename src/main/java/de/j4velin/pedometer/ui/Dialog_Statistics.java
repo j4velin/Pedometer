@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.j4velin.pedometer;
+package de.j4velin.pedometer.ui;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +25,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+
+import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.Util;
 
 class Dialog_Statistics {
@@ -55,7 +58,8 @@ class Dialog_Statistics {
 		date.set(Calendar.DAY_OF_MONTH, 1);
 		int thisMonth = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis()) + since_boot;
 
-		((TextView) d.findViewById(R.id.record)).setText(Fragment_Overview.formatter.format(record.second) + " @ "
+		((TextView) d.findViewById(R.id.record)).setText(
+                Fragment_Overview.formatter.format(record.second) + " @ "
 				+ java.text.DateFormat.getDateInstance().format(record.first));
 
 		((TextView) d.findViewById(R.id.totalthisweek)).setText(Fragment_Overview.formatter.format(thisWeek));

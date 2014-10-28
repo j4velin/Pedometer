@@ -16,7 +16,7 @@
 
 package de.j4velin.pedometer.widget;
 
-import de.j4velin.pedometer.Activity_Main;
+import de.j4velin.pedometer.ui.Activity_Main;
 import de.j4velin.pedometer.R;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;

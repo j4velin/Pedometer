@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer;
+package de.j4velin.pedometer.ui;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameActivity;
-
-import de.j4velin.pedometer.background.SensorListener;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +34,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 
 import java.util.TimeZone;
+
+import de.j4velin.pedometer.PlayServices;
+import de.j4velin.pedometer.R;
+import de.j4velin.pedometer.SensorListener;
 
 public class Activity_Main extends BaseGameActivity {
 

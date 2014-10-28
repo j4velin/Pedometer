@@ -21,8 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import de.j4velin.pedometer.background.SensorListener;
-
 public class PowerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {

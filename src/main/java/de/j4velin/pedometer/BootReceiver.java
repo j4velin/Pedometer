@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
-import de.j4velin.pedometer.background.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 
 public class BootReceiver extends BroadcastReceiver {

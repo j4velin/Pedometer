@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.j4velin.pedometer;
+package de.j4velin.pedometer.ui;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -47,7 +47,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import de.j4velin.pedometer.background.SensorListener;
+import de.j4velin.pedometer.BuildConfig;
+import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.R;
+import de.j4velin.pedometer.SensorListener;
+import de.j4velin.pedometer.ui.Activity_Main;
+import de.j4velin.pedometer.ui.Dialog_Split;
+import de.j4velin.pedometer.ui.Dialog_Statistics;
+import de.j4velin.pedometer.ui.Fragment_Settings;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
