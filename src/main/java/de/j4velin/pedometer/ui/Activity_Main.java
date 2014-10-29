@@ -16,30 +16,40 @@
 
 package de.j4velin.pedometer.ui;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
-import com.google.example.games.basegameutils.BaseGameActivity;
-
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.text.method.LinkMovementMethod;
+import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesActivityResultCodes;
 
 import java.util.TimeZone;
 
+import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.PlayServices;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
+import de.j4velin.pedometer.util.Logger;
 
-public class Activity_Main extends BaseGameActivity {
+public class Activity_Main extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
+
+    private GoogleApiClient mGoogleApiClient;
+    private final static int RC_RESOLVE = 1;
 
     @Override
     protected void onCreate(final Bundle b) {
@@ -58,9 +68,13 @@ public class Activity_Main extends BaseGameActivity {
             // Commit the transaction
             transaction.commit();
         }
-        getGameHelper().setConnectOnStart(
-                getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE)
-                        .getBoolean("autosignin", false));
+
+
+        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this, this, this);
+        builder.addApi(Games.API, Games.GamesOptions.builder().build());
+        builder.addScope(Games.SCOPE_GAMES);
+
+        mGoogleApiClient = builder.build();
 
         if (!getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).contains("timezone")) {
             getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
@@ -69,26 +83,45 @@ public class Activity_Main extends BaseGameActivity {
     }
 
     @Override
-    public void onSignInFailed() {
+    protected void onStart() {
+        super.onStart();
+        if (BuildConfig.DEBUG) Logger.log("Main::onStart");
+        if (getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE)
+                .getBoolean("autosignin", false) && !mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
-    public void onSignInSucceeded() {
-        PlayServices.achievementsAndLeaderboard(getApiClient(), this);
-        getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).edit()
-                .putBoolean("autosignin", true).apply();
+    protected void onStop() {
+        super.onStop();
+        if (BuildConfig.DEBUG) Logger.log("Main::onStop");
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     public GoogleApiClient getGC() {
-        return getApiClient();
+        return mGoogleApiClient;
     }
 
     public void beginSignIn() {
-        beginUserInitiatedSignIn();
+        if (mGoogleApiClient.isConnected()) {
+            // nothing to do
+            return;
+        } else {
+            mGoogleApiClient.connect();
+        }
     }
 
     public void signOut() {
-        super.signOut();
+        if (!mGoogleApiClient.isConnected()) {
+            // nothing to do
+            return;
+        } else {
+            Games.signOut(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+        }
         getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).edit()
                 .putBoolean("autosignin", false).apply();
     }
@@ -114,10 +147,10 @@ public class Activity_Main extends BaseGameActivity {
                 break;
             case R.id.action_leaderboard:
             case R.id.action_achievements:
-                if (getApiClient().isConnected()) {
+                if (mGoogleApiClient.isConnected()) {
                     startActivityForResult(item.getItemId() == R.id.action_achievements ?
-                            Games.Achievements.getAchievementsIntent(getApiClient()) :
-                            Games.Leaderboards.getAllLeaderboardsIntent(getApiClient()), 1);
+                            Games.Achievements.getAchievementsIntent(mGoogleApiClient) :
+                            Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient), 1);
                 } else {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
                     builder2.setTitle(R.string.sign_in_necessary);
@@ -144,7 +177,7 @@ public class Activity_Main extends BaseGameActivity {
                 break;
             case R.id.action_faq:
                 startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://j4velin-systems.de/faq/index.php?app=pm"))
+                        Uri.parse("http://j4velin.de/faq/index.php?app=pm"))
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.action_about:
@@ -174,5 +207,53 @@ public class Activity_Main extends BaseGameActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onConnected(final Bundle bundle) {
+        PlayServices.achievementsAndLeaderboard(mGoogleApiClient, this);
+        getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).edit()
+                .putBoolean("autosignin", true).apply();
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(final ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            // This problem can be fixed. So let's try to fix it.
+            try {
+                // launch appropriate UI flow (which might, for example, be the
+                // sign-in flow)
+                connectionResult.startResolutionForResult(this, RC_RESOLVE);
+            } catch (IntentSender.SendIntentException e) {
+                // Try connecting again
+                mGoogleApiClient.connect();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        if (requestCode == RC_RESOLVE) {
+            // We're coming back from an activity that was launched to resolve a
+            // connection problem. For example, the sign-in UI.
+            if (resultCode == Activity.RESULT_OK) {
+                // Ready to try to connect again.
+                mGoogleApiClient.connect();
+            } else if (resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED) {
+                mGoogleApiClient.connect();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // User cancelled.
+                mGoogleApiClient.disconnect();
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        }
     }
 }
