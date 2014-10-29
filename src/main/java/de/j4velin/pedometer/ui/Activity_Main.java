@@ -50,6 +50,7 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
 
     private GoogleApiClient mGoogleApiClient;
     private final static int RC_RESOLVE = 1;
+    private final static int RC_LEADERBOARDS = 2;
 
     @Override
     protected void onCreate(final Bundle b) {
@@ -150,7 +151,8 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
                 if (mGoogleApiClient.isConnected()) {
                     startActivityForResult(item.getItemId() == R.id.action_achievements ?
                             Games.Achievements.getAchievementsIntent(mGoogleApiClient) :
-                            Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient), 1);
+                            Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient),
+                            RC_LEADERBOARDS);
                 } else {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
                     builder2.setTitle(R.string.sign_in_necessary);
