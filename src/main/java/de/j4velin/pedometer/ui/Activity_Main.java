@@ -33,17 +33,22 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 
 import java.util.TimeZone;
 
 import de.j4velin.pedometer.BuildConfig;
-import de.j4velin.pedometer.PlayServices;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
+import de.j4velin.pedometer.util.GoogleFit;
 import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.PlayServices;
 
 public class Activity_Main extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -74,6 +79,8 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this, this, this);
         builder.addApi(Games.API, Games.GamesOptions.builder().build());
         builder.addScope(Games.SCOPE_GAMES);
+        builder.addApi(Fitness.API);
+        builder.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE));
 
         mGoogleApiClient = builder.build();
 
@@ -150,8 +157,8 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
             case R.id.action_achievements:
                 if (mGoogleApiClient.isConnected()) {
                     startActivityForResult(item.getItemId() == R.id.action_achievements ?
-                            Games.Achievements.getAchievementsIntent(mGoogleApiClient) :
-                            Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient),
+                                    Games.Achievements.getAchievementsIntent(mGoogleApiClient) :
+                                    Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient),
                             RC_LEADERBOARDS);
                 } else {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
@@ -214,6 +221,7 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
     @Override
     public void onConnected(final Bundle bundle) {
         PlayServices.achievementsAndLeaderboard(mGoogleApiClient, this);
+        new GoogleFit.Sync(mGoogleApiClient, this).execute();
         getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).edit()
                 .putBoolean("autosignin", true).apply();
     }
@@ -237,6 +245,8 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
                 // Try connecting again
                 mGoogleApiClient.connect();
             }
+        } else {
+            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
         }
     }
 
@@ -245,17 +255,19 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
         if (requestCode == RC_RESOLVE) {
             // We're coming back from an activity that was launched to resolve a
             // connection problem. For example, the sign-in UI.
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK && !mGoogleApiClient.isConnected() &&
+                    !mGoogleApiClient.isConnecting()) {
                 // Ready to try to connect again.
                 mGoogleApiClient.connect();
-            } else if (resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED) {
+            } else if (resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED &&
+                    !mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
                 mGoogleApiClient.connect();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // User cancelled.
                 mGoogleApiClient.disconnect();
-            } else {
-                super.onActivityResult(requestCode, resultCode, data);
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }
