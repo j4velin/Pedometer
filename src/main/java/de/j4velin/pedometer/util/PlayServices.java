@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
+package de.j4velin.pedometer.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
+
+import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.R;
 
 /**
  * Class to manage the Google Play achievements
@@ -83,8 +86,8 @@ public class PlayServices {
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 7500 AND date > 0", null, null, null, null,
-                        "1");
+                Cursor c = db.query(new String[]{"steps"}, "steps >= 7500 AND date > 0", null, null,
+                        null, null, "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
                             context.getString(R.string.achievement_boots_made_for_walking));
@@ -93,8 +96,9 @@ public class PlayServices {
                 c.close();
             }
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking2", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 10000 AND date > 0", null, null, null, null,
-                        "1");
+                Cursor c =
+                        db.query(new String[]{"steps"}, "steps >= 10000 AND date > 0", null, null,
+                                null, null, "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
                             context.getString(R.string.achievement_boots_made_for_walking_ii));
@@ -103,8 +107,9 @@ public class PlayServices {
                 c.close();
             }
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking3", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 15000 AND date > 0", null, null, null, null,
-                        "1");
+                Cursor c =
+                        db.query(new String[]{"steps"}, "steps >= 15000 AND date > 0", null, null,
+                                null, null, "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
                             context.getString(R.string.achievement_boots_made_for_walking_iii));
@@ -113,8 +118,9 @@ public class PlayServices {
                 c.close();
             }
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking4", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 20000 AND date > 0", null, null, null, null,
-                        "1");
+                Cursor c =
+                        db.query(new String[]{"steps"}, "steps >= 20000 AND date > 0", null, null,
+                                null, null, "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
                             context.getString(R.string.achievement_boots_made_for_walking_iv));
@@ -123,8 +129,9 @@ public class PlayServices {
                 c.close();
             }
             if (!prefs.getBoolean("achievement_boot_are_made_for_walking5", false)) {
-                Cursor c = db.query(new String[]{"steps"}, "steps >= 25000 AND date > 0", null, null, null, null,
-                        "1");
+                Cursor c =
+                        db.query(new String[]{"steps"}, "steps >= 25000 AND date > 0", null, null,
+                                null, null, "1");
                 if (c.getCount() >= 1) {
                     unlockAchievement(gc,
                             context.getString(R.string.achievement_boots_made_for_walking_v));
@@ -133,8 +140,8 @@ public class PlayServices {
                 c.close();
             }
 
-            Cursor c = db.query(new String[]{"COUNT(*)"}, "steps >= 10000 AND date > 0", null, null, null, null,
-                    null);
+            Cursor c = db.query(new String[]{"COUNT(*)"}, "steps >= 10000 AND date > 0", null, null,
+                    null, null, null);
             c.moveToFirst();
             int daysForStamina = c.getInt(0);
             c.close();

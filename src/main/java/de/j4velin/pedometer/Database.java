@@ -211,7 +211,7 @@ public class Database extends SQLiteOpenHelper {
      *
      * @return the maximum number of steps walked in one day
      */
-    int getRecord() {
+    public int getRecord() {
         Cursor c = getReadableDatabase()
                 .query(DB_NAME, new String[]{"MAX(steps)"}, "date > 0", null, null, null, null);
         c.moveToFirst();
@@ -298,7 +298,7 @@ public class Database extends SQLiteOpenHelper {
      * <p/>
      * Currently, an invalid input is such with steps >= 200,000
      */
-    void removeInvalidEntries() {
+    public void removeInvalidEntries() {
         getWritableDatabase().delete(DB_NAME, "steps >= ?", new String[]{"200000"});
     }
 
