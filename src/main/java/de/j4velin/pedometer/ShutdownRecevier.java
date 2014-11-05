@@ -16,12 +16,12 @@
 
 package de.j4velin.pedometer;
 
-import de.j4velin.pedometer.util.Logger;
-import de.j4velin.pedometer.util.Util;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 
 public class ShutdownRecevier extends BroadcastReceiver {
 
@@ -39,7 +39,21 @@ public class ShutdownRecevier extends BroadcastReceiver {
                 .putBoolean("correctShutdown", true).commit();
 
         Database db = Database.getInstance(context);
-        db.updateSteps(Util.getToday(), db.getCurrentSteps());
+        // if it's already a new day, add the temp. steps to the last one
+        if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
+            int steps = db.getCurrentSteps();
+            int pauseDifference = steps -
+                    context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+                            .getInt("pauseCount", steps);
+            db.insertNewDay(Util.getToday(), steps - pauseDifference);
+            if (pauseDifference > 0) {
+                // update pauseCount for the new day
+                context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+                        .putInt("pauseCount", steps).commit();
+            }
+        } else {
+            db.updateSteps(Util.getToday(), db.getCurrentSteps());
+        }
         // current steps will be reset on boot @see BootReceiver
         db.close();
     }
