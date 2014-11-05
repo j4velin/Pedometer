@@ -431,7 +431,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             return;
         }
         Database db = Database.getInstance(getActivity());
-        Cursor c = db.query(new String[]{"date", "steps"}, null, null, null, null, "date", null);
+        Cursor c = db.query(new String[]{"date", "steps"}, "date > 0", null, null, null, "date", null);
         try {
             if (c != null && c.moveToFirst()) {
                 while (!c.isAfterLast()) {
