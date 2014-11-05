@@ -38,6 +38,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 
@@ -222,6 +223,7 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
     public void onConnected(final Bundle bundle) {
         PlayServices.achievementsAndLeaderboard(mGoogleApiClient, this);
         new GoogleFit.Sync(mGoogleApiClient, this).execute();
+        Fitness.RecordingApi.subscribe(mGoogleApiClient, DataType.TYPE_STEP_COUNT_DELTA);
         getSharedPreferences("pedometer_playservices", Context.MODE_PRIVATE).edit()
                 .putBoolean("autosignin", true).apply();
     }
