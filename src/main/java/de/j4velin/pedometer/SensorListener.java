@@ -47,6 +47,8 @@ import de.j4velin.pedometer.widget.WidgetUpdateService;
  */
 public class SensorListener extends Service implements SensorEventListener {
 
+    private final static int NOTIFICATION_ID = 1;
+
     public final static String ACTION_PAUSE = "pause";
 
     private static boolean WAIT_FOR_VALID_STEPS = false;
@@ -207,9 +209,9 @@ public class SensorListener extends Service implements SensorEventListener {
                             PendingIntent.getService(this, 4, new Intent(this, SensorListener.class)
                                             .putExtra("action", ACTION_PAUSE),
                                     PendingIntent.FLAG_UPDATE_CURRENT)).setOngoing(true);
-            nm.notify(1, notificationBuilder.build());
+            nm.notify(NOTIFICATION_ID, notificationBuilder.build());
         } else {
-            nm.cancel(1);
+            nm.cancel(NOTIFICATION_ID);
         }
     }
 
