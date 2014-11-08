@@ -378,6 +378,7 @@ public class Database extends SQLiteOpenHelper {
     public long getLastDay() {
         Cursor c = getReadableDatabase()
                 .query(DB_NAME, new String[]{"date"}, null, null, null, null, "date DESC", "1");
+        c.moveToFirst();
         long re = c.getLong(0);
         c.close();
         return re;
