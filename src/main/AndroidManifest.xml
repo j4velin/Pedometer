@@ -5,6 +5,10 @@
           android:versionName="1.3.7"
           xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="21"/>
+
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
         android:required="true"/>

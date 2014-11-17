@@ -4,20 +4,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.android.tools.build:gradle:0.14.+'
     }
 }
 
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 21
     buildToolsVersion "20.0.0"
 
     defaultConfig {
         applicationId "de.j4velin.pedometer"
-        minSdkVersion 19
-        targetSdkVersion 20
     }
 
     signingConfigs {
@@ -27,15 +25,16 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            runProguard true
+            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
-            zipAlign true
         }
         debug {
             debuggable true
             signingConfig signingConfigs.release
-            runProguard false
-            zipAlign true
+            zipAlignEnabled true
+            minifyEnabled false
         }
     }
 }
