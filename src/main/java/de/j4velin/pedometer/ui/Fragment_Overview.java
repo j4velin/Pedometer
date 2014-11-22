@@ -51,10 +51,6 @@ import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
-import de.j4velin.pedometer.ui.Activity_Main;
-import de.j4velin.pedometer.ui.Dialog_Split;
-import de.j4velin.pedometer.ui.Dialog_Statistics;
-import de.j4velin.pedometer.ui.Fragment_Settings;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
@@ -239,7 +235,9 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         if (BuildConfig.DEBUG)
             Logger.log("UI - sensorChanged | todayOffset: " + todayOffset + " since boot: " +
                     event.values[0]);
-        if (event.values[0] == 0) return;
+        if (event.values[0] > Integer.MAX_VALUE || event.values[0] == 0) {
+            return;
+        }
         if (todayOffset == Integer.MIN_VALUE) {
             // no values for today
             // we dont know when the reboot was, so set todays steps to 0 by
