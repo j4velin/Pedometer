@@ -54,6 +54,8 @@ public class SensorListener extends Service implements SensorEventListener {
     private static boolean WAIT_FOR_VALID_STEPS = false;
     private static int steps;
 
+    private final static int MICROSECONDS_IN_ONE_MINUTE = 60000000;
+
     @Override
     public void onAccuracyChanged(final Sensor sensor, int accuracy) {
         // nobody knows what happens here: step value might magically decrease
@@ -231,7 +233,8 @@ public class SensorListener extends Service implements SensorEventListener {
             Logger.log("default: " + sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER).getName());
         }
 
+        // enable batching with delay of max 5 min
         sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-                SensorManager.SENSOR_DELAY_NORMAL);
+                SensorManager.SENSOR_DELAY_NORMAL, 5 * MICROSECONDS_IN_ONE_MINUTE);
     }
 }
