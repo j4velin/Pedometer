@@ -1,0 +1,9 @@
+# Add your keystore credentials here and rename the file to 'key.properties'
+
+keyStore=PATH_TO_KEYSTORE
+
+keyStorePassword=KEYSTORE_PASSWORD
+
+keyAlias=ALIAS
+
+keyAliasPassword=ALIAS_PASSWORD
