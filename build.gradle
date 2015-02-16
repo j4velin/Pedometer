@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.0.1'
     }
 }
 
@@ -42,7 +42,7 @@ android {
 dependencies {
     compile project(':colorpicker')
     compile project(':EazeGraph')
-    compile 'com.google.android.gms:play-services:6.1.+'
+    compile 'com.google.android.gms:play-services:6.5.87'
     compile files('../libs/dashclock-api-r2.0.jar')
 }
 
