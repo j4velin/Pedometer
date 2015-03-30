@@ -8,7 +8,7 @@ Sign in with your Google+ account to unlock <b>achievements</b> and keep you mot
 
 
 
-Pedometer uses the [EazeGraphLibrary](https://github.com/blackfizz/EazeGraph "EazeGraphLibrary") by Paul Cech and [ColorPickerPreference](https://github.com/attenzione/android-ColorPickerPreference "android-ColorPickerPreference: Android color picking library") by Sergey Margaritov.
+Pedometer uses the [EazeGraphLibrary](https://github.com/blackfizz/EazeGraph "EazeGraphLibrary") by Paul Cech and [a fork](https://github.com/j4velin/colorpicker) of [ColorPickerPreference](https://github.com/attenzione/android-ColorPickerPreference "android-ColorPickerPreference: Android color picking library") by Sergey Margaritov.
 
 
 <table sytle="border: 0px;">
@@ -23,5 +23,5 @@ Pedometer uses the [EazeGraphLibrary](https://github.com/blackfizz/EazeGraph "Ea
 Build
 -----
 
-To build the app, add [EazeGraphLibrary](https://github.com/blackfizz/EazeGraph "EazeGraphLibrary") and [ColorPickerPreference](https://github.com/attenzione/android-ColorPickerPreference "android-ColorPickerPreference: Android color picking library") as libraries to the project as well as the [DashClock API](https://code.google.com/p/dashclock/downloads/list "DashClock Lock screen clock widget for Android 4.2+").
+To build the app, add [EazeGraphLibrary](https://github.com/blackfizz/EazeGraph "EazeGraphLibrary") and [this fork of the ColorPickerPreference](https://github.com/j4velin/colorpicker "android-ColorPickerPreference: Android color picking library") as libraries to the project as well as the [DashClock API](https://code.google.com/p/dashclock/downloads/list "DashClock Lock screen clock widget for Android 4.2+").
 
