@@ -81,6 +81,7 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
         builder.addApi(Games.API, Games.GamesOptions.builder().build());
         builder.addScope(Games.SCOPE_GAMES);
         builder.addApi(Fitness.HISTORY_API);
+        builder.addApi(Fitness.RECORDING_API);
         builder.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE));
 
         mGoogleApiClient = builder.build();
