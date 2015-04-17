@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import de.j4velin.pedometer.R;
 
-class Dialog_Split {
+abstract class Dialog_Split {
 
     private static boolean split_active;
 

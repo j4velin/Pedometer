@@ -16,17 +16,17 @@
 
 package de.j4velin.pedometer.util;
 
+import android.database.Cursor;
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-import android.database.Cursor;
-import android.os.Environment;
-
 import de.j4velin.pedometer.BuildConfig;
 
-public class Logger {
+public abstract class Logger {
 
     private static FileWriter fw;
     private static final Date date = new Date();

@@ -248,7 +248,10 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
                 mGoogleApiClient.connect();
             }
         } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
+            if (!isFinishing() && !isDestroyed()) {
+                GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0)
+                        .show();
+            }
         }
     }
 
