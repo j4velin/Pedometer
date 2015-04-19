@@ -44,12 +44,12 @@ public abstract class Logger {
         c.moveToFirst();
         String title = "";
         for (int i = 0; i < c.getColumnCount(); i++)
-            title += c.getColumnName(i) + " | ";
+            title += c.getColumnName(i) + "\t| ";
         log(title);
         while (!c.isAfterLast()) {
             title = "";
             for (int i = 0; i < c.getColumnCount(); i++)
-                title += c.getString(i) + " | ";
+                title += c.getString(i) + "\t| ";
             log(title);
             c.moveToNext();
         }

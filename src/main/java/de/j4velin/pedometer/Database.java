@@ -360,6 +360,10 @@ public class Database extends SQLiteOpenHelper {
      * @param offsetDifference the difference in the rawOffsets of the two timeZones (new - old) in milliseconds
      */
     public void timeZoneChanged(int offsetDifference) {
+        if (BuildConfig.DEBUG) {
+            Logger.log(" ## before:");
+            logState();
+        }
         try {
             getWritableDatabase()
                     .execSQL("UPDATE " + DB_NAME + " SET date = date - '" + offsetDifference +
@@ -367,6 +371,20 @@ public class Database extends SQLiteOpenHelper {
         } catch (Exception e) {
             // try calling the upgrade method again to drop the PRIMARY KEY constraint
             onUpgrade(getWritableDatabase(), 1, 2);
+        }
+        if (BuildConfig.DEBUG) {
+            Logger.log(" ## after:");
+            logState();
+        }
+        // check if we need to create an entry for the new today
+        if (getSteps(Util.getToday()) == Integer.MIN_VALUE) {
+            if (BuildConfig.DEBUG) {
+                Logger.log(" creating new entry for date " + Util.getToday() + " with offset -" +
+                        getCurrentSteps() + " and adding " + getCurrentSteps() + " to " +
+                        getLastDay());
+            }
+            updateSteps(getLastDay(), getCurrentSteps());
+            insertNewDay(Util.getToday(), getCurrentSteps());
         }
     }
 
