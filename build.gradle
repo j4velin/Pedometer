@@ -45,7 +45,7 @@ android {
 
 dependencies {
     compile 'com.github.j4velin.colorpicker:colorpicker:+'
-    compile project(':EazeGraph')
+    compile 'com.github.j4velin.EazeGraph:EazeGraph:+'
     playCompile 'com.google.android.gms:play-services:+'
     compile 'com.google.android.apps.dashclock:dashclock-api:+'
 }

@@ -17,11 +17,3 @@ Pedometer uses the [EazeGraphLibrary](https://github.com/blackfizz/EazeGraph "Ea
 <td><img width="200px" src="screenshot2.png" /></td>
 </tr>
 </table>
-
-
-
-Build
------
-
-To build the app, add [EazeGraphLibrary](https://github.com/blackfizz/EazeGraph "EazeGraphLibrary") and [this fork of the ColorPickerPreference](https://github.com/j4velin/colorpicker "android-ColorPickerPreference: Android color picking library") as libraries to the project as well as the [DashClock API](https://code.google.com/p/dashclock/downloads/list "DashClock Lock screen clock widget for Android 4.2+").
-
