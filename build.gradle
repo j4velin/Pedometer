@@ -12,6 +12,8 @@ android {
         release
     }
 
+
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
@@ -33,7 +35,7 @@ dependencies {
     compile 'com.github.j4velin.colorpicker:colorpicker:+'
     compile project(':EazeGraph')
     compile 'com.google.android.gms:play-services:+'
-    compile files('../libs/dashclock-api-r2.0.jar')
+    compile 'com.google.android.apps.dashclock:dashclock-api:+'
 }
 
 def props = new Properties()
