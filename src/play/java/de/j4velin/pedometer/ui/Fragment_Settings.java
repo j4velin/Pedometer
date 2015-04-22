@@ -182,7 +182,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 builder.setView(np);
                 builder.setTitle(R.string.set_goal);
                 builder.setPositiveButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
+                        new OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 np.clearFocus();
@@ -196,7 +196,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                             }
                         });
                 builder.setNegativeButton(android.R.string.cancel,
-                        new DialogInterface.OnClickListener() {
+                        new OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -219,7 +219,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 builder.setView(v);
                 builder.setTitle(R.string.set_step_size);
                 builder.setPositiveButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
+                        new OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
@@ -239,7 +239,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                             }
                         });
                 builder.setNegativeButton(android.R.string.cancel,
-                        new DialogInterface.OnClickListener() {
+                        new OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -252,7 +252,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 v = getActivity().getLayoutInflater().inflate(R.layout.signin, null);
                 builder.setView(v);
                 builder.setNegativeButton(android.R.string.cancel,
-                        new DialogInterface.OnClickListener() {
+                        new OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -264,7 +264,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                                     .getDisplayName()));
                     v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
                     builder.setPositiveButton(R.string.sign_out,
-                            new DialogInterface.OnClickListener() {
+                            new OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     ((Activity_Main) getActivity()).signOut();
