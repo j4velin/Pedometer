@@ -43,6 +43,10 @@ android {
     }
 }
 
+repositories {
+    jcenter()
+}
+
 dependencies {
     compile 'com.github.j4velin.colorpicker:colorpicker:+'
     compile 'com.github.j4velin.EazeGraph:EazeGraph:+'
