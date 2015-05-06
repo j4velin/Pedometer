@@ -1,10 +1,10 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:+'
     }
 }
 
@@ -20,6 +20,11 @@ android {
 
     signingConfigs {
         release
+    }
+
+    productFlavors {
+        play
+        fdroid
     }
 
     buildTypes {
@@ -39,11 +44,15 @@ android {
     }
 }
 
+repositories {
+    jcenter()
+}
+
 dependencies {
-    compile project(':colorpicker')
-    compile project(':EazeGraph')
-    compile 'com.google.android.gms:play-services:6.1.+'
-    compile files('../libs/dashclock-api-r2.0.jar')
+    compile 'com.github.j4velin.colorpicker:colorpicker:+'
+    compile 'com.github.j4velin.EazeGraph:EazeGraph:+'
+    playCompile 'com.google.android.gms:play-services:+'
+    compile 'com.google.android.apps.dashclock:dashclock-api:+'
 }
 
 def props = new Properties()

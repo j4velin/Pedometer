@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
 
     <string name="app_name">Pedometer</string>
     <string name="goal">Mål</string>
@@ -24,6 +26,7 @@
     <string name="data_saved">Data sparad i %s</string>
     <string name="entries_imported">%d poster importerade</string>
     <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
+	<string name="entries_skipped">%d poster hoppades över eftersom det redan existerar data för dessa dagar</string>
     <string name="sign_in_necessary">Inloggning nödvändig</string>
     <string name="please_sign_in_with_your_google_account">Logga in med ditt konto på Google+ för att använda den här funktionen.</string>
     <string name="steps">steg</string>
@@ -52,5 +55,10 @@
     <string name="stop">Stopp</string>
     <string name="close">stäng</string>
     <string name="no_split_active">Ingen delad räknare aktiv. Tryck start för att räkna stegen från och med nu</string>
-    <string name="split_count">Dela räknare</string>	
+    <string name="split_count">Dela räknare</string>
+    <string name="pause">Pausa</string>
+    <string name="resume">Återuppta</string>
+    <string name="ispaused">Pedometer är pausad</string>
+    <string name="pause_on_power_title">Pausa under laddning</string>
+    <string name="pause_on_power_summary">Pausa Pedometer när enheten laddas</string>	
 </resources>

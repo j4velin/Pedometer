@@ -80,7 +80,8 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this, this, this);
         builder.addApi(Games.API, Games.GamesOptions.builder().build());
         builder.addScope(Games.SCOPE_GAMES);
-        builder.addApi(Fitness.API);
+        builder.addApi(Fitness.HISTORY_API);
+        builder.addApi(Fitness.RECORDING_API);
         builder.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE));
 
         mGoogleApiClient = builder.build();
@@ -248,7 +249,10 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
                 mGoogleApiClient.connect();
             }
         } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
+            if (!isFinishing() && !isDestroyed()) {
+                GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0)
+                        .show();
+            }
         }
     }
 

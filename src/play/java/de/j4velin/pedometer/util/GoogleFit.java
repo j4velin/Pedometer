@@ -27,6 +27,7 @@ import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataSource;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Device;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
@@ -40,7 +41,10 @@ import java.util.concurrent.TimeUnit;
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
 
-public class GoogleFit {
+/**
+ * Class to manage the Google Fit sync
+ */
+public abstract class GoogleFit {
 
     public static class Sync extends AsyncTask<Void, Void, Void> {
 
@@ -61,7 +65,8 @@ public class GoogleFit {
             DataSource dataSource =
                     new DataSource.Builder().setAppPackageName(context.getPackageName())
                             .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
-                            .setName("Pedometer - step count").setType(DataSource.TYPE_RAW).build();
+                            .setName("Pedometer - step count").setType(DataSource.TYPE_RAW)
+                            .setDevice(Device.getLocalDevice(context)).build();
 
             Database db = Database.getInstance(context);
 

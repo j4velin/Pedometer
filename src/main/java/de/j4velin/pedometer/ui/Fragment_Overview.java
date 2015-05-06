@@ -72,7 +72,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_overview, null);
         stepsView = (TextView) v.findViewById(R.id.steps);
         totalView = (TextView) v.findViewById(R.id.total);
@@ -350,7 +350,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         if (barChart.getData().size() > 0) {
             barChart.setOnClickListener(new OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
                     Dialog_Statistics.getDialog(getActivity(), since_boot).show();
                 }
             });

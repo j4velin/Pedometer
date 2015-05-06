@@ -15,22 +15,22 @@
  */
 package de.j4velin.pedometer.ui;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.util.Pair;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.Util;
 
-class Dialog_Statistics {
+abstract class Dialog_Statistics {
 
 	public static Dialog getDialog(final Context c, int since_boot) {
 		final Dialog d = new Dialog(c);

@@ -40,6 +40,7 @@ public class TimeZoneListener extends BroadcastReceiver {
         if (BuildConfig.DEBUG) {
             Logger.log("timezone changed: new: " + newTimeZone.getRawOffset() + " old: " +
                     oldTimeZone.getRawOffset());
+            Logger.log("Today: " + Util.getToday());
         }
         Database db = Database.getInstance(context);
         db.timeZoneChanged(newTimeZone.getRawOffset() - oldTimeZone.getRawOffset());

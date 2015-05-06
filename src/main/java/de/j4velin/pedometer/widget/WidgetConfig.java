@@ -25,9 +25,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import net.margaritov.preference.colorpicker.ColorPickerDialog;
-import net.margaritov.preference.colorpicker.ColorPickerDialog.OnColorChangedListener;
-
+import de.j4velin.lib.colorpicker.ColorPickerDialog;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.ColorPreview;
 
@@ -74,7 +72,7 @@ public class WidgetConfig extends Activity implements OnClickListener {
                         (Integer) findViewById(v.getId()).getTag() : -1);
         dialog.setHexValueEnabled(true);
         dialog.setAlphaSliderVisible(true);
-        dialog.setOnColorChangedListener(new OnColorChangedListener() {
+        dialog.setOnColorChangedListener(new ColorPickerDialog.OnColorChangedListener() {
             @Override
             public void onColorChanged(int color) {
                 ((ColorPreview) v).setColor(color);

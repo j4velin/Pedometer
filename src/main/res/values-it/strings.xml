@@ -1,0 +1,61 @@
+<resources>
+
+    <string name="about_app_version">Versione App: %s</string>
+    <string name="app_name">Pedometro</string>
+    <string name="average">In media</string>
+    <string name="average_last_7_days">In media negli ultimi 7 giorni</string>
+    <string name="average_this_month">In media questo mese</string>
+    <string name="background_color">Colore di sfondo:</string>
+    <string name="close">chiudi</string>
+    <string name="data_saved">Dati Salvati in %s</string>
+    <string name="error_external_storage_not_available">Errore: memoria esterna non disponibile</string>
+    <string name="error_file">Errore nell\'accedere al file: %s</string>
+    <string name="about">Info</string>
+    <string name="achievements">Risultati</string>
+    <string name="about_text_links">Quest\'app è stata creata da Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) e si serve <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech and <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov.\n\nPedometro è open source! Trovi il codice e la lista di chi ha contribuito qui <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n (</string>
+    <string name="export_summary">Salva i tuoi dati in un file .csv</string>
+    <string name="export_title">Esporta/Backup</string>
+    <string name="faq">FAQ</string>
+    <string name="file_already_exists">File già esistente. Sei sicuro di volerlo sovrascrivere?</string>
+    <string name="file_cant_read">Errore: %s non può essere letto</string>
+    <string name="goal">Obiettivo</string>
+    <string name="goal_reached_notification">Obiettivo raggiunto! %s passi </string>
+    <string name="goal_summary">Obiettivo attuale: %,d passi</string>
+    <string name="import_summary">Importa i dati salvati in precedenza</string>
+    <string name="import_title">Importa/Ripristina</string>
+    <string name="ispaused">Pedometro in pausa</string>
+    <string name="leaderboard">Classifiche</string>
+    <string name="no_split_active">Nessun contatore parziale arrivo. Premi per iniziare il conteggio dei passi da qui</string>
+    <string name="notification">Mostra notifica</string>
+    <string name="notification_text">%s passi mancanti</string>
+    <string name="notification_title">Sto contando i passi</string>
+    <string name="pause">In pausa</string>
+    <string name="pause_on_power_summary">Metti in pausa il Pedometro quando il dispositivo è in carica</string>
+    <string name="pause_on_power_title">In pausa mentre è in carica</string>
+    <string name="please_sign_in_with_your_google_account">Per favore fai il login con il tuo account Google+ per usare questa funzionalità.</string>
+    <string name="record">Record</string>
+    <string name="resume">Riprendi</string>
+    <string name="set_goal">Imposta obiettivo</string>
+    <string name="set_step_size">Imposta lunghezza del passo</string>
+    <string name="settings">Impostazioni</string>
+    <string name="sign_in">Esegui il login con il tuo account Google per utilizzare le funzionalità "Risultati" e "Classifiche"</string>
+    <string name="sign_in_necessary">Devi effettuare il login</string>
+    <string name="sign_out">Disconnettiti</string>
+    <string name="signed_in">Connesso come %s</string>
+    <string name="since">Dal %s</string>
+    <string name="split_count">Contatore parziale</string>
+    <string name="start">Start</string>
+    <string name="step_size">Lunghezza passo</string>
+    <string name="step_size_summary">Lunghezza del passo attuale: %1$.2f %2$s</string>
+    <string name="steps">passi</string>
+    <string name="stop">Stop</string>
+    <string name="text_color">Colore del testo:</string>
+    <string name="total">In totale</string>
+    <string name="total_last_7_days">In totale negli ultimi 7 giorni</string>
+    <string name="total_this_month">In totale questo mese</string>
+    <string name="your_progress_will_be_shown_here_soon">I tuoi progressi saranno presto visibili qui</string>
+    <string name="entries_ignored">%d voci sono state saltate poiché non contenevano dati validi</string>
+    <string name="entries_imported">Sono state importate %d voci</string>
+    <string name="entries_skipped">Sono state saltate %d voci poiché esistevano già dei dati per quei giorni</string>
+
+</resources>
