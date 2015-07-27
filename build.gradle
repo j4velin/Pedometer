@@ -61,9 +61,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.j4velin.colorpicker:colorpicker:+'
-    compile 'com.github.j4velin.EazeGraph:EazeGraph:+'
-    compile 'com.google.android.apps.dashclock:dashclock-api:+'
+    compile 'com.github.j4velin.colorpicker:colorpicker:1.2.0'
+    compile 'com.github.j4velin.EazeGraph:EazeGraph:1.0.2'
+    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     playCompile 'com.google.android.gms:play-services-fitness:+'
     playCompile 'com.google.android.gms:play-services-games:+'
     playCompile 'com.google.android.gms:play-services-identity:+'
