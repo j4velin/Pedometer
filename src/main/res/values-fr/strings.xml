@@ -18,7 +18,7 @@
     <string name="import_title">Importer/Restaurer</string>
     <string name="notification">Activer les notifications</string>
     <string name="set_goal">Fixer objectif</string>
-    <string name="set_step_size">Fixer l'unité de pas</string>
+    <string name="set_step_size">Fixer l\'unité de pas</string>
     <string name="sign_out">Déconnecter</string>
     <string name="file_cant_read">Erreur: %s ne peut pas être lu</string>
     <string name="error_file">Impossible de lire le fichier: %s</string>
@@ -47,7 +47,7 @@
     <string name="average_last_7_days">Moyenne des 7 derniers jours</string>
     <string name="total_this_month">Total mensuel</string>
     <string name="average_this_month">Moyenne mensuelle</string>
-    <string name="file_already_exists">Ce fichier existe déjà. Etes-vous sûr de vouloir l'écraser?</string>
+    <string name="file_already_exists">Ce fichier existe déjà. Etes-vous sûr de vouloir l\'écraser?</string>
     <string name="about_text_links">Cette application est créée par Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) and utilise <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> par Paul Cech et <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> par Sergey Margaritov.\n\nPodomètre est open source! Récupérez le code and toute la liste des contributeurs sur <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Version: %s</string>
     <string name="since">Depuis %s</string>
