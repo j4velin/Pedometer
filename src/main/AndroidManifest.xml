@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="de.j4velin.pedometer"
-          android:versionCode="141"
-          android:versionName="1.4.1"
-          xmlns:tools="http://schemas.android.com/tools">
+<manifest
+    package="de.j4velin.pedometer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:versionCode="142"
+    android:versionName="1.4.2">
 
     <uses-sdk
         android:minSdkVersion="19"
-        android:targetSdkVersion="21"/>
+        android:targetSdkVersion="23"/>
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
@@ -17,11 +18,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        tools:replace="label"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar">
+        android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar"
+        tools:replace="label">
 
         <activity
             android:name=".ui.Activity_Main"
@@ -76,7 +77,7 @@
 
         <activity
             android:name=".widget.WidgetConfig"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>

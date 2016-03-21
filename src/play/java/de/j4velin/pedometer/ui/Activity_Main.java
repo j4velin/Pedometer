@@ -86,8 +86,8 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
 
         mGoogleApiClient = builder.build();
 
-        if (!getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).contains("timezone")) {
-            getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+        if (!getSharedPreferences("pedometer", Context.MODE_PRIVATE).contains("timezone")) {
+            getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
                     .putString("timezone", TimeZone.getDefault().getID()).commit();
         }
     }
@@ -116,10 +116,7 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
     }
 
     public void beginSignIn() {
-        if (mGoogleApiClient.isConnected()) {
-            // nothing to do
-            return;
-        } else {
+        if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
     }

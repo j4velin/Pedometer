@@ -104,7 +104,7 @@ public abstract class GoogleFit {
             context.getSharedPreferences("GoogleFit", Context.MODE_PRIVATE).edit().
                     putLong("syncedUntil", syncedUntil).apply();
 
-            if (BuildConfig.DEBUG && false) { // print last week
+            if (BuildConfig.DEBUG) { // print last week
                 Calendar cal = Calendar.getInstance();
                 Date now = new Date();
                 cal.setTime(now);
