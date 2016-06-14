@@ -59,4 +59,7 @@
     <string name="ispaused">Schrittzähler pausiert</string>
     <string name="pause_on_power_title">Beim Laden pausieren</string>
     <string name="pause_on_power_summary">Pausiere Schrittzähler während das Gerät geladen wird</string>
+    <string name="no_sensor">Sensor nicht gefunden</string>
+    <string name="no_sensor_explain">Diese App benötigt einen dedizierten Hardware Schritt-Zähler Sensor - dein Gerät scheint einen solchen aber nicht zu besitzen. Die App wird auf diesem Gerät daher nicht funktionieren.</string>
+
 </resources>

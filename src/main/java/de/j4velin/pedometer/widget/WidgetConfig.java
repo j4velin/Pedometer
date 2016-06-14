@@ -25,11 +25,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import net.margaritov.preference.colorpicker.ColorPickerDialog;
-import net.margaritov.preference.colorpicker.ColorPickerDialog.OnColorChangedListener;
-
+import de.j4velin.lib.colorpicker.ColorPickerDialog;
+import de.j4velin.lib.colorpicker.ColorPreviewButton;
 import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.util.ColorPreview;
 
 public class WidgetConfig extends Activity implements OnClickListener {
 
@@ -49,10 +47,10 @@ public class WidgetConfig extends Activity implements OnClickListener {
         if (extras != null) {
             setContentView(R.layout.widgetconfig);
 
-            ColorPreview textcolor = (ColorPreview) findViewById(R.id.textcolor);
+            ColorPreviewButton textcolor = (ColorPreviewButton) findViewById(R.id.textcolor);
             textcolor.setOnClickListener(this);
             textcolor.setColor(Color.WHITE);
-            ColorPreview bgcolor = (ColorPreview) findViewById(R.id.bgcolor);
+            ColorPreviewButton bgcolor = (ColorPreviewButton) findViewById(R.id.bgcolor);
             bgcolor.setOnClickListener(this);
             bgcolor.setColor(Color.TRANSPARENT);
 
@@ -74,10 +72,10 @@ public class WidgetConfig extends Activity implements OnClickListener {
                         (Integer) findViewById(v.getId()).getTag() : -1);
         dialog.setHexValueEnabled(true);
         dialog.setAlphaSliderVisible(true);
-        dialog.setOnColorChangedListener(new OnColorChangedListener() {
+        dialog.setOnColorChangedListener(new ColorPickerDialog.OnColorChangedListener() {
             @Override
             public void onColorChanged(int color) {
-                ((ColorPreview) v).setColor(color);
+                ((ColorPreviewButton) v).setColor(color);
                 v.setTag(color);
                 getSharedPreferences("Widgets", Context.MODE_PRIVATE).edit()
                         .putInt((v.getId() == R.id.bgcolor ? "background_" : "color_") + widgetId,

@@ -80,13 +80,14 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this, this, this);
         builder.addApi(Games.API, Games.GamesOptions.builder().build());
         builder.addScope(Games.SCOPE_GAMES);
-        builder.addApi(Fitness.API);
+        builder.addApi(Fitness.HISTORY_API);
+        builder.addApi(Fitness.RECORDING_API);
         builder.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE));
 
         mGoogleApiClient = builder.build();
 
-        if (!getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).contains("timezone")) {
-            getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+        if (!getSharedPreferences("pedometer", Context.MODE_PRIVATE).contains("timezone")) {
+            getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
                     .putString("timezone", TimeZone.getDefault().getID()).commit();
         }
     }
@@ -115,10 +116,7 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
     }
 
     public void beginSignIn() {
-        if (mGoogleApiClient.isConnected()) {
-            // nothing to do
-            return;
-        } else {
+        if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
     }
@@ -248,7 +246,10 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
                 mGoogleApiClient.connect();
             }
         } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
+            if (!isFinishing() && !isDestroyed()) {
+                GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0)
+                        .show();
+            }
         }
     }
 

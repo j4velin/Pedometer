@@ -23,6 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -84,7 +85,9 @@ public class Database extends SQLiteOpenHelper {
      * @param orderBy       the order by statement
      * @return the cursor
      */
-    public Cursor query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final String limit) {
+    public Cursor query(final String[] columns, final String selection,
+                        final String[] selectionArgs, final String groupBy, final String having,
+                        final String orderBy, final String limit) {
         return getReadableDatabase()
                 .query(DB_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
     }
@@ -117,8 +120,10 @@ public class Database extends SQLiteOpenHelper {
                 getWritableDatabase().insert(DB_NAME, null, values);
 
                 // add 'steps' to yesterdays count
-                date -= 24 * 60 * 60 * 1000;
-                updateSteps(date, steps);
+                Calendar yesterday = Calendar.getInstance();
+                yesterday.setTimeInMillis(date);
+                yesterday.add(Calendar.DAY_OF_YEAR, -1);
+                updateSteps(yesterday.getTimeInMillis(), steps);
             }
             c.close();
             if (BuildConfig.DEBUG) {
@@ -360,6 +365,10 @@ public class Database extends SQLiteOpenHelper {
      * @param offsetDifference the difference in the rawOffsets of the two timeZones (new - old) in milliseconds
      */
     public void timeZoneChanged(int offsetDifference) {
+        if (BuildConfig.DEBUG) {
+            Logger.log(" ## before:");
+            logState();
+        }
         try {
             getWritableDatabase()
                     .execSQL("UPDATE " + DB_NAME + " SET date = date - '" + offsetDifference +
@@ -367,6 +376,20 @@ public class Database extends SQLiteOpenHelper {
         } catch (Exception e) {
             // try calling the upgrade method again to drop the PRIMARY KEY constraint
             onUpgrade(getWritableDatabase(), 1, 2);
+        }
+        if (BuildConfig.DEBUG) {
+            Logger.log(" ## after:");
+            logState();
+        }
+        // check if we need to create an entry for the new today
+        if (getSteps(Util.getToday()) == Integer.MIN_VALUE) {
+            if (BuildConfig.DEBUG) {
+                Logger.log(" creating new entry for date " + Util.getToday() + " with offset -" +
+                        getCurrentSteps() + " and adding " + getCurrentSteps() + " to " +
+                        getLastDay());
+            }
+            updateSteps(getLastDay(), getCurrentSteps());
+            insertNewDay(Util.getToday(), getCurrentSteps());
         }
     }
 
@@ -378,8 +401,12 @@ public class Database extends SQLiteOpenHelper {
     public long getLastDay() {
         Cursor c = getReadableDatabase()
                 .query(DB_NAME, new String[]{"date"}, null, null, null, null, "date DESC", "1");
-        c.moveToFirst();
-        long re = c.getLong(0);
+        long re;
+        if (c.moveToFirst()) {
+            re = c.getLong(0);
+        } else {
+            re = System.currentTimeMillis();
+        }
         c.close();
         return re;
     }

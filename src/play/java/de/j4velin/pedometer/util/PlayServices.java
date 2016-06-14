@@ -30,7 +30,7 @@ import de.j4velin.pedometer.R;
 /**
  * Class to manage the Google Play achievements
  */
-public class PlayServices {
+public abstract class PlayServices {
 
     /**
      * Updates the 'most steps walked' leaderboard score
