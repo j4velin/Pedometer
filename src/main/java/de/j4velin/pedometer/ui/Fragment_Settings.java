@@ -15,6 +15,7 @@
  */
 package de.j4velin.pedometer.ui;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ComponentName;
@@ -25,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
@@ -39,9 +41,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-
-import com.google.android.gms.games.Games;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -51,12 +51,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
 
-import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.PowerReceiver;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
-import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.API23Wrapper;
+import de.j4velin.pedometer.util.PlaySettingsWrapper;
 
 public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
 
@@ -75,9 +75,10 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         findPreference("notification")
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     @Override
-                    public boolean onPreferenceChange(final Preference preference, final Object newValue) {
-                        getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
-                                .edit().putBoolean("notification", (Boolean) newValue).commit();
+                    public boolean onPreferenceChange(final Preference preference,
+                                                      final Object newValue) {
+                        getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
+                                .putBoolean("notification", (Boolean) newValue).commit();
 
                         getActivity().startService(new Intent(getActivity(), SensorListener.class)
                                 .putExtra("updateNotificationState", true));
@@ -88,7 +89,8 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         findPreference("pause_on_power")
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     @Override
-                    public boolean onPreferenceChange(final Preference preference, final Object newValue) {
+                    public boolean onPreferenceChange(final Preference preference,
+                                                      final Object newValue) {
                         getActivity().getPackageManager().setComponentEnabledSetting(
                                 new ComponentName(getActivity(), PowerReceiver.class),
                                 ((Boolean) newValue) ?
@@ -100,21 +102,11 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 });
 
         Preference account = findPreference("account");
-        account.setOnPreferenceClickListener(this);
-        // If created for the first time, the GameClient should be setup and be
-        // connected, but when recreating the fragment (due to orientation
-        // change for example), then the fragment's onCreate is called before
-        // the new GamesClient is setup. In this case, just use the player name
-        // saved in the savedInstanceState bundle
-        if ((savedInstanceState == null && ((Activity_Main) getActivity()).getGC().isConnected()) ||
-                (savedInstanceState != null && savedInstanceState.containsKey("player"))) {
-            account.setSummary(getString(R.string.signed_in, savedInstanceState == null ?
-                    Games.Players.getCurrentPlayer(((Activity_Main) getActivity()).getGC())
-                            .getDisplayName() : savedInstanceState.getString("player")));
-        }
+        PlaySettingsWrapper
+                .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
 
         final SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
         Preference goal = findPreference("goal");
         goal.setOnPreferenceClickListener(this);
@@ -132,14 +124,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        try {
-            if (((Activity_Main) getActivity()).getGC().isConnected()) outState.putString("player",
-                    Games.Players.getCurrentPlayer(((Activity_Main) getActivity()).getGC())
-                            .getDisplayName());
-            else outState.remove("player");
-        } catch (Exception e) {
-            if (BuildConfig.DEBUG) Logger.log(e);
-        }
+        PlaySettingsWrapper.onSavedInstance(outState, (Activity_Main) getActivity());
     }
 
     @Override
@@ -171,7 +156,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         AlertDialog.Builder builder;
         View v;
         final SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
         switch (preference.getTitleRes()) {
             case R.string.goal:
                 builder = new AlertDialog.Builder(getActivity());
@@ -181,27 +166,23 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 np.setValue(prefs.getInt("goal", 10000));
                 builder.setView(np);
                 builder.setTitle(R.string.set_goal);
-                builder.setPositiveButton(android.R.string.ok,
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                np.clearFocus();
-                                prefs.edit().putInt("goal", np.getValue()).commit();
-                                preference.setSummary(
-                                        getString(R.string.goal_summary, np.getValue()));
-                                dialog.dismiss();
-                                getActivity().startService(
-                                        new Intent(getActivity(), SensorListener.class)
-                                                .putExtra("updateNotificationState", true));
-                            }
-                        });
-                builder.setNegativeButton(android.R.string.cancel,
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        np.clearFocus();
+                        prefs.edit().putInt("goal", np.getValue()).commit();
+                        preference.setSummary(getString(R.string.goal_summary, np.getValue()));
+                        dialog.dismiss();
+                        getActivity().startService(new Intent(getActivity(), SensorListener.class)
+                                .putExtra("updateNotificationState", true));
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
                 Dialog dialog = builder.create();
                 dialog.getWindow().setSoftInputMode(
                         WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -218,85 +199,56 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 value.setText(String.valueOf(prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE)));
                 builder.setView(v);
                 builder.setTitle(R.string.set_step_size);
-                builder.setPositiveButton(android.R.string.ok,
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    prefs.edit().putFloat("stepsize_value",
-                                            Float.valueOf(value.getText().toString()))
-                                            .putString("stepsize_unit",
-                                                    unit.getCheckedRadioButtonId() == R.id.cm ?
-                                                            "cm" : "ft").apply();
-                                    preference.setSummary(getString(R.string.step_size_summary,
-                                            Float.valueOf(value.getText().toString()),
-                                            unit.getCheckedRadioButtonId() == R.id.cm ? "cm" :
-                                                    "ft"));
-                                } catch (NumberFormatException nfe) {
-                                    nfe.printStackTrace();
-                                }
-                                dialog.dismiss();
-                            }
-                        });
-                builder.setNegativeButton(android.R.string.cancel,
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            prefs.edit().putFloat("stepsize_value",
+                                    Float.valueOf(value.getText().toString()))
+                                    .putString("stepsize_unit",
+                                            unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft")
+                                    .apply();
+                            preference.setSummary(getString(R.string.step_size_summary,
+                                    Float.valueOf(value.getText().toString()),
+                                    unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
                 builder.create().show();
                 break;
-            case R.string.account:
-                builder = new AlertDialog.Builder(getActivity());
-                v = getActivity().getLayoutInflater().inflate(R.layout.signin, null);
-                builder.setView(v);
-                builder.setNegativeButton(android.R.string.cancel,
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                if (((Activity_Main) getActivity()).getGC().isConnected()) {
-                    ((TextView) v.findViewById(R.id.signedin)).setText(getString(R.string.signed_in,
-                            Games.Players.getCurrentPlayer(((Activity_Main) getActivity()).getGC())
-                                    .getDisplayName()));
-                    v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-                    builder.setPositiveButton(R.string.sign_out,
-                            new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ((Activity_Main) getActivity()).signOut();
-                                    preference.setSummary(getString(R.string.sign_in));
-                                    dialog.dismiss();
-                                }
-                            });
-                }
-                final Dialog d = builder.create();
-
-                if (!((Activity_Main) getActivity()).getGC().isConnected()) {
-                    v.findViewById(R.id.signedin).setVisibility(View.GONE);
-                    v.findViewById(R.id.sign_in_button)
-                            .setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(final View v) {
-                                    // start the asynchronous sign in flow
-                                    ((Activity_Main) getActivity()).beginSignIn();
-                                    d.dismiss();
-                                }
-                            });
-                }
-                d.show();
-                break;
             case R.string.import_title:
-                importCsv();
-                break;
             case R.string.export_title:
-                exportCsv();
+                if (hasWriteExternalPermission()) {
+                    if (preference.getTitleRes() == R.string.import_title) {
+                        importCsv();
+                    } else {
+                        exportCsv();
+                    }
+                } else if (Build.VERSION.SDK_INT >= 23) {
+                    API23Wrapper.requestPermission(getActivity(),
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+                } else {
+                    Toast.makeText(getActivity(), R.string.permission_external_storage,
+                            Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return false;
+    }
+
+    private boolean hasWriteExternalPermission() {
+        return getActivity().getPackageManager()
+                .checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        getActivity().getPackageName()) == PackageManager.PERMISSION_GRANTED;
     }
 
     /**

@@ -55,8 +55,8 @@ public class Activity_Main extends FragmentActivity {
             transaction.commit();
         }
 
-        if (!getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).contains("timezone")) {
-            getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+        if (!getSharedPreferences("pedometer", Context.MODE_PRIVATE).contains("timezone")) {
+            getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
                     .putString("timezone", TimeZone.getDefault().getID()).commit();
         }
     }

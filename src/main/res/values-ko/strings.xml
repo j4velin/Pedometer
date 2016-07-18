@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <string name="app_name">피도미터</string>
+    <string name="goal">목표</string>
+    <string name="step_size">보폭</string>
+    <string name="about">정보</string>
+    <string name="account">계정</string>
+    <string name="goal_summary">현재 목표: %,d 걸음</string>
+    <string name="step_size_summary">현재 보폭: %1$.2f %2$s</string>
+    <string name="sign_in">목표달성과 리더보드 기능을 사용하려면 구글 계정에 로그인하세요</string>
+    <string name="signed_in">%s 로그인됨</string>
+    <string name="export_summary">.csv 파일로 자료 저장</string>
+    <string name="export_title">내보내기/백업</string>
+    <string name="import_summary">기존에 저장된 자료 불러오기</string>
+    <string name="import_title">불러오기/복원</string>
+    <string name="notification">알림 표시</string>
+    <string name="set_goal">목표 설정</string>
+    <string name="set_step_size">보폭 설정</string>
+    <string name="sign_out">로그아웃</string>
+    <string name="file_cant_read">오류: %s 읽을 수 없음</string>
+    <string name="error_file">다음 파일에 접속 중 오류 발생: %s</string>
+    <string name="error_external_storage_not_available">오류: 외부 저장소가 없음</string>
+    <string name="data_saved">자료 저장됨: %s</string>
+    <string name="entries_imported">%d 개 항목 불러옴</string>
+    <string name="entries_ignored">%d 개 항목은 올바른 자료를 포함하지 않으므로 무시되었습니다</string>
+    <string name="entries_skipped">%d 개 항목은 이미 해당 기간동안의 자료가 존재하므로 건너뛰었습니다</string>
+    <string name="sign_in_necessary">로그인 필요</string>
+    <string name="please_sign_in_with_your_google_account">이 기능을 사용하려면 Google+ 계정에 로그인하세요</string>
+    <string name="steps">걸음 수</string>
+    <string name="text_color">글자 색깔:</string>
+    <string name="background_color">배경 색깔:</string>
+    <string name="settings">설정</string>
+    <string name="achievements">목표달성</string>
+    <string name="leaderboard">리더보드</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">목표 달성 완료! %s 걸음 이상</string>
+    <string name="notification_text">%s 걸음이 남았습니다</string>
+    <string name="total">합계</string>
+    <string name="notification_title">피도미터가 측정중입니다</string>
+    <string name="your_progress_will_be_shown_here_soon">진행 상황이 여기에 곧 나타납니다</string>
+    <string name="average">평균</string>
+    <string name="record">기록</string>
+    <string name="total_last_7_days">지난 7일간 합계</string>
+    <string name="average_last_7_days">지난 7일간 평균</string>
+    <string name="total_this_month">이번달 합계</string>
+    <string name="average_this_month">이번달 평균</string>
+    <string name="file_already_exists">파일이 이미 존재합니다. 덮어쓸까요?</string>
+    <string name="about_text_links">제작자는 Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>)이며 <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech 그리고 <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov 가 사용되었습니다.\n\nPedometer는 소스 코드가 공개되어 있습니다! 소스 코드와 모든 기여자들을 다음에서 확인하세요.<a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">앱 버전: %s</string>
+    <string name="since">%s 이후로</string>
+    <string name="start">시작</string>
+    <string name="stop">중지</string>
+    <string name="close">닫기</string>
+    <string name="no_split_active">활성화된 구분 측정 카운터가 없습니다. 시작을 눌러 지금부터 걸음 수를 측정하세요.</string>
+    <string name="split_count">구분 측정</string>
+    <string name="pause">일시정지</string>
+    <string name="resume">재개</string>
+    <string name="ispaused">피도미터가 일시정지되었습니다.</string>
+    <string name="pause_on_power_title">충전중에 측정 일시정지</string>
+    <string name="pause_on_power_summary">기기가 충전중일때는 측정하지 않습니다</string>
+</resources>

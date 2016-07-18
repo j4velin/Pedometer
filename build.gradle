@@ -4,15 +4,27 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        if (rootProject.ext.has("gradle_classpath")) {
+            classpath rootProject.ext.gradle_classpath
+        } else {
+            logger.warn('classpath not found in rootProject')
+            classpath 'com.android.tools.build:gradle:2.1.2'
+        }
     }
 }
 
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+
+    if (rootProject.ext.has("compileSdkVersion")) {
+        compileSdkVersion rootProject.ext.compileSdkVersion
+        buildToolsVersion rootProject.ext.buildToolsVersion
+    } else {
+        logger.warn('compileSdkVersion not found in rootProject')
+        compileSdkVersion 23
+        buildToolsVersion "23.0.0 rc3"
+    }
 
     defaultConfig {
         applicationId "de.j4velin.pedometer"
@@ -49,10 +61,12 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.j4velin.colorpicker:colorpicker:+'
-    compile 'com.github.j4velin.EazeGraph:EazeGraph:+'
-    playCompile 'com.google.android.gms:play-services:+'
-    compile 'com.google.android.apps.dashclock:dashclock-api:+'
+    compile 'com.github.j4velin.colorpicker:colorpicker:1.2.3'
+    compile 'com.github.j4velin.EazeGraph:EazeGraph:1.0.2'
+    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    playCompile 'com.google.android.gms:play-services-fitness:9.0.2'
+    playCompile 'com.google.android.gms:play-services-games:9.0.2'
+    playCompile 'com.google.android.gms:play-services-identity:9.0.2'
 }
 
 def props = new Properties()

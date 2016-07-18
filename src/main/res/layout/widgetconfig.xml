@@ -21,7 +21,7 @@
         android:layout_marginTop="15dp"
         android:text="@string/background_color"/>
 
-    <de.j4velin.pedometer.util.ColorPreview
+    <de.j4velin.lib.colorpicker.ColorPreviewButton
         android:id="@+id/bgcolor"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -30,7 +30,7 @@
         android:layout_marginLeft="15dp"
         />
 
-    <de.j4velin.pedometer.util.ColorPreview
+    <de.j4velin.lib.colorpicker.ColorPreviewButton
         android:id="@+id/textcolor"
         android:layout_width="20dp"
         android:layout_height="20dp"

@@ -60,5 +60,8 @@
     <string name="resume">Återuppta</string>
     <string name="ispaused">Pedometer är pausad</string>
     <string name="pause_on_power_title">Pausa under laddning</string>
-    <string name="pause_on_power_summary">Pausa Pedometer när enheten laddas</string>	
+    <string name="pause_on_power_summary">Pausa Pedometer när enheten laddas</string>
+    <string name="no_sensor">Sensor hittades inte</string>
+    <string name="no_sensor_explain">Denna app kräver en dedikerad stegräknare i hårdvara, som din enhet saknar. Den här appen kan inte köra på din enhet.</string>
+    <string name="permission_external_storage">Saknar tillstånd att komma åt extern lagring</string>
 </resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <string name="app_name">Podomètre</string>
+    <string name="goal">Objectif</string>
+    <string name="step_size">Unité de pas</string>
+    <string name="about">A propos</string>
+    <string name="account">Compte</string>
+    <string name="goal_summary">Objectif en cours: %,d pas</string>
+    <string name="step_size_summary">Unité de pas actuelle: %1$.2f %2$s</string>
+    <string name="sign_in">Enregistrez-vous avec votre compte Google pour consulter les objectifs atteints et les classements</string>
+    <string name="signed_in">Enregistrez-vous en tant que %s</string>
+    <string name="export_summary">Sauvegardez vos données dans un fichier .csv</string>
+    <string name="export_title">Exporter/Sauvegarder</string>
+    <string name="import_summary">Importer les données sauvegardées</string>
+    <string name="import_title">Importer/Restaurer</string>
+    <string name="notification">Activer les notifications</string>
+    <string name="set_goal">Fixer objectif</string>
+    <string name="set_step_size">Fixer l\'unité de pas</string>
+    <string name="sign_out">Déconnecter</string>
+    <string name="file_cant_read">Erreur: %s ne peut pas être lu</string>
+    <string name="error_file">Impossible de lire le fichier: %s</string>
+    <string name="error_external_storage_not_available">Erreur: Espace de stockage non disponible</string>
+    <string name="data_saved">Données sauvegardées dans %s</string>
+    <string name="entries_imported">%d entrées importées</string>
+    <string name="entries_ignored">%d entrées sont ignorées pour cause de données invalides</string>
+    <string name="entries_skipped">%d entrées sont ignorées car déjà existant pour ce jour</string>
+    <string name="sign_in_necessary">Enregistrement nécessaire</string>
+    <string name="please_sign_in_with_your_google_account">Merci de vous enregistrer avec votre compte Google+ pour utiliser cette fonctionnalité.</string>
+    <string name="steps">pas</string>
+    <string name="text_color">Couleur de texte:</string>
+    <string name="background_color">Couleur de fond:</string>
+    <string name="settings">Paramètres</string>
+    <string name="achievements">Objectifs atteints</string>
+    <string name="leaderboard">Classement</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">Objectif atteint! %s pas enregistrés</string>
+    <string name="notification_text">%s pas à faire</string>
+    <string name="total">Total</string>
+    <string name="notification_title">Podomètre compte</string>
+    <string name="your_progress_will_be_shown_here_soon">Votre progression apparaîtra bientôt ici</string>
+    <string name="average">Moyenne</string>
+    <string name="record">Record</string>
+    <string name="total_last_7_days">Total des 7 derniers jours</string>
+    <string name="average_last_7_days">Moyenne des 7 derniers jours</string>
+    <string name="total_this_month">Total mensuel</string>
+    <string name="average_this_month">Moyenne mensuelle</string>
+    <string name="file_already_exists">Ce fichier existe déjà. Etes-vous sûr de vouloir l\'écraser?</string>
+    <string name="about_text_links">Cette application est créée par Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) and utilise <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> par Paul Cech et <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> par Sergey Margaritov.\n\nPodomètre est open source! Récupérez le code and toute la liste des contributeurs sur <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">Version: %s</string>
+    <string name="since">Depuis %s</string>
+    <string name="start">Départ</string>
+    <string name="stop">Stop</string>
+    <string name="close">fermeture</string>
+    <string name="no_split_active">Compteur non actif. Cliquez pour activer le comptage de pas</string>
+    <string name="split_count">Activer le comptage</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Reprendre</string>
+    <string name="ispaused">Podomètre en pause</string>
+    <string name="pause_on_power_title">Pause prendant la charge</string>
+    <string name="pause_on_power_summary">Stopper Podomètre pendant la charge du périphérique</string>
+</resources>
