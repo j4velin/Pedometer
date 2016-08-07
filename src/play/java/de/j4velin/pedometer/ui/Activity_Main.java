@@ -122,10 +122,7 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
     }
 
     public void signOut() {
-        if (!mGoogleApiClient.isConnected()) {
-            // nothing to do
-            return;
-        } else {
+        if (mGoogleApiClient.isConnected()) {
             Games.signOut(mGoogleApiClient);
             mGoogleApiClient.disconnect();
         }
