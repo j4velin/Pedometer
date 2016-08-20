@@ -25,6 +25,7 @@ import android.util.Pair;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import de.j4velin.pedometer.util.Logger;
@@ -120,7 +121,7 @@ public class Database extends SQLiteOpenHelper {
                 getWritableDatabase().insert(DB_NAME, null, values);
 
                 // add 'steps' to yesterdays count
-                Calendar yesterday = Calendar.getInstance();
+                Calendar yesterday = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 yesterday.setTimeInMillis(date);
                 yesterday.add(Calendar.DAY_OF_YEAR, -1);
                 updateSteps(yesterday.getTimeInMillis(), steps);
@@ -358,13 +359,9 @@ public class Database extends SQLiteOpenHelper {
         return re == Integer.MIN_VALUE ? 0 : re;
     }
 
-    /**
-     * Should be called when the timezone on the device changes. This will adjust the databas entries
-     * so that each entry still translates to midnight of a day.
-     *
-     * @param offsetDifference the difference in the rawOffsets of the two timeZones (new - old) in milliseconds
-     */
-    public void timeZoneChanged(int offsetDifference) {
+
+    public void switchToUTC(int offsetDifference) {
+        if (offsetDifference == 0) return;
         if (BuildConfig.DEBUG) {
             Logger.log(" ## before:");
             logState();

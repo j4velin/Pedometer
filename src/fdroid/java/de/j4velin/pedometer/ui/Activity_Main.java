@@ -19,7 +19,6 @@ package de.j4velin.pedometer.ui;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -29,8 +28,6 @@ import android.support.v4.app.FragmentActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import java.util.TimeZone;
 
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
@@ -55,9 +52,12 @@ public class Activity_Main extends FragmentActivity {
             transaction.commit();
         }
 
-        if (!getSharedPreferences("pedometer", Context.MODE_PRIVATE).contains("timezone")) {
-            getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
-                    .putString("timezone", TimeZone.getDefault().getID()).commit();
+        if (getSharedPreferences("pedometer", Context.MODE_PRIVATE).contains("timezone")) {
+            Database db = Database.getInstance(this);
+            db.switchToUTC(-TimeZone.getDefault().getRawOffset());
+            db.close();
+            getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit().remove("timezone")
+                    .commit();
         }
     }
 

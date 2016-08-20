@@ -48,6 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
@@ -166,8 +167,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         if (showSteps) {
             ((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
         } else {
-            String unit =
-                    getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+            String unit = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
                             .getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT);
             if (unit.equals("cm")) {
                 unit = "km";
@@ -201,7 +201,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         inflater.inflate(R.menu.main, menu);
         MenuItem pause = menu.getItem(0);
         Drawable d;
-        if (getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+        if (getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
                 .contains("pauseCount")) { // currently paused
             pause.setTitle(R.string.resume);
             d = getResources().getDrawable(R.drawable.ic_resume);
@@ -224,7 +224,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
                 SensorManager sm =
                         (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
                 Drawable d;
-                if (getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+                if (getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
                         .contains("pauseCount")) { // currently paused -> now resumed
                     sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
                             SensorManager.SENSOR_DELAY_UI, 0);
@@ -302,7 +302,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         } else {
             // update only every 10 steps when displaying distance
             SharedPreferences prefs =
-                    getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+                    getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
             float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
             float distance_today = steps_today * stepsize;
             float distance_total = (total_start + steps_today) * stepsize;
@@ -326,7 +326,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
      */
     private void updateBars() {
         Database db = Database.getInstance(getActivity());
-        Calendar yesterday = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         yesterday.setTimeInMillis(Util.getToday());
         yesterday.add(Calendar.DAY_OF_YEAR, -1);
         BarChart barChart = (BarChart) getView().findViewById(R.id.bargraph);
@@ -339,7 +339,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         if (!showSteps) {
             // load some more settings if distance is needed
             SharedPreferences prefs =
-                    getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+                    getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
             stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
             stepsize_cm = prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT)
                     .equals("cm");

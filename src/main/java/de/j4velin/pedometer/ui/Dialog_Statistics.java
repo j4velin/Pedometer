@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
@@ -46,7 +47,7 @@ abstract class Dialog_Statistics {
 
 		Pair<Date, Integer> record = db.getRecordData();
 
-		Calendar date = Calendar.getInstance();
+		Calendar date = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		date.setTimeInMillis(Util.getToday());
 		int daysThisMonth = date.get(Calendar.DAY_OF_MONTH);
 

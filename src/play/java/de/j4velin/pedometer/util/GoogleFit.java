@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import de.j4velin.pedometer.BuildConfig;
@@ -74,7 +75,7 @@ public abstract class GoogleFit {
                     db.query(new String[]{"date, steps"}, "date > " + syncedUntil, null, null, null,
                             "date ASC", null);
             c.moveToFirst();
-            Calendar endOfDay = Calendar.getInstance();
+            Calendar endOfDay = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
             while (!c.isAfterLast()) {
                 if (c.getInt(1) > 0) {
                     // Create a data set
@@ -105,7 +106,7 @@ public abstract class GoogleFit {
                     putLong("syncedUntil", syncedUntil).apply();
 
             if (BuildConfig.DEBUG) { // print last week
-                Calendar cal = Calendar.getInstance();
+                Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 Date now = new Date();
                 cal.setTime(now);
                 long endTime = cal.getTimeInMillis();

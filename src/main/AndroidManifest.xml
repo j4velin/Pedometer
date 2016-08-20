@@ -3,8 +3,8 @@
     package="de.j4velin.pedometer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="143"
-    android:versionName="1.4.3">
+    android:versionCode="149"
+    android:versionName="1.4.9">
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -94,13 +94,6 @@
         </receiver>
 
         <service android:name=".widget.WidgetUpdateService"/>
-
-        <receiver
-            android:name=".util.TimeZoneListener">
-            <intent-filter>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
-            </intent-filter>
-        </receiver>
 
         <receiver
             android:name=".PowerReceiver"
