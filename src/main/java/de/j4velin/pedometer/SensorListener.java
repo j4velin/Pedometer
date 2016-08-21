@@ -113,7 +113,7 @@ public class SensorListener extends Service implements SensorEventListener {
                 int difference = steps -
                         prefs.getInt("pauseCount", steps); // number of steps taken during the pause
                 Database db = Database.getInstance(this);
-                db.updateSteps(Util.getToday(), -difference);
+                db.addToLastEntry(-difference);
                 db.close();
                 prefs.edit().remove("pauseCount").commit();
                 updateNotificationState();

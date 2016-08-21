@@ -42,10 +42,7 @@ import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 
-import java.util.TimeZone;
-
 import de.j4velin.pedometer.BuildConfig;
-import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 import de.j4velin.pedometer.util.GoogleFit;
@@ -86,14 +83,6 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
         builder.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE));
 
         mGoogleApiClient = builder.build();
-
-        if (getSharedPreferences("pedometer", Context.MODE_PRIVATE).contains("timezone")) {
-            Database db = Database.getInstance(this);
-            db.switchToUTC(-TimeZone.getDefault().getRawOffset());
-            db.close();
-            getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit().remove("timezone")
-                    .commit();
-        }
     }
 
     @Override

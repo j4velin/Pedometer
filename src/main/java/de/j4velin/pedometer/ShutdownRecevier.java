@@ -35,7 +35,7 @@ public class ShutdownRecevier extends BroadcastReceiver {
         // broadcast might not be send. Therefore, the app will check this
         // setting on the next boot and displays an error message if it's not
         // set to true
-        context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+        context.getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
                 .putBoolean("correctShutdown", true).commit();
 
         Database db = Database.getInstance(context);
@@ -43,16 +43,16 @@ public class ShutdownRecevier extends BroadcastReceiver {
         if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
             int steps = db.getCurrentSteps();
             int pauseDifference = steps -
-                    context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS)
+                    context.getSharedPreferences("pedometer", Context.MODE_PRIVATE)
                             .getInt("pauseCount", steps);
             db.insertNewDay(Util.getToday(), steps - pauseDifference);
             if (pauseDifference > 0) {
                 // update pauseCount for the new day
-                context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS).edit()
+                context.getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
                         .putInt("pauseCount", steps).commit();
             }
         } else {
-            db.updateSteps(Util.getToday(), db.getCurrentSteps());
+            db.addToLastEntry(db.getCurrentSteps());
         }
         // current steps will be reset on boot @see BootReceiver
         db.close();

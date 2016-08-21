@@ -23,9 +23,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import de.j4velin.pedometer.util.Logger;
@@ -114,17 +114,16 @@ public class Database extends SQLiteOpenHelper {
             Cursor c = getReadableDatabase().query(DB_NAME, new String[]{"date"}, "date = ?",
                     new String[]{String.valueOf(date)}, null, null, null);
             if (c.getCount() == 0 && steps >= 0) {
+
+                // add 'steps' to yesterdays count
+                addToLastEntry(steps);
+
+                // add today
                 ContentValues values = new ContentValues();
                 values.put("date", date);
                 // use the negative steps as offset
                 values.put("steps", -steps);
                 getWritableDatabase().insert(DB_NAME, null, values);
-
-                // add 'steps' to yesterdays count
-                Calendar yesterday = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                yesterday.setTimeInMillis(date);
-                yesterday.add(Calendar.DAY_OF_YEAR, -1);
-                updateSteps(yesterday.getTimeInMillis(), steps);
             }
             c.close();
             if (BuildConfig.DEBUG) {
@@ -134,6 +133,18 @@ public class Database extends SQLiteOpenHelper {
             getWritableDatabase().setTransactionSuccessful();
         } finally {
             getWritableDatabase().endTransaction();
+        }
+    }
+
+    /**
+     * Adds the given number of steps to the last entry in the database
+     *
+     * @param steps the number of steps to add. Must be > 0
+     */
+    public void addToLastEntry(int steps) {
+        if (steps > 0) {
+            getWritableDatabase().execSQL("UPDATE " + DB_NAME + " SET steps = steps + " + steps +
+                    " WHERE date = (SELECT MAX(date) FROM " + DB_NAME + ")");
         }
     }
 
@@ -178,22 +189,6 @@ public class Database extends SQLiteOpenHelper {
                     .query(DB_NAME, null, null, null, null, null, "date DESC", "5");
             Logger.log(c);
             c.close();
-        }
-    }
-
-    /**
-     * Adds 'steps' steps to the row for the date 'date'. Won't do anything if
-     * there isn't a row for the given date
-     *
-     * @param date  the date to update the steps for in millis since 1970
-     * @param steps the steps to add to the current steps-value for the date
-     */
-    public void updateSteps(final long date, int steps) {
-        getWritableDatabase().execSQL(
-                "UPDATE " + DB_NAME + " SET steps = steps + " + steps + " WHERE date = " + date);
-        if (BuildConfig.DEBUG) {
-            Logger.log("updateSteps " + date + " / " + steps);
-            logState();
         }
     }
 
@@ -261,6 +256,26 @@ public class Database extends SQLiteOpenHelper {
         else re = c.getInt(0);
         c.close();
         return re;
+    }
+
+    /**
+     * Gets the last num entries in descending order of date (newest first)
+     *
+     * @param num the number of entries to get
+     * @return a list of long,integer pair - the first being the date, the second the number of steps
+     */
+    public List<Pair<Long, Integer>> getLastEntries(int num) {
+        Cursor c = getReadableDatabase()
+                .query(DB_NAME, new String[]{"date", "steps"}, "date > 0", null, null, null,
+                        "date DESC", String.valueOf(num));
+        int max = c.getCount();
+        List<Pair<Long, Integer>> result = new ArrayList<>(max);
+        if (c.moveToFirst()) {
+            do {
+                result.add(new Pair<>(c.getLong(0), c.getInt(1)));
+            } while (c.moveToNext());
+        }
+        return result;
     }
 
     /**
@@ -358,54 +373,4 @@ public class Database extends SQLiteOpenHelper {
         int re = getSteps(-1);
         return re == Integer.MIN_VALUE ? 0 : re;
     }
-
-
-    public void switchToUTC(int offsetDifference) {
-        if (offsetDifference == 0) return;
-        if (BuildConfig.DEBUG) {
-            Logger.log(" ## before:");
-            logState();
-        }
-        try {
-            getWritableDatabase()
-                    .execSQL("UPDATE " + DB_NAME + " SET date = date - '" + offsetDifference +
-                            "' WHERE date > 0");
-        } catch (Exception e) {
-            // try calling the upgrade method again to drop the PRIMARY KEY constraint
-            onUpgrade(getWritableDatabase(), 1, 2);
-        }
-        if (BuildConfig.DEBUG) {
-            Logger.log(" ## after:");
-            logState();
-        }
-        // check if we need to create an entry for the new today
-        if (getSteps(Util.getToday()) == Integer.MIN_VALUE) {
-            if (BuildConfig.DEBUG) {
-                Logger.log(" creating new entry for date " + Util.getToday() + " with offset -" +
-                        getCurrentSteps() + " and adding " + getCurrentSteps() + " to " +
-                        getLastDay());
-            }
-            updateSteps(getLastDay(), getCurrentSteps());
-            insertNewDay(Util.getToday(), getCurrentSteps());
-        }
-    }
-
-    /**
-     * Gets the date of the newest entry
-     *
-     * @return the date in milliseconds since 1970
-     */
-    public long getLastDay() {
-        Cursor c = getReadableDatabase()
-                .query(DB_NAME, new String[]{"date"}, null, null, null, null, "date DESC", "1");
-        long re;
-        if (c.moveToFirst()) {
-            re = c.getLong(0);
-        } else {
-            re = System.currentTimeMillis();
-        }
-        c.close();
-        return re;
-    }
-
 }

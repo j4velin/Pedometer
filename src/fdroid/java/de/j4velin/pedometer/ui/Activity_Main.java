@@ -51,14 +51,6 @@ public class Activity_Main extends FragmentActivity {
             // Commit the transaction
             transaction.commit();
         }
-
-        if (getSharedPreferences("pedometer", Context.MODE_PRIVATE).contains("timezone")) {
-            Database db = Database.getInstance(this);
-            db.switchToUTC(-TimeZone.getDefault().getRawOffset());
-            db.close();
-            getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit().remove("timezone")
-                    .commit();
-        }
     }
 
     @Override

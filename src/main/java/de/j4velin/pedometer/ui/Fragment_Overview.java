@@ -29,6 +29,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,10 +46,9 @@ import org.eazegraph.lib.models.PieModel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
@@ -118,7 +118,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         todayOffset = db.getSteps(Util.getToday());
 
         SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
         goal = prefs.getInt("goal", Fragment_Settings.DEFAULT_GOAL);
         since_boot = db.getCurrentSteps(); // do not use the value from the sharedPreferences
@@ -168,7 +168,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             ((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
         } else {
             String unit = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
-                            .getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT);
+                    .getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT);
             if (unit.equals("cm")) {
                 unit = "km";
             } else {
@@ -325,14 +325,9 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
      * be called when switching from step count to distance.
      */
     private void updateBars() {
-        Database db = Database.getInstance(getActivity());
-        Calendar yesterday = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        yesterday.setTimeInMillis(Util.getToday());
-        yesterday.add(Calendar.DAY_OF_YEAR, -1);
+        SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
         BarChart barChart = (BarChart) getView().findViewById(R.id.bargraph);
         if (barChart.getData().size() > 0) barChart.clearChart();
-        SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
-        yesterday.add(Calendar.DAY_OF_YEAR, -6);
         int steps;
         float distance, stepsize = Fragment_Settings.DEFAULT_STEP_SIZE;
         boolean stepsize_cm = true;
@@ -346,10 +341,14 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         }
         barChart.setShowDecimal(!showSteps); // show decimal in distance view only
         BarModel bm;
-        for (int i = 0; i < 7; i++) {
-            steps = db.getSteps(yesterday.getTimeInMillis());
+        Database db = Database.getInstance(getActivity());
+        List<Pair<Long, Integer>> last = db.getLastEntries(8);
+        db.close();
+        for (int i = last.size() - 1; i > 0; i--) {
+            Pair<Long, Integer> current = last.get(i);
+            steps = current.second;
             if (steps > 0) {
-                bm = new BarModel(df.format(new Date(yesterday.getTimeInMillis())), 0,
+                bm = new BarModel(df.format(new Date(current.first)), 0,
                         steps > goal ? Color.parseColor("#99CC00") : Color.parseColor("#0099cc"));
                 if (showSteps) {
                     bm.setValue(steps);
@@ -365,7 +364,6 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
                 }
                 barChart.addBar(bm);
             }
-            yesterday.add(Calendar.DAY_OF_YEAR, 1);
         }
         if (barChart.getData().size() > 0) {
             barChart.setOnClickListener(new OnClickListener() {
@@ -378,7 +376,6 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         } else {
             barChart.setVisibility(View.GONE);
         }
-        db.close();
     }
 
 }
