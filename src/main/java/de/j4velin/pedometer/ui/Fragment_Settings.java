@@ -81,7 +81,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                                 .putBoolean("notification", (Boolean) newValue).commit();
 
                         getActivity().startService(new Intent(getActivity(), SensorListener.class)
-                                .putExtra("updateNotificationState", true));
+                                .putExtra(SensorListener.ACTION_UPDATE_NOTIFICATION, true));
                         return true;
                     }
                 });

@@ -56,6 +56,8 @@ public class SensorListener extends Service implements SensorEventListener {
 
     private final static int MICROSECONDS_IN_ONE_MINUTE = 60000000;
 
+    public final static String ACTION_UPDATE_NOTIFICATION = "updateNotificationState";
+
     @Override
     public void onAccuracyChanged(final Sensor sensor, int accuracy) {
         // nobody knows what happens here: step value might magically decrease
@@ -138,6 +140,10 @@ public class SensorListener extends Service implements SensorEventListener {
                                 PendingIntent.FLAG_UPDATE_CURRENT));
 
         WAIT_FOR_VALID_STEPS = true;
+
+        if (intent != null && intent.getBooleanExtra(ACTION_UPDATE_NOTIFICATION, false)) {
+            updateNotificationState();
+        }
 
         return START_STICKY;
     }
