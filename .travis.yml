@@ -3,7 +3,7 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-24
+    - build-tools-23.0.3
     - android-24
 
 script:
