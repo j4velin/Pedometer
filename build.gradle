@@ -71,7 +71,12 @@ dependencies {
 
 def props = new Properties()
 
-props.load(new FileInputStream(project.file("key.properties")))
+if (project.file("key.properties").exists()) {
+    props.load(new FileInputStream(project.file("key.properties")))
+} else {
+    logger.warn('Using sample keystore!!')
+    props.load(new FileInputStream(project.file("key.properties.sample")))
+}
 
 android.signingConfigs.release.storeFile rootProject.file(props.keyStore)
 

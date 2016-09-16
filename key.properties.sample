@@ -1,9 +1,9 @@
 # Add your keystore credentials here and rename the file to 'key.properties'
 
-keyStore=PATH_TO_KEYSTORE
+keyStore=example.keystore.jks
 
-keyStorePassword=KEYSTORE_PASSWORD
+keyStorePassword=android
 
-keyAlias=ALIAS
+keyAlias=android
 
-keyAliasPassword=ALIAS_PASSWORD
+keyAliasPassword=android
