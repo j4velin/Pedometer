@@ -23,7 +23,7 @@ android {
     } else {
         logger.warn('compileSdkVersion not found in rootProject')
         compileSdkVersion 23
-        buildToolsVersion "23.0.0 rc3"
+        buildToolsVersion "23.0.2"
     }
 
     defaultConfig {
