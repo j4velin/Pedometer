@@ -1,11 +1,14 @@
 language: android
+
+jdk:
+    - oraclejdk8
+
 android:
   components:
     - platform-tools
     - tools
-    - build-tools-23.0.2
-    - android-23
+    - build-tools-23.0.3
+    - android-24
 
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
+script:
+  - ./gradlew assembleFdroidRelease
