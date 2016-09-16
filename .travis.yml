@@ -3,12 +3,8 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-23.0.2
-    - android-23
-
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
+    - build-tools-24
+    - android-24
 
 script:
   - ./gradlew assembleFdroidRelease
