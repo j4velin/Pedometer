@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >
+
+    <string name="app_id">000</string>
+    <string name="achievement_boots_made_for_walking">notARealValue</string>
+    <string name="achievement_boots_made_for_walking_ii">notARealValue</string>
+    <string name="achievement_boots_made_for_walking_iii">notARealValue</string>
+    <string name="achievement_boots_made_for_walking_iv">notARealValue</string>
+    <string name="achievement_boots_made_for_walking_v">notARealValue</string>
+    <string name="achievement_stamina">notARealValue</string>
+    <string name="achievement_stamina_ii">notARealValue</string>
+    <string name="achievement_stamina_iii">notARealValue</string>
+    <string name="achievement_stamina_iv">notARealValue</string>
+    <string name="achievement_stamina_v">notARealValue</string>
+    <string name="achievement_stamina_vi">notARealValue</string>
+    <string name="achievement_marathon">notARealValue</string>
+    <string name="achievement_marathon_ii">notARealValue</string>
+    <string name="achievement_marathon_iii">notARealValue</string>
+    <string name="achievement_marathon_iv">notARealValue</string>
+    <string name="achievement_marathon_v">notARealValue</string>
+    <string name="achievement_continual_i">notARealValue</string>
+    <string name="achievement_continual_ii">notARealValue</string>
+    <string name="achievement_continual_iii">notARealValue</string>
+    <string name="leaderboard_most_steps_walked">notARealValue</string>
+    <string name="leaderboard_most_steps_walked_in_one_day">notARealValue</string>
+    <string name="leaderboard_highest_average">notARealValue</string>
+
+</resources>
