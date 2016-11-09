@@ -23,6 +23,7 @@
     <string name="data_saved">%s にデータを保存しました</string>
     <string name="entries_imported">%d 件のデータを復元しました</string>
     <string name="entries_ignored">%d 件の無効なデータをスキップしました</string>
+    <string name="entries_skipped">%d 件の既に存在する日付のデータをスキップしました</string>
     <string name="sign_in_necessary">サインインが必要です</string>
     <string name="please_sign_in_with_your_google_account">この機能を利用するにはGoogle+のアカウントでサインインしてください</string>
     <string name="steps">歩</string>
@@ -44,6 +45,7 @@
     <string name="total_this_month">今月の合計</string>
     <string name="average_this_month">今月の平均</string>
     <string name="file_already_exists">既にファイルがあります。このファイルを上書きしますか？</string>
+    <string name="about_text_links">このアプリは Thomas Hoffmann によって作成されました (<a href="https://www.j4velin.de">www.j4velin.de</a>) そして <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech と <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov を使用します。\n\nPedometer はオープンソースです! コードと貢献者のすべてのリストは <a href="https://github.com/j4velin/Pedometer">GitHub</a> を参照してください。\n\n</string>
     <string name="about_app_version">アプリのバージョン: %s</string>
     <string name="since">%s より</string>
     <string name="start">開始</string>
@@ -51,4 +53,12 @@
     <string name="close">閉じる</string>
     <string name="no_split_active">開始をタップすると、現在時点からの歩数をカウントします</string>
     <string name="split_count">スプリットカウント</string>
+    <string name="pause">一時停止</string>
+    <string name="resume">再開</string>
+    <string name="ispaused">Pedometer は停止中</string>
+    <string name="pause_on_power_title">充電中は一時停止</string>
+    <string name="pause_on_power_summary">デバイスの充電中はPedometerを一時停止します</string>
+    <string name="no_sensor">センサーが見つかりません</string>
+    <string name="no_sensor_explain">このアプリは、専用のハードウェア歩数センサーが必要です - お使いのデバイスにはありません。このアプリはお使いのデバイスで実行できません。</string>
+    <string name="permission_external_storage">外部ストレージのアクセス許可がありません</string>
 </resources>
