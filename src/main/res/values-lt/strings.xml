@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pedometer</string>
+    <string name="about">Apie</string>
+    <string name="account">Paskyra</string>
+    <string name="average">Vidurkis</string>
+    <string name="average_last_7_days">Pask. 7 dienų vidurkis</string>
+    <string name="average_this_month">Šio mėnesio vidurkis</string>
+    <string name="background_color">Fono spalva</string>
+    <string name="close">uždaryti</string>
+    <string name="faq">DUK</string>
+    <string name="goal">Tikslas</string>
+    <string name="ispaused"></string>
+    <string name="pause">Pauzė</string>
+    <string name="record">Įrašas</string>
+    <string name="resume">Tęsti</string>
+    <string name="sign_out">Atsijungti</string>
+    <string name="settings">Nustatymai</string>
+    <string name="start">Pradėti</string>
+    <string name="step_size">Žingsnio dydis</string>
+    <string name="steps">žingsniai</string>
+    <string name="stop">Sustabdyti</string>
+    <string name="text_color">Teksto spalva</string>
+    <string name="total">Iš viso</string>
+    <string name="since">Nuo %s</string>
+    <string name="signed_in">Prisijungta kaip %s</string>
+    <string name="pause_on_power_summary"></string>
+    <string name="no_sensor">Jutiklis nerastas</string>
+    <string name="import_title">Importuoti/Atkurti</string>
+    <string name="export_title">Eksportuoti/Išsaugoti</string>
+    <string name="about_app_version">Programėlės versija: %s</string>
+</resources>
