@@ -24,6 +24,7 @@
     <string name="data_saved">Данные сохранены в %s</string>
     <string name="entries_imported">%d записей импортировано</string>
     <string name="entries_ignored">%d записей было проигнорировано, т.к. они не содержат корректных данных</string>
+    <string name="entries_skipped">%d записей было проигнорировано, т.к. за эти дни уже есть данные</string>    
     <string name="sign_in_necessary">Необходимо выполнить вход</string>
     <string name="please_sign_in_with_your_google_account">Войдите с помощью учётной записи Google+ для использования данной функции.</string>
     <string name="steps">шагов</string>
@@ -53,7 +54,13 @@
     <string name="close">закрыть</string>
     <string name="no_split_active">Выделенный счётчик неактивен. Нажмите начать для учёта шагов с этого момента</string>
     <string name="split_count">Разделить</string>
+    <string name="pause">Пауза</string>
+    <string name="resume">Продолжить</string>
+    <string name="ispaused">Pedometer приостановлен</string>
     <string name="pause_on_power_title">Пауза при зарядке</string>
     <string name="pause_on_power_summary">Остановить шагомер во время зарядки устройства</string>
+    <string name="no_sensor">Датчик не найден</string>
+    <string name="no_sensor_explain">Данному приложению требуется аппаратный датчик шагов, которого нет в вашем устройстве. Это приложение не будет работать на вашем устройстве.</string>
+    <string name="permission_external_storage">Нет прав на запись во внешнее хранилище данных</string>    
 
 </resources>
