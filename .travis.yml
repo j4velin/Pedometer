@@ -10,5 +10,9 @@ android:
     - platform-tools
     - android-25
 
+licenses:
+    - 'android-sdk-license-.+'
+    - '.+'
+
 script:
   - ./gradlew assembleFdroidRelease
