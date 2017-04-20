@@ -7,8 +7,8 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-23.0.3
-    - android-24
+    - build-tools-25.0.2
+    - android-25
 
 script:
   - ./gradlew assembleFdroidRelease
