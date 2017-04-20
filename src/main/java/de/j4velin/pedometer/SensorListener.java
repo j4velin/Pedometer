@@ -48,11 +48,14 @@ import de.j4velin.pedometer.widget.WidgetUpdateService;
 public class SensorListener extends Service implements SensorEventListener {
 
     private final static int NOTIFICATION_ID = 1;
+    private final static int SAVE_OFFSET_STEPS = 500;
+    private final static long SAVE_OFFSET_TIME = 60 * 60 * 1000; // 1 hour
 
     public final static String ACTION_PAUSE = "pause";
 
-    private static boolean WAIT_FOR_VALID_STEPS = false;
     private static int steps;
+    private static int lastSaveSteps;
+    private static long lastSaveTime;
 
     private final static int MICROSECONDS_IN_ONE_MINUTE = 60000000;
 
@@ -72,8 +75,8 @@ public class SensorListener extends Service implements SensorEventListener {
             return;
         } else {
             steps = (int) event.values[0];
-            if (WAIT_FOR_VALID_STEPS && steps > 0) {
-                WAIT_FOR_VALID_STEPS = false;
+            if (steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
+                    System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME) {
                 Database db = Database.getInstance(this);
                 if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
                     int pauseDifference = steps -
@@ -89,6 +92,8 @@ public class SensorListener extends Service implements SensorEventListener {
                 }
                 db.saveCurrentSteps(steps);
                 db.close();
+                lastSaveSteps = steps;
+                lastSaveTime = System.currentTimeMillis();
                 updateNotificationState();
                 startService(new Intent(this, WidgetUpdateService.class));
             }
@@ -131,15 +136,6 @@ public class SensorListener extends Service implements SensorEventListener {
                 return START_NOT_STICKY;
             }
         }
-
-        // restart service every hour to get the current step count
-        ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
-                .set(AlarmManager.RTC, System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR,
-                        PendingIntent.getService(getApplicationContext(), 2,
-                                new Intent(this, SensorListener.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT));
-
-        WAIT_FOR_VALID_STEPS = true;
 
         if (intent != null && intent.getBooleanExtra(ACTION_UPDATE_NOTIFICATION, false)) {
             updateNotificationState();
