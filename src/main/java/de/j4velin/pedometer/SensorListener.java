@@ -31,6 +31,7 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import de.j4velin.pedometer.ui.Activity_Main;
@@ -48,8 +49,9 @@ import de.j4velin.pedometer.widget.WidgetUpdateService;
 public class SensorListener extends Service implements SensorEventListener {
 
     private final static int NOTIFICATION_ID = 1;
+    private final static long MICROSECONDS_IN_ONE_MINUTE = 60000000;
+    private final static long SAVE_OFFSET_TIME = AlarmManager.INTERVAL_HOUR;
     private final static int SAVE_OFFSET_STEPS = 500;
-    private final static long SAVE_OFFSET_TIME = 60 * 60 * 1000; // 1 hour
 
     public final static String ACTION_PAUSE = "pause";
 
@@ -57,7 +59,6 @@ public class SensorListener extends Service implements SensorEventListener {
     private static int lastSaveSteps;
     private static long lastSaveTime;
 
-    private final static int MICROSECONDS_IN_ONE_MINUTE = 60000000;
 
     public final static String ACTION_UPDATE_NOTIFICATION = "updateNotificationState";
 
@@ -75,28 +76,34 @@ public class SensorListener extends Service implements SensorEventListener {
             return;
         } else {
             steps = (int) event.values[0];
-            if (steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
-                    System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME) {
-                Database db = Database.getInstance(this);
-                if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
-                    int pauseDifference = steps -
-                            getSharedPreferences("pedometer", Context.MODE_PRIVATE)
-                                    .getInt("pauseCount", steps);
-                    db.insertNewDay(Util.getToday(), steps - pauseDifference);
-                    if (pauseDifference > 0) {
-                        // update pauseCount for the new day
-                        getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
-                                .putInt("pauseCount", steps).commit();
-                    }
-                    reRegisterSensor();
+            updateIfNecessary();
+        }
+    }
+
+    private void updateIfNecessary() {
+        if (steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
+                (steps > 0 && System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME)) {
+            if (BuildConfig.DEBUG) Logger.log(
+                    "saving steps: steps=" + steps + " lastSave=" + lastSaveSteps +
+                            " lastSaveTime=" + new Date(lastSaveTime));
+            Database db = Database.getInstance(this);
+            if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
+                int pauseDifference = steps -
+                        getSharedPreferences("pedometer", Context.MODE_PRIVATE)
+                                .getInt("pauseCount", steps);
+                db.insertNewDay(Util.getToday(), steps - pauseDifference);
+                if (pauseDifference > 0) {
+                    // update pauseCount for the new day
+                    getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
+                            .putInt("pauseCount", steps).commit();
                 }
-                db.saveCurrentSteps(steps);
-                db.close();
-                lastSaveSteps = steps;
-                lastSaveTime = System.currentTimeMillis();
-                updateNotificationState();
-                startService(new Intent(this, WidgetUpdateService.class));
             }
+            db.saveCurrentSteps(steps);
+            db.close();
+            lastSaveSteps = steps;
+            lastSaveTime = System.currentTimeMillis();
+            updateNotificationState();
+            startService(new Intent(this, WidgetUpdateService.class));
         }
     }
 
@@ -139,7 +146,17 @@ public class SensorListener extends Service implements SensorEventListener {
 
         if (intent != null && intent.getBooleanExtra(ACTION_UPDATE_NOTIFICATION, false)) {
             updateNotificationState();
+        } else {
+            updateIfNecessary();
         }
+
+        // restart service every hour to save the current step count
+        ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
+                .set(AlarmManager.RTC, Math.min(Util.getTomorrow(),
+                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR), PendingIntent
+                        .getService(getApplicationContext(), 2,
+                                new Intent(this, SensorListener.class),
+                                PendingIntent.FLAG_UPDATE_CURRENT));
 
         return START_STICKY;
     }
@@ -237,6 +254,7 @@ public class SensorListener extends Service implements SensorEventListener {
 
         // enable batching with delay of max 5 min
         sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-                SensorManager.SENSOR_DELAY_NORMAL, 5 * MICROSECONDS_IN_ONE_MINUTE);
+                SensorManager.SENSOR_DELAY_NORMAL, (int) (5 * MICROSECONDS_IN_ONE_MINUTE));
+        sm.register
     }
 }
