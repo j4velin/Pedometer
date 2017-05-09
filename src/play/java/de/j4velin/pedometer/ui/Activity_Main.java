@@ -16,6 +16,7 @@
 
 package de.j4velin.pedometer.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -26,8 +27,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.PermissionChecker;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -83,6 +86,12 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
         builder.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE));
 
         mGoogleApiClient = builder.build();
+
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 23 && PermissionChecker
+                .checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PermissionChecker.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
     }
 
     @Override
