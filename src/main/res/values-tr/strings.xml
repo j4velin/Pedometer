@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <string name="app_name">Pedometer</string>
+    <string name="goal">Hedef</string>
+    <string name="step_size">Adım boyutu</string>
+    <string name="about">Hakkında</string>
+    <string name="account">Hesap</string>
+    <string name="goal_summary">Şimdiki hedef: %,d adım</string>
+    <string name="step_size_summary">Şu anki adım boyutu: %1$.2f %2$s</string>
+    <string name="sign_in">Başarılar ve Lider tablosu özelliklerini kullanmak için Google hesabınıza
+        giriş yapın
+    </string>
+    <string name="signed_in">%s olarak giriş yapıldı</string>
+    <string name="export_summary">Verilerinizi .csv dosyasına kaydedin</string>
+    <string name="export_title">İçeriye aktar/Yedekle</string>
+    <string name="import_summary">Önceden kaydedilen veriyi içeriye aktarır</string>
+    <string name="import_title">İçeriye akar/Geri yükle</string>
+    <string name="notification">Bildirim göster</string>
+    <string name="set_goal">Hedef ver</string>
+    <string name="set_step_size">Adım boyutunu gir</string>
+    <string name="sign_out">Çıkış yap</string>
+    <string name="file_cant_read">Hata: %s okunmadı</string>
+    <string name="error_file">Dosyaya erişimde hata: %s</string>
+    <string name="error_external_storage_not_available">Hata: Harici depolama alanı kullanılabilir
+        değil
+    </string>
+    <string name="data_saved">Veri %s konumuna kaydedildi.</string>
+    <string name="entries_imported">%d girdi içeriye aktarıldı</string>
+    <string name="entries_ignored">%d girdi, geçerli veri içermediğinden görmezden gelindi</string>
+    <string name="entries_skipped">%d girdi, bu günler için zaten veri bulunduğundan atlandı
+    </string>
+    <string name="sign_in_necessary">Hesaba giriş gerekli</string>
+    <string name="please_sign_in_with_your_google_account">Bu özelliği kullanmak için lütfen Google+
+        hesabınıza giriş yapın.
+    </string>
+    <string name="steps">adım</string>
+    <string name="text_color">Metin rengi:</string>
+    <string name="background_color">Arkaplan rengi:</string>
+    <string name="settings">Ayarlar</string>
+    <string name="achievements">Başarılar</string>
+    <string name="leaderboard">Lider tablosu</string>
+    <string name="faq">SSS</string>
+    <string name="goal_reached_notification">Hedefe ulaşıldı! %s adım ve devam ediliyor</string>
+    <string name="notification_text">Atılacak %s adım</string>
+    <string name="total">Toplam</string>
+    <string name="notification_title">Pedometer sayıyor</string>
+    <string name="your_progress_will_be_shown_here_soon">Durumunuz burada gösterilecek</string>
+    <string name="average">Ortalama</string>
+    <string name="record">Rekor</string>
+    <string name="total_last_7_days">Son 7 günün toplamı</string>
+    <string name="average_last_7_days">Son 7 günün ortalaması</string>
+    <string name="total_this_month">Bu ayın toplamı</string>
+    <string name="average_this_month">Bu ayın ortalaması</string>
+    <string name="file_already_exists">Dosya zaten var. Üzerine yazmak istediğinize emin misiniz?
+    </string>
+    <string name="about_text_links">Bu uygulama Thomas Hoffmann tarafından oluşturulmuştur (<a
+        href="https://www.j4velin.de">www.j4velin.de</a>) ve Paul Cech tarafından oluşturulan <a
+        href="https://github.com/blackfizz/EazeGraph">EazeGraph
+    </a> ve Sergey Margaritov tarafından oluşturulan <a
+        href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference
+    </a> yazılımlarından yararlanır.\n\nPedometer açık kaynaktır! Kodun ve katkıcıların tümüne <a
+        href="https://github.com/j4velin/Pedometer">GitHub
+    </a> konumundan erişin.
+    </string>
+    <string name="about_app_version">Uygulama sürümü: %s</string>
+    <string name="since">%s tarihinden beri</string>
+    <string name="start">Başlat</string>
+    <string name="stop">Durdur</string>
+    <string name="close">kapat</string>
+    <string name="no_split_active">Hiçbir ayrı sayaç etkin değil. Adımları şimdi saymaya başlamak
+        için başlata basınız
+    </string>
+    <string name="split_count">Sayımı böl</string>
+    <string name="pause">Duraklat</string>
+    <string name="resume">Devam et</string>
+    <string name="ispaused">Pedometer durduruldu</string>
+    <string name="pause_on_power_title">Şarj olurken duraklat</string>
+    <string name="pause_on_power_summary">Cihaz şarj olurken Pedometer\'i duraklat</string>
+    <string name="no_sensor">Algılayıcı bulunamadı</string>
+    <string name="no_sensor_explain">Bu uygulama -cihazınızda bulunmayan- adım algılayıcı özel
+        donanıma ihtiyaç duyar. Bu uygulama cihazınız çalışmayacak.
+    </string>
+    <string name="permission_external_storage">Harici depolama alanına erişim izni yok</string>
+</resources>
