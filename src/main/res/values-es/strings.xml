@@ -24,6 +24,7 @@
     <string name="data_saved">Datos guardados en %s</string>
     <string name="entries_imported">%d entradas recuperadas</string>
     <string name="entries_ignored">%d entradas fueron ignoradas ya que no contenían datos válidos</string>
+    <string name="entries_overwritten">%d entradas fueron sobreescritas con los datos importados</string>
     <string name="sign_in_necessary">Inicio de sesión necesario</string>
     <string name="please_sign_in_with_your_google_account">Por favor, inicia sesión con tu cuenta de Google+ para usar esta funcionalidad.</string>
     <string name="steps">pasos</string>
