@@ -310,7 +310,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             Database db = Database.getInstance(getActivity());
             String line;
             String[] data;
-            int ignored = 0, inserted = 0, skips = 0;
+            int ignored = 0, inserted = 0, overwritten = 0;
             BufferedReader in;
             try {
                 in = new BufferedReader(new FileReader(f));
@@ -321,7 +321,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                                 Integer.valueOf(data[1]))) {
                             inserted++;
                         } else {
-                            skips++;
+                            overwritten++;
                         }
                     } catch (Exception nfe) {
                         ignored++;
@@ -343,7 +343,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 db.close();
             }
             String message = getString(R.string.entries_imported, inserted);
-            if (skips > 0) message += "\n\n" + getString(R.string.entries_skipped, skips);
+            if (overwritten > 0) message += "\n\n" + getString(R.string.entries_overwritten, overwritten);
             if (ignored > 0) message += "\n\n" + getString(R.string.entries_ignored, ignored);
             new AlertDialog.Builder(getActivity()).setMessage(message)
                     .setPositiveButton(android.R.string.ok, new OnClickListener() {

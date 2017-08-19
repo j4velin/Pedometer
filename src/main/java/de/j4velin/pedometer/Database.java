@@ -149,35 +149,32 @@ public class Database extends SQLiteOpenHelper {
     }
 
     /**
-     * Inserts a new entry in the database, if there is no entry for the given
-     * date yet. Use this method for restoring data from a backup.
-     * <p/>
-     * This method does nothing if there is already an entry for 'date'.
+     * Inserts a new entry in the database, overwriting any existing entry for the given date.
+     * Use this method for restoring data from a backup.
      *
      * @param date  the date in ms since 1970
      * @param steps the step value for 'date'; must be >= 0
      * @return true if a new entry was created, false if there was already an
-     * entry for 'date'
+     * entry for 'date' (and it was overwritten)
      */
     public boolean insertDayFromBackup(long date, int steps) {
         getWritableDatabase().beginTransaction();
-        boolean re;
+        boolean newEntryCreated = false;
         try {
-            Cursor c = getReadableDatabase().query(DB_NAME, new String[]{"date"}, "date = ?",
-                    new String[]{String.valueOf(date)}, null, null, null);
-            re = c.getCount() == 0 && steps >= 0;
-            if (re) {
-                ContentValues values = new ContentValues();
+            ContentValues values = new ContentValues();
+            values.put("steps", steps);
+            int updatedRows = getWritableDatabase()
+                    .update(DB_NAME, values, "date = ?", new String[]{String.valueOf(date)});
+            if (updatedRows == 0) {
                 values.put("date", date);
-                values.put("steps", steps);
                 getWritableDatabase().insert(DB_NAME, null, values);
+                newEntryCreated = true;
             }
-            c.close();
             getWritableDatabase().setTransactionSuccessful();
         } finally {
             getWritableDatabase().endTransaction();
         }
-        return re;
+        return newEntryCreated;
     }
 
     /**

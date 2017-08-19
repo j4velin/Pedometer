@@ -24,7 +24,7 @@
     <string name="data_saved">Daten gespeichert in %s</string>
     <string name="entries_imported">%d Einträge wurden importiert</string>
     <string name="entries_ignored">%d Einträge wurden ignoriert, da diese in keinem gültigen Format vorlagen</string>
-    <string name="entries_skipped">%d Einträge wurden übersprungen, da für diese Tage bereits Daten vorliegen</string>
+    <string name="entries_overwritten">%d Einträge wurden übersprungen, da für diese Tage bereits Daten vorliegen</string>
     <string name="sign_in_necessary">Login erforderlich</string>
     <string name="please_sign_in_with_your_google_account">Bitte logge dich mit deinem Google+ Konto ein um diese Funktion zu nutzen.</string>
     <string name="steps">Schritte</string>
