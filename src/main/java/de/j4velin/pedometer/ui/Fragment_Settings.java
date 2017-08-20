@@ -291,7 +291,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     /**
      * Imports previously exported data from a csv file
      * <p/>
-     * Requires external storage to be readable. Skips days for which there is already an entry in the database
+     * Requires external storage to be readable. Overwrites days for which there is already an entry in the database
      */
     private void importCsv() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
