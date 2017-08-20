@@ -56,6 +56,5 @@
     <string name="your_progress_will_be_shown_here_soon">I tuoi progressi saranno presto visibili qui</string>
     <string name="entries_ignored">%d voci sono state saltate poiché non contenevano dati validi</string>
     <string name="entries_imported">Sono state importate %d voci</string>
-    <string name="entries_overwritten">Sono state saltate %d voci poiché esistevano già dei dati per quei giorni</string>
 
 </resources>
