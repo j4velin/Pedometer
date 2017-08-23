@@ -16,6 +16,7 @@
 
 package de.j4velin.pedometer.ui;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -23,12 +24,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.PermissionChecker;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 
