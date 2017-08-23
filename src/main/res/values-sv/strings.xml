@@ -26,7 +26,6 @@
     <string name="data_saved">Data sparad i %s</string>
     <string name="entries_imported">%d poster importerade</string>
     <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
-	<string name="entries_skipped">%d poster hoppades över eftersom det redan existerar data för dessa dagar</string>
     <string name="sign_in_necessary">Inloggning nödvändig</string>
     <string name="please_sign_in_with_your_google_account">Logga in med ditt konto på Google+ för att använda den här funktionen.</string>
     <string name="steps">steg</string>

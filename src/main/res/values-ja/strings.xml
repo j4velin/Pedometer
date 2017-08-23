@@ -23,7 +23,6 @@
     <string name="data_saved">%s にデータを保存しました</string>
     <string name="entries_imported">%d 件のデータを復元しました</string>
     <string name="entries_ignored">%d 件の無効なデータをスキップしました</string>
-    <string name="entries_skipped">%d 件の既に存在する日付のデータをスキップしました</string>
     <string name="sign_in_necessary">サインインが必要です</string>
     <string name="please_sign_in_with_your_google_account">この機能を利用するにはGoogle+のアカウントでサインインしてください</string>
     <string name="steps">歩</string>

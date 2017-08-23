@@ -26,7 +26,6 @@
     <string name="data_saved">Données sauvegardées dans %s</string>
     <string name="entries_imported">%d entrées importées</string>
     <string name="entries_ignored">%d entrées sont ignorées pour cause de données invalides</string>
-    <string name="entries_skipped">%d entrées sont ignorées car déjà existant pour ce jour</string>
     <string name="sign_in_necessary">Enregistrement nécessaire</string>
     <string name="please_sign_in_with_your_google_account">Merci de vous enregistrer avec votre compte Google+ pour utiliser cette fonctionnalité.</string>
     <string name="steps">pas</string>

@@ -24,7 +24,6 @@
     <string name="data_saved">자료 저장됨: %s</string>
     <string name="entries_imported">%d 개 항목 불러옴</string>
     <string name="entries_ignored">%d 개 항목은 올바른 자료를 포함하지 않으므로 무시되었습니다</string>
-    <string name="entries_skipped">%d 개 항목은 이미 해당 기간동안의 자료가 존재하므로 건너뛰었습니다</string>
     <string name="sign_in_necessary">로그인 필요</string>
     <string name="please_sign_in_with_your_google_account">이 기능을 사용하려면 Google+ 계정에 로그인하세요</string>
     <string name="steps">걸음 수</string>

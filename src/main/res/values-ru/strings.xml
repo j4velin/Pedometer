@@ -24,7 +24,6 @@
     <string name="data_saved">Данные сохранены в %s</string>
     <string name="entries_imported">%d записей импортировано</string>
     <string name="entries_ignored">%d записей было проигнорировано, т.к. они не содержат корректных данных</string>
-    <string name="entries_skipped">%d записей было проигнорировано, т.к. за эти дни уже есть данные</string>    
     <string name="sign_in_necessary">Необходимо выполнить вход</string>
     <string name="please_sign_in_with_your_google_account">Войдите с помощью учётной записи Google+ для использования данной функции.</string>
     <string name="steps">шагов</string>

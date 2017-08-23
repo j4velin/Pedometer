@@ -36,7 +36,6 @@
     <string name="start">শুরু</string>
     <string name="text_color">লেখার রঙ:</string>
     <string name="step_size_summary">বর্তমান পদক্ষেপের দীর্ঘ: %1$.2f %2$s</string>
-    <string name="entries_skipped">%d এন্ট্রিগুলি ছেড়ে দেওয়া হয়েছে কারণ ইতিমধ্যে এই দিনগুলির জন্য তথ্য আছে</string>
     <string name="split_count">বিভক্ত গণনা</string>
     <string name="since">%s থেকে</string>
     <string name="signed_in">%s হিসাবে সাইন ইন</string>
