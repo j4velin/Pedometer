@@ -216,23 +216,23 @@ public abstract class PlayServices {
                 }
             }
 
-            int days = db.getDays();
+            int days = db.getDaysWithoutToday();
             if (days >= 10) {
                 float average = totalSteps / (float) days;
                 if (!prefs.getBoolean("achievement_continual", false)) {
-                    if (average > 7500) {
+                    if (average >= 7500) {
                         unlockAchievement(gc, context.getString(R.string.achievement_continual_i));
                         prefs.edit().putBoolean("achievement_continual", true).apply();
                     }
                 }
                 if (!prefs.getBoolean("achievement_continual2", false)) {
-                    if (average > 10000) {
+                    if (average >= 10000) {
                         unlockAchievement(gc, context.getString(R.string.achievement_continual_ii));
                         prefs.edit().putBoolean("achievement_continual2", true).apply();
                     }
                 }
                 if (!prefs.getBoolean("achievement_continual3", false)) {
-                    if (average > 12500) {
+                    if (average >= 12500) {
                         unlockAchievement(gc,
                                 context.getString(R.string.achievement_continual_iii));
                         prefs.edit().putBoolean("achievement_continual3", true).apply();
