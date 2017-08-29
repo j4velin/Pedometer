@@ -216,7 +216,7 @@ public abstract class PlayServices {
                 }
             }
 
-            int days = db.getDays();
+            int days = db.getDaysWithoutToday();
             if (days >= 10) {
                 float average = totalSteps / (float) days;
                 if (!prefs.getBoolean("achievement_continual", false)) {

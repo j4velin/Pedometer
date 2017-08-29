@@ -323,6 +323,24 @@ public class Database extends SQLiteOpenHelper {
     /**
      * Get the number of 'valid' days (= days with a step value > 0).
      * <p/>
+     * The current day is not added to this number.
+     *
+     * @return the number of days with a step value > 0, return will be >= 0
+     */
+    public int getDaysWithoutToday() {
+        Cursor c = getReadableDatabase()
+                .query(DB_NAME, new String[]{"COUNT(*)"}, "steps > ? AND date < ? AND date > 0",
+                        new String[]{String.valueOf(0), String.valueOf(Util.getToday())}, null,
+                        null, null);
+        c.moveToFirst();
+        int re = c.getInt(0);
+        c.close();
+        return re < 0 ? 0 : re;
+    }
+
+    /**
+     * Get the number of 'valid' days (= days with a step value > 0).
+     * <p/>
      * The current day is also added to this number, even if the value in the
      * database might still be < 0.
      * <p/>
@@ -332,15 +350,9 @@ public class Database extends SQLiteOpenHelper {
      * @return the number of days with a step value > 0, return will be >= 1
      */
     public int getDays() {
-        Cursor c = getReadableDatabase()
-                .query(DB_NAME, new String[]{"COUNT(*)"}, "steps > ? AND date < ? AND date > 0",
-                        new String[]{String.valueOf(0), String.valueOf(Util.getToday())}, null,
-                        null, null);
-        c.moveToFirst();
         // todays is not counted yet
-        int re = c.getInt(0) + 1;
-        c.close();
-        return re <= 0 ? 1 : re;
+        int re = this.getDaysWithoutToday() + 1;
+        return re;
     }
 
     /**
