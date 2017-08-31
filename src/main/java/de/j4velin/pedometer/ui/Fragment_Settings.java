@@ -191,8 +191,8 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             case R.string.step_size:
                 builder = new AlertDialog.Builder(getActivity());
                 v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);
-                final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
-                final EditText value = (EditText) v.findViewById(R.id.value);
+                final RadioGroup unit = v.findViewById(R.id.unit);
+                final EditText value = v.findViewById(R.id.value);
                 unit.check(
                         prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm :
                                 R.id.ft);
@@ -342,8 +342,9 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             } finally {
                 db.close();
             }
-            String message = getString(R.string.entries_imported, inserted);
-            if (overwritten > 0) message += "\n\n" + getString(R.string.entries_overwritten, overwritten);
+            String message = getString(R.string.entries_imported, inserted + overwritten);
+            if (overwritten > 0)
+                message += "\n\n" + getString(R.string.entries_overwritten, overwritten);
             if (ignored > 0) message += "\n\n" + getString(R.string.entries_ignored, ignored);
             new AlertDialog.Builder(getActivity()).setMessage(message)
                     .setPositiveButton(android.R.string.ok, new OnClickListener() {
