@@ -191,8 +191,8 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             case R.string.step_size:
                 builder = new AlertDialog.Builder(getActivity());
                 v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);
-                final RadioGroup unit = v.findViewById(R.id.unit);
-                final EditText value = v.findViewById(R.id.value);
+                final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
+                final EditText value = (EditText) v.findViewById(R.id.value);
                 unit.check(
                         prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm :
                                 R.id.ft);
