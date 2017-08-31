@@ -22,8 +22,8 @@ android {
         buildToolsVersion rootProject.ext.buildToolsVersion
     } else {
         logger.warn('compileSdkVersion not found in rootProject')
-        compileSdkVersion = 26
-        buildToolsVersion = "26.0.1"
+        compileSdkVersion = 25
+        buildToolsVersion = "25.0.2"
     }
 
     defaultConfig {
