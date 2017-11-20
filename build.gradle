@@ -34,9 +34,15 @@ android {
         release
     }
 
+    flavorDimensions "main"
+
     productFlavors {
-        play
-        fdroid
+        play {
+            dimension "main"
+        }
+        fdroid {
+            dimension "main"
+        }
     }
 
     buildTypes {
