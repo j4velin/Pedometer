@@ -1,14 +1,17 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
-
     dependencies {
         if (rootProject.ext.has("gradle_classpath")) {
             classpath rootProject.ext.gradle_classpath
         } else {
             logger.warn('classpath not found in rootProject')
-            classpath 'com.android.tools.build:gradle:2.3.0'
+            classpath 'com.android.tools.build:gradle:3.0.1'
         }
     }
 }
@@ -22,8 +25,8 @@ android {
         buildToolsVersion rootProject.ext.buildToolsVersion
     } else {
         logger.warn('compileSdkVersion not found in rootProject')
-        compileSdkVersion = 25
-        buildToolsVersion = "25.0.2"
+        compileSdkVersion = 27
+        buildToolsVersion = "27.0.1"
     }
 
     defaultConfig {
