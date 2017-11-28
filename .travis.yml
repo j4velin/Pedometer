@@ -5,14 +5,11 @@ jdk:
 
 android:
   components:
-    - tools
-    - build-tools-25.0.2
     - platform-tools
-    - android-25
-
-licenses:
-    - 'android-sdk-license-.+'
-    - '.+'
+    - tools
+    - build-tools-27.0.1
+    - android-27
+    - extra-android-m2repository
 
 script:
   - ./gradlew assembleFdroidRelease
