@@ -8,7 +8,7 @@
 
     <uses-sdk
         android:minSdkVersion="19"
-        android:targetSdkVersion="23"/>
+        android:targetSdkVersion="27"/>
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
@@ -49,14 +49,6 @@
         <service
             android:name=".SensorListener"/>
 
-        <receiver
-            android:name=".ShutdownRecevier">
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
-                <action android:name="de.j4velin.ACTION_SHUTDOWN"/>
-            </intent-filter>
-        </receiver>
-
         <service
             android:name=".widget.DashClock"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
@@ -94,15 +86,6 @@
         </receiver>
 
         <service android:name=".widget.WidgetUpdateService"/>
-
-        <receiver
-            android:name=".PowerReceiver"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

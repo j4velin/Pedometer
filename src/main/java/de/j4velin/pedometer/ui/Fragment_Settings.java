@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 Thomas Hoffmann
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,6 @@ package de.j4velin.pedometer.ui;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -52,7 +51,6 @@ import java.io.IOException;
 import java.util.Locale;
 
 import de.j4velin.pedometer.Database;
-import de.j4velin.pedometer.PowerReceiver;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 import de.j4velin.pedometer.util.API23Wrapper;
@@ -72,14 +70,15 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         findPreference("import").setOnPreferenceClickListener(this);
         findPreference("export").setOnPreferenceClickListener(this);
 
+        final SharedPreferences prefs =
+                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+
         findPreference("notification")
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(final Preference preference,
                                                       final Object newValue) {
-                        getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
-                                .putBoolean("notification", (Boolean) newValue).commit();
-
+                        prefs.edit().putBoolean("notification", (Boolean) newValue).apply();
                         getActivity().startService(new Intent(getActivity(), SensorListener.class)
                                 .putExtra(SensorListener.ACTION_UPDATE_NOTIFICATION, true));
                         return true;
@@ -91,12 +90,8 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                     @Override
                     public boolean onPreferenceChange(final Preference preference,
                                                       final Object newValue) {
-                        getActivity().getPackageManager().setComponentEnabledSetting(
-                                new ComponentName(getActivity(), PowerReceiver.class),
-                                ((Boolean) newValue) ?
-                                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                                PackageManager.DONT_KILL_APP);
+                        prefs.edit().putBoolean("pause_on_power", (Boolean) newValue).apply();
+                        getActivity().startService(new Intent(getActivity(), SensorListener.class));
                         return true;
                     }
                 });
@@ -104,9 +99,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         Preference account = findPreference("account");
         PlaySettingsWrapper
                 .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
-
-        final SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
         Preference goal = findPreference("goal");
         goal.setOnPreferenceClickListener(this);

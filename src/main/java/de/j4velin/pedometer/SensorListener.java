@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 Thomas Hoffmann
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,8 +21,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -59,6 +61,8 @@ public class SensorListener extends Service implements SensorEventListener {
     private static int lastSaveSteps;
     private static long lastSaveTime;
 
+    private BroadcastReceiver powerReceiver;
+    private final BroadcastReceiver shutdownReceiver = new ShutdownRecevier();
 
     public final static String ACTION_UPDATE_NOTIFICATION = "updateNotificationState";
 
@@ -148,6 +152,7 @@ public class SensorListener extends Service implements SensorEventListener {
             updateNotificationState();
         } else {
             updateIfNecessary();
+            registerBroadcastReceiver();
         }
 
         // restart service every hour to save the current step count
@@ -234,6 +239,25 @@ public class SensorListener extends Service implements SensorEventListener {
         } else {
             nm.cancel(NOTIFICATION_ID);
         }
+    }
+
+    private void registerBroadcastReceiver() {
+        SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+        if (BuildConfig.DEBUG) Logger.log(
+                "register broadcastreceiver, power=" + prefs.getBoolean("pause_on_power", false));
+        if (powerReceiver == null && prefs.getBoolean("pause_on_power", false)) {
+            powerReceiver = new PowerReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_POWER_CONNECTED);
+            filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
+            registerReceiver(powerReceiver, filter);
+        } else if (powerReceiver != null && !prefs.getBoolean("pause_on_power", false)) {
+            unregisterReceiver(powerReceiver);
+            powerReceiver = null;
+        }
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SHUTDOWN);
+        registerReceiver(shutdownReceiver, filter);
     }
 
     private void reRegisterSensor() {
