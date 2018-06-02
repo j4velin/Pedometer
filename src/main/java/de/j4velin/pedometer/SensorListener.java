@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.j4velin.pedometer.ui.Activity_Main;
+import de.j4velin.pedometer.ui.Fragment_Overview;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.widget.WidgetUpdateService;
@@ -128,13 +129,17 @@ public class SensorListener extends Service implements SensorEventListener {
             }
             SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_PRIVATE);
             if (prefs.contains("pauseCount")) { // resume counting
-                int difference = steps -
+                int stepsDuringPause = steps -
                         prefs.getInt("pauseCount", steps); // number of steps taken during the pause
+                if (BuildConfig.DEBUG) Logger.log("Steps taken during pause: " + stepsDuringPause);
                 Database db = Database.getInstance(this);
-                db.addToLastEntry(-difference);
+                db.addToLastEntry(-stepsDuringPause);
                 db.close();
                 prefs.edit().remove("pauseCount").commit();
                 updateNotificationState();
+                sendBroadcast(new Intent(Fragment_Overview.ACTION_PAUSE_STATE_CHANGED)
+                        .setPackage(getPackageName())
+                        .putExtra("stepsDuringPause", stepsDuringPause));
             } else { // pause counting
                 // cancel restart
                 ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
@@ -142,7 +147,10 @@ public class SensorListener extends Service implements SensorEventListener {
                                 new Intent(this, SensorListener.class),
                                 PendingIntent.FLAG_UPDATE_CURRENT));
                 prefs.edit().putInt("pauseCount", steps).commit();
+                if (BuildConfig.DEBUG) Logger.log("Steps taken before pause: " + steps);
                 updateNotificationState();
+                sendBroadcast(new Intent(Fragment_Overview.ACTION_PAUSE_STATE_CHANGED)
+                        .setPackage(getPackageName()));
                 stopSelf();
                 return START_NOT_STICKY;
             }
@@ -156,9 +164,11 @@ public class SensorListener extends Service implements SensorEventListener {
         }
 
         // restart service every hour to save the current step count
+        long nextUpdate = Math.min(Util.getTomorrow(),
+                System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR);
+        if (BuildConfig.DEBUG) Logger.log("next update: " + new Date(nextUpdate).toLocaleString());
         ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
-                .set(AlarmManager.RTC, Math.min(Util.getTomorrow(),
-                        System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR), PendingIntent
+                .set(AlarmManager.RTC, nextUpdate, PendingIntent
                         .getService(getApplicationContext(), 2,
                                 new Intent(this, SensorListener.class),
                                 PendingIntent.FLAG_UPDATE_CURRENT));

@@ -22,20 +22,12 @@ import android.os.AsyncTask;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.data.Bucket;
-import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataSource;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Device;
-import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.result.DataReadResult;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import de.j4velin.pedometer.BuildConfig;
@@ -104,59 +96,59 @@ public abstract class GoogleFit {
             context.getSharedPreferences("GoogleFit", Context.MODE_PRIVATE).edit().
                     putLong("syncedUntil", syncedUntil).apply();
 
-            if (BuildConfig.DEBUG) { // print last week
-                Calendar cal = Calendar.getInstance();
-                Date now = new Date();
-                cal.setTime(now);
-                long endTime = cal.getTimeInMillis();
-                cal.add(Calendar.WEEK_OF_YEAR, -1);
-                long startTime = cal.getTimeInMillis();
-                DataReadRequest readRequest = new DataReadRequest.Builder()
-                        .aggregate(DataType.TYPE_STEP_COUNT_DELTA,
-                                DataType.AGGREGATE_STEP_COUNT_DELTA).bucketByTime(1, TimeUnit.DAYS)
-                        .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS).build();
-                DataReadResult dataReadResult = Fitness.HistoryApi.readData(mClient, readRequest)
-                        .await(1, TimeUnit.MINUTES);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                if (dataReadResult.getBuckets().size() > 0) {
-                    Logger.log("Number of returned buckets of DataSets is: " +
-                            dataReadResult.getBuckets().size());
-                    for (Bucket bucket : dataReadResult.getBuckets()) {
-                        List<DataSet> dataSets = bucket.getDataSets();
-                        for (DataSet dataSet : dataSets) {
-                            for (DataPoint dp : dataSet.getDataPoints()) {
-                                Logger.log("Data point:");
-                                Logger.log("\tType: " + dp.getDataType().getName());
-                                Logger.log("\tStart: " +
-                                        dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-                                Logger.log("\tEnd: " +
-                                        dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
-                                for (Field field : dp.getDataType().getFields()) {
-                                    Logger.log("\tField: " + field.getName() +
-                                            " Value: " + dp.getValue(field));
-                                }
-                            }
-                        }
-                    }
-                } else if (dataReadResult.getDataSets().size() > 0) {
-                    Logger.log("Number of returned DataSets is: " +
-                            dataReadResult.getDataSets().size());
-                    for (DataSet dataSet : dataReadResult.getDataSets()) {
-                        for (DataPoint dp : dataSet.getDataPoints()) {
-                            Logger.log("Data point:");
-                            Logger.log("\tType: " + dp.getDataType().getName());
-                            Logger.log("\tStart: " +
-                                    dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-                            Logger.log("\tEnd: " +
-                                    dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
-                            for (Field field : dp.getDataType().getFields()) {
-                                Logger.log("\tField: " + field.getName() +
-                                        " Value: " + dp.getValue(field));
-                            }
-                        }
-                    }
-                }
-            }
+            //            if (BuildConfig.DEBUG) { // print last week
+            //                Calendar cal = Calendar.getInstance();
+            //                Date now = new Date();
+            //                cal.setTime(now);
+            //                long endTime = cal.getTimeInMillis();
+            //                cal.add(Calendar.WEEK_OF_YEAR, -1);
+            //                long startTime = cal.getTimeInMillis();
+            //                DataReadRequest readRequest = new DataReadRequest.Builder()
+            //                        .aggregate(DataType.TYPE_STEP_COUNT_DELTA,
+            //                                DataType.AGGREGATE_STEP_COUNT_DELTA).bucketByTime(1, TimeUnit.DAYS)
+            //                        .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS).build();
+            //                DataReadResult dataReadResult = Fitness.HistoryApi.readData(mClient, readRequest)
+            //                        .await(1, TimeUnit.MINUTES);
+            //                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+            //                if (dataReadResult.getBuckets().size() > 0) {
+            //                    Logger.log("Number of returned buckets of DataSets is: " +
+            //                            dataReadResult.getBuckets().size());
+            //                    for (Bucket bucket : dataReadResult.getBuckets()) {
+            //                        List<DataSet> dataSets = bucket.getDataSets();
+            //                        for (DataSet dataSet : dataSets) {
+            //                            for (DataPoint dp : dataSet.getDataPoints()) {
+            //                                Logger.log("Data point:");
+            //                                Logger.log("\tType: " + dp.getDataType().getName());
+            //                                Logger.log("\tStart: " +
+            //                                        dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+            //                                Logger.log("\tEnd: " +
+            //                                        dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+            //                                for (Field field : dp.getDataType().getFields()) {
+            //                                    Logger.log("\tField: " + field.getName() +
+            //                                            " Value: " + dp.getValue(field));
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                } else if (dataReadResult.getDataSets().size() > 0) {
+            //                    Logger.log("Number of returned DataSets is: " +
+            //                            dataReadResult.getDataSets().size());
+            //                    for (DataSet dataSet : dataReadResult.getDataSets()) {
+            //                        for (DataPoint dp : dataSet.getDataPoints()) {
+            //                            Logger.log("Data point:");
+            //                            Logger.log("\tType: " + dp.getDataType().getName());
+            //                            Logger.log("\tStart: " +
+            //                                    dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+            //                            Logger.log("\tEnd: " +
+            //                                    dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+            //                            for (Field field : dp.getDataType().getFields()) {
+            //                                Logger.log("\tField: " + field.getName() +
+            //                                        " Value: " + dp.getValue(field));
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //            }
             return null;
         }
     }
