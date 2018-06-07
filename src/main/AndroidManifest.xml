@@ -8,7 +8,7 @@
 
     <uses-sdk
         android:minSdkVersion="19"
-        android:targetSdkVersion="27"/>
+        android:targetSdkVersion="25"/>
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
