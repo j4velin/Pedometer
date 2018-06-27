@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Podómetro</string>
+    <string name="goal">Objetivo</string>
+    <string name="step_size">Longitud de paso</string>
+    <string name="about">Acerca de</string>
+    <string name="account">Cuenta</string>
+    <string name="goal_summary">Objetivo actual: %,d pasos</string>
+    <string name="step_size_summary">Longitud de paso actual: %1$.2f %2$s</string>
+    <string name="sign_in">Inicia sesión con tu cuenta de Google para usar las funcionalidades de Logros y Marcadores</string>
+    <string name="signed_in">Sesión iniciada como %s</string>
+    <string name="export_summary">Guarda tus datos en un archivo .csv</string>
+    <string name="export_title">Exportar/Copia de seguridad</string>
+    <string name="import_summary">Recupera datos guardados con anterioridad</string>
+    <string name="import_title">Importar/Restaurar</string>
+    <string name="notification">Mostrar notificación</string>
+    <string name="set_goal">Establecer objetivo</string>
+    <string name="set_step_size">Establecer longitud de paso</string>
+    <string name="sign_out">Cerrar sesión</string>
+    <string name="file_cant_read">Error: no se puede leer %s </string>
+    <string name="error_file">Error accediendo al archivo: %s</string>
+    <string name="error_external_storage_not_available">Error: Almancenamiento externo no disponible</string>
+    <string name="data_saved">Datos guardados en %s</string>
+    <string name="entries_imported">%d entradas recuperadas</string>
+    <string name="entries_ignored">%d entradas fueron ignoradas ya que no contenían datos válidos</string>
+    <string name="entries_overwritten">%d entradas fueron sobreescritas con los datos importados</string>
+    <string name="sign_in_necessary">Inicio de sesión necesario</string>
+    <string name="please_sign_in_with_your_google_account">Por favor, inicia sesión con tu cuenta de Google+ para usar esta funcionalidad.</string>
+    <string name="steps">pasos</string>
+    <string name="text_color">Color de texto:</string>
+    <string name="background_color">Color de fondo:</string>
+    <string name="settings">Ajustes</string>
+    <string name="achievements">Logros</string>
+    <string name="leaderboard">Marcadores</string>
+    <string name="faq">Ayuda</string>
+    <string name="goal_reached_notification">¡Objetivo alcanzado! %s pasos y contando</string>
+    <string name="notification_text">Faltan %s pasos</string>
+    <string name="total">Total</string>
+    <string name="notification_title">Podómetro está contando</string>
+    <string name="your_progress_will_be_shown_here_soon">Tu progreso se mostrará aquí pronto</string>    
+    <string name="average">Media</string>
+    <string name="record">Récord</string>
+    <string name="total_last_7_days">Total últimos 7 días</string>
+    <string name="average_last_7_days">Media últimos 7 días</string>
+    <string name="total_this_month">Total este mes</string>
+    <string name="average_this_month">Media este mes</string>
+    <string name="file_already_exists">El archivo ya existe. ¿Estás seguro de querer sobreescribirlo?</string>
+    <string name="about_text_links">Esta aplicación fue creada por Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) y utiliza <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> de Paul Cech y <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> de Sergey Margaritov.\n\n¡Podómetro es código libre! Consigue el código y la lista completa de contribuciones de <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">Versión: %s</string>
+    <string name="since">Desde %s</string>
+    <string name="start">Iniciar</string>
+    <string name="stop">Parar</string>
+    <string name="close">cerrar</string>
+    <string name="no_split_active">No hay contador parcial activo. Pulsa iniciar para contar los pasos a partir de este momento</string>
+    <string name="split_count">Contador parcial</string>
+    
+</resources>
