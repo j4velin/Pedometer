@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <string name="app_name">Pedômetro</string>
+    <string name="goal">Meta</string>
+    <string name="step_size">Tamanho do passo</string>
+    <string name="about">Sobre</string>
+    <string name="account">Conta</string>
+    <string name="goal_summary">Meta atual: %,d passos</string>
+    <string name="step_size_summary">Tamanho do passo atual: %1$.2f %2$s</string>
+    <string name="sign_in">Faça login com sua conta do Google para usar os recursos de Conquistas e Líderes</string>
+    <string name="signed_in">Logado como %s</string>
+    <string name="export_summary">Salvar seus dados em .csv file</string>
+    <string name="export_title">Exportar/Backup</string>
+    <string name="import_summary">Importa dados salvos anteriormente</string>
+    <string name="import_title">Importa/Restaurar</string>
+    <string name="notification">Mostrar notificação</string>
+    <string name="set_goal">Definir meta</string>
+    <string name="set_step_size">Definir tamanho do passo</string>
+    <string name="sign_out">Sign out</string>
+    <string name="file_cant_read">Erro: %s não pode ser lido</string>
+    <string name="error_file">Erro acessando o arquivo: %s</string>
+    <string name="error_external_storage_not_available">Error: Armazenamento externo não disponível</string>
+    <string name="data_saved">Dados salvo em %s</string>
+    <string name="entries_imported">%d entradas importadas</string>
+    <string name="entries_ignored">%d as entradas foram ignoradas porque não continham dados válidos</string>
+    <string name="entries_overwritten">%d as entradas foram substituídas por dados importados</string>
+    <string name="sign_in_necessary">Login necessário</string>
+    <string name="please_sign_in_with_your_google_account">Por favor autentique com sua conta Google+ para usar esse recursos</string>
+    <string name="steps">Passos</string>
+    <string name="text_color">Cor do texto:</string>
+    <string name="background_color">Cor de fundo:</string>
+    <string name="settings">Configurações</string>
+    <string name="achievements">Conquistas</string>
+    <string name="leaderboard">Líderes</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">Meta alcançada! %s passos</string>
+    <string name="notification_text">%s passos a percorrer</string>
+    <string name="total">Total</string>
+    <string name="notification_title">Pedômetro está contando</string>
+    <string name="your_progress_will_be_shown_here_soon">Seu progresso será mostrado aqui em breve</string>
+    <string name="average">Média</string>
+    <string name="record">Registro</string>
+    <string name="total_last_7_days">Total dos últimos 7 dias</string>
+    <string name="average_last_7_days">Média dos últimos 7 dias</string>
+    <string name="total_this_month">Total desse mës</string>
+    <string name="average_this_month">Média desse mes</string>
+    <string name="file_already_exists">O arquivo já existe. Tem certeza de que deseja substituí-lo?</string>
+    <string name="about_text_links">Esta aplicação foi creada por Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) e utiliza <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> de Paul Cech e <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> de Sergey Margaritov.\n\n¡Pedômetro é código livre! Veja o código e a lista completa de contribuidores em <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">App versão: %s</string>
+    <string name="since">Desde %s</string>
+    <string name="start">Iniciar</string>
+    <string name="stop">Parar</string>
+    <string name="close">fechar</string>
+    <string name="no_split_active">Nenhum contador parcial ativo. Clique em Iniciar para contar as etapas a partir de agora</string>
+    <string name="split_count">contador parcial</string>
+    <string name="pause">Pausa</string>
+    <string name="resume">Resumo</string>
+    <string name="ispaused">pedômetro está pausado</string>
+    <string name="pause_on_power_title">Pausa durante o carregamento</string>
+    <string name="pause_on_power_summary">Pausar o pedômetro enquanto o dispositivo está carregando</string>
+    <string name="no_sensor">Sensor não encontrado</string>
+    <string name="no_sensor_explain">Este aplicativo requer um sensor de passo de hardware dedicado - o seu dispositivo não possui o sensor. Este aplicativo não será executado no seu dispositivo.</string>
+    <string name="permission_external_storage">Sem permissão para acessar o armazenamento externo</string>
+
+</resources>
