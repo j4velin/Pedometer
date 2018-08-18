@@ -11,18 +11,10 @@
         android:key="account"
         android:summary="@string/sign_in"
         android:title="@string/account"/>
-
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="notification"
         android:title="@string/notification"/>
-
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="pause_on_power"
-        android:title="@string/pause_on_power_title"
-        android:summary="@string/pause_on_power_summary"/>
-
     <Preference
         android:key="export"
         android:summary="@string/export_summary"

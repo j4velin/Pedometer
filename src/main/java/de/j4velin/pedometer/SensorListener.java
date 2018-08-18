@@ -37,7 +37,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.j4velin.pedometer.ui.Activity_Main;
-import de.j4velin.pedometer.ui.Fragment_Overview;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.widget.WidgetUpdateService;
@@ -56,13 +55,10 @@ public class SensorListener extends Service implements SensorEventListener {
     private final static long SAVE_OFFSET_TIME = AlarmManager.INTERVAL_HOUR;
     private final static int SAVE_OFFSET_STEPS = 500;
 
-    public final static String ACTION_PAUSE = "pause";
-
     private static int steps;
     private static int lastSaveSteps;
     private static long lastSaveTime;
 
-    private BroadcastReceiver powerReceiver;
     private final BroadcastReceiver shutdownReceiver = new ShutdownRecevier();
 
     public final static String ACTION_UPDATE_NOTIFICATION = "updateNotificationState";
@@ -119,43 +115,6 @@ public class SensorListener extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-        if (intent != null && ACTION_PAUSE.equals(intent.getStringExtra("action"))) {
-            if (BuildConfig.DEBUG)
-                Logger.log("onStartCommand action: " + intent.getStringExtra("action"));
-            if (steps == 0) {
-                Database db = Database.getInstance(this);
-                steps = db.getCurrentSteps();
-                db.close();
-            }
-            SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-            if (prefs.contains("pauseCount")) { // resume counting
-                int stepsDuringPause = steps -
-                        prefs.getInt("pauseCount", steps); // number of steps taken during the pause
-                if (BuildConfig.DEBUG) Logger.log("Steps taken during pause: " + stepsDuringPause);
-                Database db = Database.getInstance(this);
-                db.addToLastEntry(-stepsDuringPause);
-                db.close();
-                prefs.edit().remove("pauseCount").commit();
-                updateNotificationState();
-                sendBroadcast(new Intent(Fragment_Overview.ACTION_PAUSE_STATE_CHANGED)
-                        .setPackage(getPackageName())
-                        .putExtra("stepsDuringPause", stepsDuringPause));
-            } else { // pause counting
-                // cancel restart
-                ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
-                        .cancel(PendingIntent.getService(getApplicationContext(), 2,
-                                new Intent(this, SensorListener.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT));
-                prefs.edit().putInt("pauseCount", steps).commit();
-                if (BuildConfig.DEBUG) Logger.log("Steps taken before pause: " + steps);
-                updateNotificationState();
-                sendBroadcast(new Intent(Fragment_Overview.ACTION_PAUSE_STATE_CHANGED)
-                        .setPackage(getPackageName()));
-                stopSelf();
-                return START_NOT_STICKY;
-            }
-        }
-
         if (intent != null && intent.getBooleanExtra(ACTION_UPDATE_NOTIFICATION, false)) {
             updateNotificationState();
         } else {
@@ -233,18 +192,11 @@ public class SensorListener extends Service implements SensorEventListener {
                 notificationBuilder
                         .setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
             }
-            boolean isPaused = prefs.contains("pauseCount");
             notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
-                    .setContentTitle(isPaused ? getString(R.string.ispaused) :
-                            getString(R.string.notification_title)).setContentIntent(PendingIntent
-                    .getActivity(this, 0, new Intent(this, Activity_Main.class),
+                    .setContentTitle(getString(R.string.notification_title)).setContentIntent(
+                    PendingIntent.getActivity(this, 0, new Intent(this, Activity_Main.class),
                             PendingIntent.FLAG_UPDATE_CURRENT))
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .addAction(isPaused ? R.drawable.ic_resume : R.drawable.ic_pause,
-                            isPaused ? getString(R.string.resume) : getString(R.string.pause),
-                            PendingIntent.getService(this, 4, new Intent(this, SensorListener.class)
-                                            .putExtra("action", ACTION_PAUSE),
-                                    PendingIntent.FLAG_UPDATE_CURRENT)).setOngoing(true);
+                    .setSmallIcon(R.drawable.ic_notification).setOngoing(true);
             nm.notify(NOTIFICATION_ID, notificationBuilder.build());
         } else {
             nm.cancel(NOTIFICATION_ID);
@@ -252,19 +204,7 @@ public class SensorListener extends Service implements SensorEventListener {
     }
 
     private void registerBroadcastReceiver() {
-        SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        if (BuildConfig.DEBUG) Logger.log(
-                "register broadcastreceiver, power=" + prefs.getBoolean("pause_on_power", false));
-        if (powerReceiver == null && prefs.getBoolean("pause_on_power", false)) {
-            powerReceiver = new PowerReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_POWER_CONNECTED);
-            filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
-            registerReceiver(powerReceiver, filter);
-        } else if (powerReceiver != null && !prefs.getBoolean("pause_on_power", false)) {
-            unregisterReceiver(powerReceiver);
-            powerReceiver = null;
-        }
+        if (BuildConfig.DEBUG) Logger.log("register broadcastreceiver");
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SHUTDOWN);
         registerReceiver(shutdownReceiver, filter);

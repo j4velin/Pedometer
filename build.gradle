@@ -48,6 +48,11 @@ android {
         }
     }
 
+    lintOptions{
+        disable 'MissingTranslation'
+        disable 'ExtraTranslation'
+    }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release

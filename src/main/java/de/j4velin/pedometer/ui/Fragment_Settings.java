@@ -85,17 +85,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                     }
                 });
 
-        findPreference("pause_on_power")
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(final Preference preference,
-                                                      final Object newValue) {
-                        prefs.edit().putBoolean("pause_on_power", (Boolean) newValue).apply();
-                        getActivity().startService(new Intent(getActivity(), SensorListener.class));
-                        return true;
-                    }
-                });
-
         Preference account = findPreference("account");
         PlaySettingsWrapper
                 .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
@@ -134,7 +123,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     public void onPrepareOptionsMenu(final Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_settings).setVisible(false);
-        menu.findItem(R.id.action_pause).setVisible(false);
         menu.findItem(R.id.action_split_count).setVisible(false);
     }
 
