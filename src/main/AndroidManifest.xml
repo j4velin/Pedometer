@@ -27,6 +27,7 @@
         <activity
             android:name=".ui.Activity_Main"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
