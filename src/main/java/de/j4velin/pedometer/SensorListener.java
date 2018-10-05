@@ -30,6 +30,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.IBinder;
 
 import java.text.NumberFormat;
@@ -37,6 +38,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.j4velin.pedometer.ui.Activity_Main;
+import de.j4velin.pedometer.util.API23Wrapper;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.widget.WidgetUpdateService;
@@ -118,19 +120,25 @@ public class SensorListener extends Service implements SensorEventListener {
         if (intent != null && intent.getBooleanExtra(ACTION_UPDATE_NOTIFICATION, false)) {
             updateNotificationState();
         } else {
-            updateIfNecessary();
+            reRegisterSensor();
             registerBroadcastReceiver();
+            updateIfNecessary();
         }
 
         // restart service every hour to save the current step count
         long nextUpdate = Math.min(Util.getTomorrow(),
                 System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR);
         if (BuildConfig.DEBUG) Logger.log("next update: " + new Date(nextUpdate).toLocaleString());
-        ((AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE))
-                .set(AlarmManager.RTC, nextUpdate, PendingIntent
-                        .getService(getApplicationContext(), 2,
-                                new Intent(this, SensorListener.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT));
+        AlarmManager am =
+                (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pi = PendingIntent
+                .getService(getApplicationContext(), 2, new Intent(this, SensorListener.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= 23) {
+            API23Wrapper.setAlarmWhileIdle(am, AlarmManager.RTC, nextUpdate, pi);
+        } else {
+            am.set(AlarmManager.RTC, nextUpdate, pi);
+        }
 
         return START_STICKY;
     }
