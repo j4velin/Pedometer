@@ -234,8 +234,15 @@ public class SensorListener extends Service implements SensorEventListener {
             Logger.log("default: " + sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER).getName());
         }
 
-        // enable batching with delay of max 5 min
-        sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-                SensorManager.SENSOR_DELAY_NORMAL, (int) (5 * MICROSECONDS_IN_ONE_MINUTE));
+        if (Build.VERSION.SDK_INT >= 27) {
+            // do not use batching on Android P and newer as we dont live long enough to recieve
+            // those value due to aggressive power saving
+            sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                    SensorManager.SENSOR_DELAY_FASTEST);
+        } else {
+            // enable batching with delay of max 5 min
+            sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                    SensorManager.SENSOR_DELAY_NORMAL, (int) (5 * MICROSECONDS_IN_ONE_MINUTE));
+        }
     }
 }
