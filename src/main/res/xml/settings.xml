@@ -11,10 +11,6 @@
         android:key="account"
         android:summary="@string/sign_in"
         android:title="@string/account"/>
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="notification"
-        android:title="@string/notification"/>
     <Preference
         android:key="export"
         android:summary="@string/export_summary"

@@ -18,7 +18,6 @@ package de.j4velin.pedometer;
 
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -39,6 +38,7 @@ import java.util.Locale;
 
 import de.j4velin.pedometer.ui.Activity_Main;
 import de.j4velin.pedometer.util.API23Wrapper;
+import de.j4velin.pedometer.util.API26Wrapper;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.widget.WidgetUpdateService;
@@ -83,7 +83,10 @@ public class SensorListener extends Service implements SensorEventListener {
         }
     }
 
-    private void updateIfNecessary() {
+    /**
+     * @return true, if notification was updated
+     */
+    private boolean updateIfNecessary() {
         if (steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
                 (steps > 0 && System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME)) {
             if (BuildConfig.DEBUG) Logger.log(
@@ -105,8 +108,11 @@ public class SensorListener extends Service implements SensorEventListener {
             db.close();
             lastSaveSteps = steps;
             lastSaveTime = System.currentTimeMillis();
-            updateNotificationState();
+            startForeground(NOTIFICATION_ID, getNotification()); // update notification
             startService(new Intent(this, WidgetUpdateService.class));
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -117,12 +123,10 @@ public class SensorListener extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-        if (intent != null && intent.getBooleanExtra(ACTION_UPDATE_NOTIFICATION, false)) {
-            updateNotificationState();
-        } else {
-            reRegisterSensor();
-            registerBroadcastReceiver();
-            updateIfNecessary();
+        reRegisterSensor();
+        registerBroadcastReceiver();
+        if (!updateIfNecessary()) {
+            startForeground(NOTIFICATION_ID, getNotification());
         }
 
         // restart service every hour to save the current step count
@@ -147,8 +151,6 @@ public class SensorListener extends Service implements SensorEventListener {
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) Logger.log("SensorListener onCreate");
-        reRegisterSensor();
-        updateNotificationState();
     }
 
     @Override
@@ -174,41 +176,37 @@ public class SensorListener extends Service implements SensorEventListener {
         }
     }
 
-    private void updateNotificationState() {
-        if (BuildConfig.DEBUG) Logger.log("SensorListener updateNotificationState");
+    private Notification getNotification() {
+        if (BuildConfig.DEBUG) Logger.log("getNotification");
         SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        NotificationManager nm =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (prefs.getBoolean("notification", true)) {
-            int goal = prefs.getInt("goal", 10000);
-            Database db = Database.getInstance(this);
-            int today_offset = db.getSteps(Util.getToday());
-            if (steps == 0)
-                steps = db.getCurrentSteps(); // use saved value if we haven't anything better
-            db.close();
-            Notification.Builder notificationBuilder = new Notification.Builder(this);
-            if (steps > 0) {
-                if (today_offset == Integer.MIN_VALUE) today_offset = -steps;
-                notificationBuilder.setProgress(goal, today_offset + steps, false).setContentText(
-                        today_offset + steps >= goal ? getString(R.string.goal_reached_notification,
-                                NumberFormat.getInstance(Locale.getDefault())
-                                        .format((today_offset + steps))) :
-                                getString(R.string.notification_text,
-                                        NumberFormat.getInstance(Locale.getDefault())
-                                                .format((goal - today_offset - steps))));
-            } else { // still no step value?
-                notificationBuilder
-                        .setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
-            }
-            notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
-                    .setContentTitle(getString(R.string.notification_title)).setContentIntent(
-                    PendingIntent.getActivity(this, 0, new Intent(this, Activity_Main.class),
-                            PendingIntent.FLAG_UPDATE_CURRENT))
-                    .setSmallIcon(R.drawable.ic_notification).setOngoing(true);
-            nm.notify(NOTIFICATION_ID, notificationBuilder.build());
-        } else {
-            nm.cancel(NOTIFICATION_ID);
+        int goal = prefs.getInt("goal", 10000);
+        Database db = Database.getInstance(this);
+        int today_offset = db.getSteps(Util.getToday());
+        if (steps == 0)
+            steps = db.getCurrentSteps(); // use saved value if we haven't anything better
+        db.close();
+        Notification.Builder notificationBuilder =
+                Build.VERSION.SDK_INT >= 26 ? API26Wrapper.getNotificationBuilder(this) :
+                        new Notification.Builder(this);
+        if (steps > 0) {
+            if (today_offset == Integer.MIN_VALUE) today_offset = -steps;
+            notificationBuilder.setProgress(goal, today_offset + steps, false).setContentText(
+                    today_offset + steps >= goal ? getString(R.string.goal_reached_notification,
+                            NumberFormat.getInstance(Locale.getDefault())
+                                    .format((today_offset + steps))) :
+                            getString(R.string.notification_text,
+                                    NumberFormat.getInstance(Locale.getDefault())
+                                            .format((goal - today_offset - steps))));
+        } else { // still no step value?
+            notificationBuilder
+                    .setContentText(getString(R.string.your_progress_will_be_shown_here_soon));
         }
+        notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
+                .setContentTitle(getString(R.string.notification_title)).setContentIntent(
+                PendingIntent.getActivity(this, 0, new Intent(this, Activity_Main.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT)).setSmallIcon(R.drawable.ic_notification)
+                .setOngoing(true);
+        return notificationBuilder.build();
     }
 
     private void registerBroadcastReceiver() {

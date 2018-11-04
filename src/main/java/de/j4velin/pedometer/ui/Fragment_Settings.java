@@ -73,18 +73,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         final SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
-        findPreference("notification")
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(final Preference preference,
-                                                      final Object newValue) {
-                        prefs.edit().putBoolean("notification", (Boolean) newValue).apply();
-                        getActivity().startService(new Intent(getActivity(), SensorListener.class)
-                                .putExtra(SensorListener.ACTION_UPDATE_NOTIFICATION, true));
-                        return true;
-                    }
-                });
-
         Preference account = findPreference("account");
         PlaySettingsWrapper
                 .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
