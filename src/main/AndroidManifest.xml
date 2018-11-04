@@ -3,12 +3,11 @@
     package="de.j4velin.pedometer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="156"
-    android:versionName="1.5.6">
+    android:versionCode="157"
+    android:versionName="1.5.7">
 
     <uses-sdk
-        android:maxSdkVersion="27"
-        android:minSdkVersion="19"
+        android:minSdkVersion="21"
         android:targetSdkVersion="26"/>
 
     <uses-feature
@@ -48,7 +47,8 @@
         </receiver>
 
         <service
-            android:name=".SensorListener"/>
+            android:name=".SensorListener"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <service
             android:name=".widget.DashClock"
