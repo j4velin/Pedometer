@@ -18,6 +18,7 @@ package de.j4velin.pedometer.ui;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -29,7 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.view.Menu;
@@ -54,6 +54,7 @@ import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 import de.j4velin.pedometer.util.API23Wrapper;
+import de.j4velin.pedometer.util.API26Wrapper;
 import de.j4velin.pedometer.util.PlaySettingsWrapper;
 
 public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
@@ -67,23 +68,35 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.settings);
-        findPreference("import").setOnPreferenceClickListener(this);
-        findPreference("export").setOnPreferenceClickListener(this);
 
         final SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
-        findPreference("notification")
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(final Preference preference,
-                                                      final Object newValue) {
-                        prefs.edit().putBoolean("notification", (Boolean) newValue).apply();
-                        getActivity().startService(new Intent(getActivity(), SensorListener.class)
-                                .putExtra(SensorListener.ACTION_UPDATE_NOTIFICATION, true));
-                        return true;
-                    }
-                });
+        findPreference("import").setOnPreferenceClickListener(this);
+        findPreference("export").setOnPreferenceClickListener(this);
+        if (Build.VERSION.SDK_INT >= 26) {
+            findPreference("notification").setOnPreferenceClickListener(this);
+        } else {
+            findPreference("notification")
+                    .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(final Preference preference,
+                                                          final Object newValue) {
+                            prefs.edit().putBoolean("notification", (Boolean) newValue).apply();
+
+                            NotificationManager manager = (NotificationManager) getActivity()
+                                    .getSystemService(Context.NOTIFICATION_SERVICE);
+                            if ((Boolean) newValue) {
+                                manager.notify(SensorListener.NOTIFICATION_ID,
+                                        SensorListener.getNotification(getActivity()));
+                            } else {
+                                manager.cancel(SensorListener.NOTIFICATION_ID);
+                            }
+
+                            return true;
+                        }
+                    });
+        }
 
         Preference account = findPreference("account");
         PlaySettingsWrapper
@@ -112,6 +125,10 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     public void onResume() {
         super.onResume();
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT >= 26) { // notification settings might have changed
+            API26Wrapper.startForegroundService(getActivity(),
+                    new Intent(getActivity(), SensorListener.class));
+        }
     }
 
     @Override
@@ -220,6 +237,9 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                     Toast.makeText(getActivity(), R.string.permission_external_storage,
                             Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.string.notification_settings:
+                API26Wrapper.launchNotificationSettings(getActivity());
                 break;
         }
         return false;
