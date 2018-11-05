@@ -20,24 +20,25 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.job.JobInfo;
-import android.app.job.JobParameters;
-import android.app.job.JobScheduler;
-import android.app.job.JobService;
-import android.content.ComponentName;
+import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
+import android.os.IBinder;
 
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import de.j4velin.pedometer.ui.Activity_Main;
+import de.j4velin.pedometer.util.API23Wrapper;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.widget.WidgetUpdateService;
@@ -49,17 +50,18 @@ import de.j4velin.pedometer.widget.WidgetUpdateService;
  * This service won't be needed any more if there is a way to read the
  * step-value without waiting for a sensor event
  */
-public class SensorListener extends JobService implements SensorEventListener {
+public class SensorListener extends Service implements SensorEventListener {
 
     private final static int NOTIFICATION_ID = 1;
-    private final static int JOB_ID = 1;
+    private final static long MICROSECONDS_IN_ONE_MINUTE = 60000000;
     private final static long SAVE_OFFSET_TIME = AlarmManager.INTERVAL_HOUR;
     private final static int SAVE_OFFSET_STEPS = 500;
 
     private static int steps;
     private static int lastSaveSteps;
     private static long lastSaveTime;
-    private JobParameters jobParameters;
+
+    private final BroadcastReceiver shutdownReceiver = new ShutdownRecevier();
 
     public final static String ACTION_UPDATE_NOTIFICATION = "updateNotificationState";
 
@@ -72,11 +74,12 @@ public class SensorListener extends JobService implements SensorEventListener {
 
     @Override
     public void onSensorChanged(final SensorEvent event) {
-        if (BuildConfig.DEBUG) Logger.log("step count received: "+event.values[0]);
-        if (event.values[0] < Integer.MAX_VALUE) {
+        if (event.values[0] > Integer.MAX_VALUE) {
+            if (BuildConfig.DEBUG) Logger.log("probably not a real value: " + event.values[0]);
+            return;
+        } else {
             steps = (int) event.values[0];
             updateIfNecessary();
-            jobFinished(jobParameters, false);
         }
     }
 
@@ -107,30 +110,68 @@ public class SensorListener extends JobService implements SensorEventListener {
         }
     }
 
-    public static void schedulePeriodicJob(final Context context) {
-        if (BuildConfig.DEBUG) Logger.log("SensorListener schedulePeriodicJob");
-        ComponentName serviceComponent = new ComponentName(context, SensorListener.class);
-        JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, serviceComponent);
-        builder.setPeriodic(AlarmManager.INTERVAL_HOUR);
-        JobScheduler jobScheduler =
-                (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        jobScheduler.schedule(builder.build());
-
+    @Override
+    public IBinder onBind(final Intent intent) {
+        return null;
     }
 
     @Override
-    public boolean onStartJob(JobParameters jobParameters) {
-        if (BuildConfig.DEBUG) Logger.log("SensorListener onStartJob");
-        this.jobParameters = jobParameters;
-        registerSensor();
-        return true; // keep running until receiving a step value
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+        if (intent != null && intent.getBooleanExtra(ACTION_UPDATE_NOTIFICATION, false)) {
+            updateNotificationState();
+        } else {
+            reRegisterSensor();
+            registerBroadcastReceiver();
+            updateIfNecessary();
+        }
+
+        // restart service every hour to save the current step count
+        long nextUpdate = Math.min(Util.getTomorrow(),
+                System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR);
+        if (BuildConfig.DEBUG) Logger.log("next update: " + new Date(nextUpdate).toLocaleString());
+        AlarmManager am =
+                (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pi = PendingIntent
+                .getService(getApplicationContext(), 2, new Intent(this, SensorListener.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= 23) {
+            API23Wrapper.setAlarmWhileIdle(am, AlarmManager.RTC, nextUpdate, pi);
+        } else {
+            am.set(AlarmManager.RTC, nextUpdate, pi);
+        }
+
+        return START_STICKY;
     }
 
     @Override
-    public boolean onStopJob(JobParameters jobParameters) {
-        if (BuildConfig.DEBUG) Logger.log("SensorListener onStopJob");
-        unregisterSensor();
-        return false;
+    public void onCreate() {
+        super.onCreate();
+        if (BuildConfig.DEBUG) Logger.log("SensorListener onCreate");
+        reRegisterSensor();
+        updateNotificationState();
+    }
+
+    @Override
+    public void onTaskRemoved(final Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        if (BuildConfig.DEBUG) Logger.log("sensor service task removed");
+        // Restart service in 500 ms
+        ((AlarmManager) getSystemService(Context.ALARM_SERVICE))
+                .set(AlarmManager.RTC, System.currentTimeMillis() + 500, PendingIntent
+                        .getService(this, 3, new Intent(this, SensorListener.class), 0));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (BuildConfig.DEBUG) Logger.log("SensorListener onDestroy");
+        try {
+            SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+            sm.unregisterListener(this);
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) Logger.log(e);
+            e.printStackTrace();
+        }
     }
 
     private void updateNotificationState() {
@@ -170,26 +211,38 @@ public class SensorListener extends JobService implements SensorEventListener {
         }
     }
 
-    private void registerSensor() {
-        if (BuildConfig.DEBUG) Logger.log("re-register sensor listener");
-        SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-        if (BuildConfig.DEBUG) {
-            Logger.log("step sensors: " + sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size());
-            if (sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size() < 1) return; // emulator
-            Logger.log("default: " + sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER).getName());
-        }
-
-        sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-                SensorManager.SENSOR_DELAY_FASTEST);
+    private void registerBroadcastReceiver() {
+        if (BuildConfig.DEBUG) Logger.log("register broadcastreceiver");
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SHUTDOWN);
+        registerReceiver(shutdownReceiver, filter);
     }
 
-    private void unregisterSensor() {
+    private void reRegisterSensor() {
+        if (BuildConfig.DEBUG) Logger.log("re-register sensor listener");
         SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         try {
             sm.unregisterListener(this);
         } catch (Exception e) {
             if (BuildConfig.DEBUG) Logger.log(e);
             e.printStackTrace();
+        }
+
+        if (BuildConfig.DEBUG) {
+            Logger.log("step sensors: " + sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size());
+            if (sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size() < 1) return; // emulator
+            Logger.log("default: " + sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER).getName());
+        }
+
+        if (Build.VERSION.SDK_INT >= 27) {
+            // do not use batching on Android P and newer as we dont live long enough to recieve
+            // those value due to aggressive power saving
+            sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                    SensorManager.SENSOR_DELAY_FASTEST);
+        } else {
+            // enable batching with delay of max 5 min
+            sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+                    SensorManager.SENSOR_DELAY_NORMAL, (int) (5 * MICROSECONDS_IN_ONE_MINUTE));
         }
     }
 }

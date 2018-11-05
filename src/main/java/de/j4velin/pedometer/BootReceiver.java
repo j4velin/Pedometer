@@ -47,6 +47,6 @@ public class BootReceiver extends BroadcastReceiver {
         db.close();
         prefs.edit().remove("correctShutdown").apply();
 
-        SensorListener.schedulePeriodicJob(context);
+        context.startService(new Intent(context, SensorListener.class));
     }
 }
