@@ -11,7 +11,6 @@
     <string name="goal_summary">Nykyinen tavoite: %,d askelta</string>
     <string name="step_size_summary">Nykyinen askeleen koko: %1$.2f %2$s</string>
     <string name="sign_in">Kirjaudu sisään Google-tililläsi käyttääksesi Saavutuksia ja Tulostaulua</string>
-    <string name="sign_in">Sign in with your Google account to use the Achievements and Leaderboards features</string>
     <string name="signed_in">Kirjauduttu sisään käyttäjänä %s</string>
     <string name="export_summary">Tallenna tiedot .csv -tiedostoon</string>
     <string name="export_title">Vie tiedostoon</string>
