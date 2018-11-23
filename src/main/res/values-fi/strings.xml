@@ -37,7 +37,6 @@
     <string name="leaderboard">Tulostaulu</string>
     <string name="faq">FAQ</string>
     <string name="goal_reached_notification">Tavoite saavutettu! %s askelta jo</string>
-    <string name="goal_reached_notification">Goal reached! %s steps and counting</string>
     <string name="notification_text">%s askelta tavoitteeseen</string>
     <string name="total">Yhteensä</string>
     <string name="notification_title">Askelmittari laskee</string>
