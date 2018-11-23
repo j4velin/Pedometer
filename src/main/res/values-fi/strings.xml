@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <string name="app_name">Askelmittari</string>
+    <string name="goal">Tavoite</string>
+    <string name="step_size">Askeleen koko</string>
+    <string name="about">Tiedot</string>
+    <string name="account">Tili</string>
+    <string name="goal_summary">Nykyinen tavoite: %,d askelta</string>
+    <string name="step_size_summary">Nykyinen askeleen koko: %1$.2f %2$s</string>
+    <string name="sign_in">Kirjaudu sisään Google-tililläsi käyttääksesi Saavutuksia ja Tulostaulua</string>
+    <string name="signed_in">Kirjauduttu sisään käyttäjänä %s</string>
+    <string name="export_summary">Tallenna tiedot .csv -tiedostoon</string>
+    <string name="export_title">Vie tiedostoon</string>
+    <string name="import_summary">Tuo aiemmin tallennetut tiedot</string>
+    <string name="import_title">Tuo tiedostosta</string>
+    <string name="notification">Näytä ilmoitus</string>
+    <string name="set_goal">Aseta tavoite</string>
+    <string name="set_step_size">Aseta askeleen koko</string>
+    <string name="sign_out">Kirjaudu ulos</string>
+    <string name="file_cant_read">Virhe: %s ei voitu lukea</string>
+    <string name="error_file">Virhe käsiteltäessä tiedostoa: %s</string>
+    <string name="error_external_storage_not_available">Virhe: Ulkoinen tallennustila ei saatavilla</string>
+    <string name="data_saved">Tiedot tallennettu tiedostoon %s</string>
+    <string name="entries_imported">%d merkintää tuotu</string>
+    <string name="entries_ignored">%d merkintää ei huomioitu koska ne eivät olleet oikeassa muodossa</string>
+    <string name="entries_overwritten">%d merkintää ylikirjoitettiin tuoduilla tiedoilla</string>
+    <string name="sign_in_necessary">Sisäänkirjautuminen vaadittu</string>
+    <string name="please_sign_in_with_your_google_account">Kirjaudu sisään Google+ -tililläsi käyttääksesi tätä ominaisuutta.</string>
+    <string name="steps">askelta</string>
+    <string name="text_color">Tekstin väri:</string>
+    <string name="background_color">Taustan väri:</string>
+    <string name="settings">Asetukset</string>
+    <string name="achievements">Saavutukset</string>
+    <string name="leaderboard">Tulostaulu</string>
+    <string name="faq">FAQ</string>
+    <string name="goal_reached_notification">Tavoite saavutettu! %s askelta jo</string>
+    <string name="notification_text">%s askelta tavoitteeseen</string>
+    <string name="total">Yhteensä</string>
+    <string name="notification_title">Askelmittari laskee</string>
+    <string name="your_progress_will_be_shown_here_soon">Tuloksesi näytetään tässä piakkoin</string>
+    <string name="average">Keskiarvo</string>
+    <string name="record">Ennätys</string>
+    <string name="total_last_7_days">Yhteensä viimeisenä 7 päivänä</string>
+    <string name="average_last_7_days">Keskiarvo viimeisenä 7 päivänä</string>
+    <string name="total_this_month">Yhteensä tässä kuussa</string>
+    <string name="average_this_month">Keskiarvo tässä kuussa</string>
+    <string name="file_already_exists">Tiedosto on jo olemassa. Haluatko ylikirjoittaa sen?</string>
+    <string name="about_text_links">Tämän sovelluksen teki Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) käyttäen <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> (Paul Cech) ja <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> (Sergey Margaritov).\n\nAskelmittari on avoimen lähdekoodin sovellus! Lähdekoodi sekä kaikkien avustajien lista löytyy täältä: <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_app_version">Sovelluksen versio: %s</string>
+    <string name="since">Aloitettu: %s</string>
+    <string name="start">Aloita</string>
+    <string name="stop">Lopeta</string>
+    <string name="close">Sulje</string>
+    <string name="no_split_active">Ei aktiivista alilaskuria. Paina Aloita aloittaaksesi askelten laskemisen tästä hetkestä lähtien.</string>
+    <string name="split_count">Alilaskuri</string>
+    <string name="no_sensor">Sensoria ei löydetty</string>
+    <string name="no_sensor_explain">Tämä sovellus tarvitsee erillisen laitteistosensorin jota laittessasi ei ole. Sovellus ei toimi laitteessasi.</string>
+    <string name="permission_external_storage">Ei lupaa ulkoisen muistin käsittelyyn</string>
+</resources>
+
