@@ -26,6 +26,7 @@
     <string name="data_saved">Data sparad i %s</string>
     <string name="entries_imported">%d poster importerade</string>
     <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
+    <string name="entries_overwritten">%d poster skrevs över med importerad data</string>
     <string name="sign_in_necessary">Inloggning nödvändig</string>
     <string name="please_sign_in_with_your_google_account">Logga in med ditt konto på Google+ för att använda den här funktionen.</string>
     <string name="steps">steg</string>
@@ -55,12 +56,8 @@
     <string name="close">stäng</string>
     <string name="no_split_active">Ingen delad räknare aktiv. Tryck start för att räkna stegen från och med nu</string>
     <string name="split_count">Dela räknare</string>
-    <string name="pause">Pausa</string>
-    <string name="resume">Återuppta</string>
-    <string name="ispaused">Pedometer är pausad</string>
-    <string name="pause_on_power_title">Pausa under laddning</string>
-    <string name="pause_on_power_summary">Pausa Pedometer när enheten laddas</string>
     <string name="no_sensor">Sensor hittades inte</string>
     <string name="no_sensor_explain">Denna app kräver en dedikerad stegräknare i hårdvara, som din enhet saknar. Den här appen kan inte köra på din enhet.</string>
     <string name="permission_external_storage">Saknar tillstånd att komma åt extern lagring</string>
+    <string name="notification_settings">Notifieringsinställningar</string>
 </resources>
