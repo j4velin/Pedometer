@@ -20,7 +20,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 
@@ -33,11 +32,6 @@ public class WidgetUpdateService extends JobIntentService {
 
     static void enqueueUpdate(Context context) {
         enqueueWork(context, WidgetUpdateService.class, JOB_ID, new Intent());
-    }
-
-    @Override
-    public IBinder onBind(final Intent intent) {
-        return null;
     }
 
     @Override

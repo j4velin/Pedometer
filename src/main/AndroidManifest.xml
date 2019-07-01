@@ -3,8 +3,8 @@
     package="de.j4velin.pedometer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="159"
-    android:versionName="1.5.9">
+    android:versionCode="1510"
+    android:versionName="1.5.10">
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -16,6 +16,7 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:allowBackup="true"
@@ -85,7 +86,8 @@
                 android:resource="@xml/widget"/>
         </receiver>
 
-        <service android:name=".widget.WidgetUpdateService"/>
+        <service android:name=".widget.WidgetUpdateService" android:exported="true"
+                 android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>
