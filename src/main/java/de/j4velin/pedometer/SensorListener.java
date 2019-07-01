@@ -199,23 +199,24 @@ public class SensorListener extends Service implements SensorEventListener {
                         new Notification.Builder(context);
         if (steps > 0) {
             if (today_offset == Integer.MIN_VALUE) today_offset = -steps;
+            NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
             notificationBuilder.setProgress(goal, today_offset + steps, false).setContentText(
                     today_offset + steps >= goal ?
                             context.getString(R.string.goal_reached_notification,
-                                    NumberFormat.getInstance(Locale.getDefault())
-                                            .format((today_offset + steps))) :
+                                    format.format((today_offset + steps))) :
                             context.getString(R.string.notification_text,
-                                    NumberFormat.getInstance(Locale.getDefault())
-                                            .format((goal - today_offset - steps))));
+                                    format.format((goal - today_offset - steps)))).setContentTitle(
+                    format.format(today_offset + steps) + " " + context.getString(R.string.steps));
         } else { // still no step value?
             notificationBuilder.setContentText(
-                    context.getString(R.string.your_progress_will_be_shown_here_soon));
+                    context.getString(R.string.your_progress_will_be_shown_here_soon))
+                    .setContentTitle(context.getString(R.string.notification_title));
         }
         notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
-                .setContentTitle(context.getString(R.string.notification_title)).setContentIntent(
-                PendingIntent.getActivity(context, 0, new Intent(context, Activity_Main.class),
-                        PendingIntent.FLAG_UPDATE_CURRENT)).setSmallIcon(R.drawable.ic_notification)
-                .setOngoing(true);
+                .setContentIntent(PendingIntent
+                        .getActivity(context, 0, new Intent(context, Activity_Main.class),
+                                PendingIntent.FLAG_UPDATE_CURRENT))
+                .setSmallIcon(R.drawable.ic_notification).setOngoing(true);
         return notificationBuilder.build();
     }
 
