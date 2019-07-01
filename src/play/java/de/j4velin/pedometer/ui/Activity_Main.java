@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 Thomas Hoffmann
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,6 +48,7 @@ import com.google.android.gms.games.GamesActivityResultCodes;
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
+import de.j4velin.pedometer.util.API26Wrapper;
 import de.j4velin.pedometer.util.GoogleFit;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.PlayServices;
@@ -62,7 +63,11 @@ public class Activity_Main extends FragmentActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(final Bundle b) {
         super.onCreate(b);
-        startService(new Intent(this, SensorListener.class));
+        if (Build.VERSION.SDK_INT >= 26) {
+            API26Wrapper.startForegroundService(this, new Intent(this, SensorListener.class));
+        } else {
+            startService(new Intent(this, SensorListener.class));
+        }
         if (b == null) {
             // Create new fragment and transaction
             Fragment newFragment = new Fragment_Overview();
