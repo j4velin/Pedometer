@@ -1,0 +1,54 @@
+en-US
+
+Lightweight pedometer app using the <b>hardware step-sensor</b> for minimal battery consumption.
+This app is designed to be running all the time without having any impact on your battery life! It uses the hardware step detection sensor of devices like the Nexus 5, which is already running even when not using any pedometer app. Therefore the app does not consume any additional battery drain. Unlike other pedometer apps, this app does <b>not</b> track your movement or your location so it doesn't need to turn on your GPS sensor (again: <b>no impact on your battery</b>).
+
+Sign in with your Google+ account to unlock <b>achievements</b> and compete with others in the <b>leaderboards</b>! 
+The app also provides a <b>DashClock extension</b>, a widget and a notification to show your progress.
+
+<b>FAQ:</b>
+• Do not use any task killer if you want the app to work
+• Achievements are granted the day <u>after</u> meeting the requirements
+
+
+Pedometer is open source: https://github.com/j4velin/Pedometer
+Pedometer uses the 'EazeGraph' library by Paul Cech and 'ColorPickerPreference' by Sergey Margaritov
+Icon provided by https://utopian.io/@tobaloidee
+
+-------------------------------------------
+
+de-DE
+
+<b>Schrittzähler</b> (engl. "Pedometer") ist eine einfache Schrittzähler-App, welche den <b>Hardware Schritt-Sensor</b> neuerer Handys nutzt und dadurch keinen zusätzlichen Stromverbrauch verursacht.
+Die App ist mit dem Gedanken entwickelt worden, ständig im Hintergrund zu laufen und deine Schritte zu zählen, ohne dabei einen Einfluss auf die Leistung oder die Akku-Laufzeit deines Gerätes zu haben. Die App profitiert von den eingebauten Schritt-Sensoren, welche sowieso bereits die ganze Zeit über aktiv sind. Dadurch ist "Schrittzähler" aber auch nur auf Geräten verfügbar, die einen solchen Hardware Schrittzähler eingebaut haben (z.B. das LG Nexus 5). Anders als viele andere Schrittzähler-Apps, benötigt die App keinen Zugriff auf das GPS oder andere Ortungsdienste, der zurückgelegte Weg wird also garantiert nicht aufgezeichnet.
+
+Optional bietet die App die Möglichkeit, sich mit dem Google+ Konto einzuloggen und damit <b>Errungenschaften</b> freizuschalten oder sich mit anderen in der <b>Rangliste</b> zu messen!
+Außerdem wird eine <b>DashClock Erweiterung</b>, ein Widget und ein Eintrag in der Benachrichtigungsleiste bereitgestellt, um den aktuellen Fortschritt anzuzeigen.
+
+<b>FAQ:</b>
+• Verwende bitte keine Task-Killer oder "Battery-Saver" App!
+• Errungenschaften werden im Allgemeinen am folgenden Tag freigeschaltet
+
+
+Schrittzähler (Pedometer) ist open source: https://github.com/j4velin/Pedometer
+Schrittzähler verwendet die 'EazeGraph' Bibliothek von Paul Cech und 'ColorPickerPreference' von Sergey Margaritov
+Icon von https://utopian.io/@tobaloidee
+
+-------------------------------------------
+
+ru-RU
+
+<b>Шагомер</b> (англ. "Pedometer") - это легковесное приложение-шагомер, основанное на <b>аппаратном датчике</b> для экономии расхода батареи.
+Это приложение предназначено для круглосуточной работы без ощутимого воздействия на срок службы батареи! На таких устройствах, как Nexus 5, оно использует аппаратный счётчик шагов, который работает всё время даже, если не установлено какое-либо приложение для измерения шагов. Поэтому это приложение минимально расходует заряд аккумулятора. В отличие от других приложений для измерения шагов, это приложение <b>не</b> отслеживает передвижения и местоположение вашего устройства, поэтому вам не нужно включать GPS-датчик (опять же: <b>снижается влияние на батарею</b>).
+Войдите в свой аккаунт Google+, чтобы разблокировать <b>достижения</b> и соревноваться с другими пользователями в <b>общем рейтинге</b>!
+Приложение также предоставляет <b>расширение для DashClock</b>, виджет и уведомление, чтобы вам было удобно отслеживать прогресс.
+
+<b>ЧаВо:</b>
+• Не используйте приложения для очистки памяти (task killer), если хотите, чтобы это приложение работало
+• Достижения присуждаются на <u>следующий</u> день после выполнения необходимых требований.
+
+Исходный код приложения Pedometer открыт для всех: https://github.com/j4velin/Pedometer
+Pedometer использует библиотеки 'EazeGraph' от Paul Cech и 'ColorPickerPreference' от Sergey Margaritov
+Иконка предоставлена https://utopian.io/@tobaloidee
+
+-------------------------------------------
