@@ -30,7 +30,7 @@ public class WidgetUpdateService extends JobIntentService {
 
     private static final int JOB_ID = 42;
 
-    static void enqueueUpdate(Context context) {
+    public static void enqueueUpdate(Context context) {
         enqueueWork(context, WidgetUpdateService.class, JOB_ID, new Intent());
     }
 
