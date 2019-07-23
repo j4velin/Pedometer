@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.PermissionChecker;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 
-public class Activity_Main extends FragmentActivity {
+public class Activity_Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle b) {
@@ -46,10 +47,11 @@ public class Activity_Main extends FragmentActivity {
             // Create new fragment and transaction
             Fragment newFragment = new Fragment_Overview();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-            // Replace whatever is in the fragment_container view with this
-            // fragment,
-            // and add the transaction to the back stack
+            /**
+             * Replace whatever is in the fragment_container view with this
+             * fragment,
+             * and add the transaction to the back stack
+             */
             transaction.replace(android.R.id.content, newFragment);
 
             // Commit the transaction
@@ -84,18 +86,7 @@ public class Activity_Main extends FragmentActivity {
                 break;
             case R.id.action_leaderboard:
             case R.id.action_achievements:
-                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-                builder2.setTitle("Google services required");
-                builder2.setMessage(
-                        "This feature is not available on the F-Droid version of the app");
-                builder2.setNegativeButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                builder2.create().show();
+               achievementsDialog();
                 break;
             case R.id.action_faq:
                 startActivity(new Intent(Intent.ACTION_VIEW,
@@ -103,31 +94,52 @@ public class Activity_Main extends FragmentActivity {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 break;
             case R.id.action_about:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.about);
-                TextView tv = new TextView(this);
-                tv.setPadding(10, 10, 10, 10);
-                tv.setText(R.string.about_text_links);
-                try {
-                    tv.append(getString(R.string.about_app_version,
-                            getPackageManager().getPackageInfo(getPackageName(), 0).versionName));
-                } catch (NameNotFoundException e1) {
-                    // should not happen as the app is definitely installed when
-                    // seeing the dialog
-                    e1.printStackTrace();
-                }
-                tv.setMovementMethod(LinkMovementMethod.getInstance());
-                builder.setView(tv);
-                builder.setPositiveButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                builder.create().show();
+               aboutDialog();
                 break;
         }
         return true;
+    }
+
+    private void achievementsDialog() {
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle("Google services required");
+        builder2.setMessage(
+                "This feature is not available on the F-Droid version of the app");
+        builder2.setNegativeButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder2.create().show();
+    }
+
+    private void aboutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.about);
+        TextView tv = new TextView(this);
+        tv.setPadding(10, 10, 10, 10);
+        tv.setText(R.string.about_text_links);
+        try {
+            tv.append(getString(R.string.about_app_version,
+                    getPackageManager().getPackageInfo(getPackageName(), 0).versionName));
+        } catch (NameNotFoundException e1) {
+            /**
+             * should not happen as the app is definitely installed when
+             * seeing the dialog
+             */
+            e1.printStackTrace();
+        }
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        builder.setView(tv);
+        builder.setPositiveButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.create().show();
     }
 }

@@ -104,8 +104,9 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             }
         });
 
-        pg.setDrawValueInPie(false);
-        pg.setUsePieRotation(true);
+        pg.setUseInnerValue(false);
+        pg.setRotation(360);
+
         pg.startAnimation();
         return v;
     }
@@ -113,7 +114,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+//        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Database db = Database.getInstance(getActivity());
 
