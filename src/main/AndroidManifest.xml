@@ -6,9 +6,7 @@
     android:versionCode="1511"
     android:versionName="1.5.11">
 
-    <uses-sdk
-        android:minSdkVersion="19"
-        android:targetSdkVersion="26"/>
+    <uses-sdk android:targetSdkVersion="26"/>
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
@@ -17,7 +15,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" android:maxSdkVersion="26"/>
 
     <application
         android:allowBackup="true"
