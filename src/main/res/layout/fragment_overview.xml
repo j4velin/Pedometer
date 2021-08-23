@@ -91,4 +91,14 @@
         eaze:egLegendHeight="35dp"
         eaze:egShowValues="true"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@drawable/fab"
+        android:id="@+id/fab"
+        android:layout_margin="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/todo" />
+
 </RelativeLayout>

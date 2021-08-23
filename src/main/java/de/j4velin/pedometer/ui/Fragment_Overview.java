@@ -36,7 +36,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.eazegraph.lib.charts.BarChart;
 import org.eazegraph.lib.charts.PieChart;
@@ -62,7 +64,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     private TextView stepsView, totalView, averageView;
     private PieModel sliceGoal, sliceCurrent;
     private PieChart pg;
-
+    ImageView imageViewFab;
     private int todayOffset, total_start, goal, since_boot, total_days;
     public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
     private boolean showSteps = true;
@@ -84,6 +86,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         final View v = inflater.inflate(R.layout.fragment_overview, null);
         stepsView = (TextView) v.findViewById(R.id.steps);
         totalView = (TextView) v.findViewById(R.id.total);
+        imageViewFab = (ImageView) v.findViewById(R.id.fab);
         averageView = (TextView) v.findViewById(R.id.average);
 
         pg = (PieChart) v.findViewById(R.id.graph);
@@ -104,6 +107,13 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             }
         });
 
+        imageViewFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog_Split.getDialog(getActivity(),
+                        total_start + Math.max(todayOffset + since_boot, 0)).show();
+            }
+        });
         pg.setDrawValueInPie(false);
         pg.setUsePieRotation(true);
         pg.startAnimation();
