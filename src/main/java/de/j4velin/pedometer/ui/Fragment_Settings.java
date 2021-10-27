@@ -32,6 +32,7 @@ import android.os.Environment;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -157,18 +158,17 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         switch (preference.getTitleRes()) {
             case R.string.goal:
                 builder = new AlertDialog.Builder(getActivity());
-                final NumberPicker np = new NumberPicker(getActivity());
-                np.setMinValue(1);
-                np.setMaxValue(100000);
-                np.setValue(prefs.getInt("goal", 10000));
-                builder.setView(np);
+                final EditText ed = new EditText(getActivity());
+                ed.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_CLASS_NUMBER);
+                ed.setText(String.valueOf(prefs.getInt("goal", 10000)));
+                builder.setView(ed);
                 builder.setTitle(R.string.set_goal);
                 builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        np.clearFocus();
-                        prefs.edit().putInt("goal", np.getValue()).commit();
-                        preference.setSummary(getString(R.string.goal_summary, np.getValue()));
+                        ed.clearFocus();
+                        prefs.edit().putInt("goal", Integer.parseInt(ed.getText().toString())).commit();
+                        preference.setSummary(getString(R.string.goal_summary, Integer.parseInt(ed.getText().toString())));
                         dialog.dismiss();
                         getActivity().startService(new Intent(getActivity(), SensorListener.class)
                                 .putExtra("updateNotificationState", true));
