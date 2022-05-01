@@ -33,7 +33,7 @@
     <string name="entries_overwritten">%d bejegyzés felül lett írva az importált adatokkal</string>
     <string name="sign_in_necessary">Bejelentkezés szükséges</string>
     <string name="please_sign_in_with_your_google_account">A funkció használatához jelentkezzen be
-        Google+ fiókjával.
+        Google fiókjával.
     </string>
     <string name="steps">lépések</string>
     <string name="text_color">Szöveg színe:</string>

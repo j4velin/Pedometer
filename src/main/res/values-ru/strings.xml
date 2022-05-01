@@ -25,7 +25,7 @@
     <string name="entries_imported">%d записей импортировано</string>
     <string name="entries_ignored">%d записей было проигнорировано, т.к. они не содержат корректных данных</string>
     <string name="sign_in_necessary">Необходимо выполнить вход</string>
-    <string name="please_sign_in_with_your_google_account">Войдите с помощью учётной записи Google+ для использования данной функции.</string>
+    <string name="please_sign_in_with_your_google_account">Войдите с помощью учётной записи Google для использования данной функции.</string>
     <string name="steps">шагов</string>
     <string name="text_color">Цвет текста:</string>
     <string name="background_color">Цвет фона:</string>

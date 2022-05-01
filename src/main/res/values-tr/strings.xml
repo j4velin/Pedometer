@@ -31,7 +31,7 @@
     <string name="entries_imported">%d girdi içeriye aktarıldı</string>
     <string name="entries_ignored">%d girdi, geçerli veri içermediğinden görmezden gelindi</string>
     <string name="sign_in_necessary">Hesaba giriş gerekli</string>
-    <string name="please_sign_in_with_your_google_account">Bu özelliği kullanmak için lütfen Google+
+    <string name="please_sign_in_with_your_google_account">Bu özelliği kullanmak için lütfen Google
         hesabınıza giriş yapın.
     </string>
     <string name="steps">adım</string>

@@ -25,7 +25,7 @@
     <string name="entries_imported">%d 项条目已导入</string>
     <string name="entries_ignored">%d 项条目被跳过，因为它们不包含有效数据</string>
     <string name="sign_in_necessary">必须要登录</string>
-    <string name="please_sign_in_with_your_google_account">请登录您的 Google+ 帐户才能使用此功能。</string>
+    <string name="please_sign_in_with_your_google_account">请登录您的 Google 帐户才能使用此功能。</string>
     <string name="steps">步</string>
     <string name="text_color">文字颜色：</string>
     <string name="background_color">背景颜色：</string>

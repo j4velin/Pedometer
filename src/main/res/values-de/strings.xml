@@ -25,7 +25,7 @@
     <string name="entries_imported">%d Einträge wurden importiert</string>
     <string name="entries_ignored">%d Einträge wurden ignoriert, da diese in keinem gültigen Format vorlagen</string>
     <string name="sign_in_necessary">Login erforderlich</string>
-    <string name="please_sign_in_with_your_google_account">Bitte logge dich mit deinem Google+ Konto ein um diese Funktion zu nutzen.</string>
+    <string name="please_sign_in_with_your_google_account">Bitte logge dich mit deinem Google Konto ein um diese Funktion zu nutzen.</string>
     <string name="steps">Schritte</string>
     <string name="text_color">Text-Farbe:</string>
     <string name="background_color">Hintergrund-Farbe:</string>

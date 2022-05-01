@@ -27,7 +27,7 @@
     <string name="entries_imported">%d entrées importées</string>
     <string name="entries_ignored">%d entrées sont ignorées pour cause de données invalides</string>
     <string name="sign_in_necessary">Enregistrement nécessaire</string>
-    <string name="please_sign_in_with_your_google_account">Merci de vous enregistrer avec votre compte Google+ pour utiliser cette fonctionnalité.</string>
+    <string name="please_sign_in_with_your_google_account">Merci de vous enregistrer avec votre compte Google pour utiliser cette fonctionnalité.</string>
     <string name="steps">pas</string>
     <string name="text_color">Couleur de texte:</string>
     <string name="background_color">Couleur de fond:</string>

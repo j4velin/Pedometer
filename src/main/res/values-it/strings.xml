@@ -32,7 +32,7 @@
     <string name="pause">In pausa</string>
     <string name="pause_on_power_summary">Metti in pausa il Pedometro quando il dispositivo è in carica</string>
     <string name="pause_on_power_title">In pausa mentre è in carica</string>
-    <string name="please_sign_in_with_your_google_account">Per favore fai il login con il tuo account Google+ per usare questa funzionalità.</string>
+    <string name="please_sign_in_with_your_google_account">Per favore fai il login con il tuo account Google per usare questa funzionalità.</string>
     <string name="record">Record</string>
     <string name="resume">Riprendi</string>
     <string name="set_goal">Imposta obiettivo</string>
