@@ -26,7 +26,7 @@
     <string name="entries_ignored">%d entradas fueron ignoradas ya que no contenían datos válidos</string>
     <string name="entries_overwritten">%d entradas fueron sobreescritas con los datos importados</string>
     <string name="sign_in_necessary">Inicio de sesión necesario</string>
-    <string name="please_sign_in_with_your_google_account">Por favor, inicia sesión con tu cuenta de Google+ para usar esta funcionalidad.</string>
+    <string name="please_sign_in_with_your_google_account">Por favor, inicia sesión con tu cuenta de Google para usar esta funcionalidad.</string>
     <string name="steps">pasos</string>
     <string name="text_color">Color de texto:</string>
     <string name="background_color">Color de fondo:</string>

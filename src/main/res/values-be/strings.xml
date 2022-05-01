@@ -26,7 +26,7 @@
     <string name="entries_ignored">%d запісаў праігнаравана, бо яны не змяшчаюць правільных даных</string>
     <string name="entries_overwritten">%d запісаў перазапісана імпартаванымі данымі</string>
     <string name="sign_in_necessary">Уваход неабходны</string>
-    <string name="please_sign_in_with_your_google_account">Калі ласка, зайдзіце пад вашым Google+-контам каб скарыстацца гэтай магчымасцю.</string>
+    <string name="please_sign_in_with_your_google_account">Калі ласка, зайдзіце пад вашым Google-контам каб скарыстацца гэтай магчымасцю.</string>
     <string name="steps">крокі</string>
     <string name="text_color">Колер тэксту:</string>
     <string name="background_color">Колер фону:</string>

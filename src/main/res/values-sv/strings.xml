@@ -28,7 +28,7 @@
     <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
     <string name="entries_overwritten">%d poster skrevs över med importerad data</string>
     <string name="sign_in_necessary">Inloggning nödvändig</string>
-    <string name="please_sign_in_with_your_google_account">Logga in med ditt konto på Google+ för att använda den här funktionen.</string>
+    <string name="please_sign_in_with_your_google_account">Logga in med ditt konto på Google för att använda den här funktionen.</string>
     <string name="steps">steg</string>
     <string name="text_color">Textfärg:</string>
     <string name="background_color">Bakgrundsfärg:</string>

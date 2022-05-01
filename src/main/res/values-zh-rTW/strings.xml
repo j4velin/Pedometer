@@ -25,7 +25,7 @@
     <string name="entries_imported">%d 項條目已匯入</string>
     <string name="entries_ignored">%d 項條目被跳過，因為它們不包含有效資料</string>
     <string name="sign_in_necessary">必須要登入</string>
-    <string name="please_sign_in_with_your_google_account">請登入您的 Google+ 帳戶才能使用此功能。</string>
+    <string name="please_sign_in_with_your_google_account">請登入您的 Google 帳戶才能使用此功能。</string>
     <string name="steps">步</string>
     <string name="text_color">文字顏色：</string>
     <string name="background_color">背景顏色：</string>

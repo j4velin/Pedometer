@@ -42,7 +42,7 @@
     <string name="sign_out">সাইন আউট</string>
     <string name="sign_in_necessary">সাইন ইন প্রয়োজনীয়</string>
     <string name="sign_in">কৃতিত্ব এবং লিডারবোর্ড বৈশিষ্ট্যগুলি ব্যবহার করতে আপনার Google অ্যাকাউন্টের মাধ্যমে সাইন ইন করুন</string>
-    <string name="please_sign_in_with_your_google_account">এই বৈশিষ্ট্যটি ব্যবহার করতে আপনার Google+ অ্যাকাউন্টের সাথে সাইন ইন করুন।</string>
+    <string name="please_sign_in_with_your_google_account">এই বৈশিষ্ট্যটি ব্যবহার করতে আপনার Google অ্যাকাউন্টের সাথে সাইন ইন করুন।</string>
     <string name="permission_external_storage">বাহ্যিক সঞ্চয়স্থান অ্যাক্সেস করার অনুমতি নেই</string>
     <string name="notification_title">প্যাডেমোটার গণনা করছে</string>
     <string name="ispaused">প্যাডেমোটার বিরত আছে</string>

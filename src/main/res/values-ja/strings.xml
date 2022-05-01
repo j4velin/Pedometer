@@ -24,7 +24,7 @@
     <string name="entries_imported">%d 件のデータを復元しました</string>
     <string name="entries_ignored">%d 件の無効なデータをスキップしました</string>
     <string name="sign_in_necessary">サインインが必要です</string>
-    <string name="please_sign_in_with_your_google_account">この機能を利用するにはGoogle+のアカウントでサインインしてください</string>
+    <string name="please_sign_in_with_your_google_account">この機能を利用するにはGoogleのアカウントでサインインしてください</string>
     <string name="steps">歩</string>
     <string name="text_color">文字の色:</string>
     <string name="background_color">背景の色:</string>

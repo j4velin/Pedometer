@@ -28,7 +28,7 @@
     <string name="entries_ignored">%d merkintää ei huomioitu koska ne eivät olleet oikeassa muodossa</string>
     <string name="entries_overwritten">%d merkintää ylikirjoitettiin tuoduilla tiedoilla</string>
     <string name="sign_in_necessary">Sisäänkirjautuminen vaadittu</string>
-    <string name="please_sign_in_with_your_google_account">Kirjaudu sisään Google+ -tililläsi käyttääksesi tätä ominaisuutta.</string>
+    <string name="please_sign_in_with_your_google_account">Kirjaudu sisään Google -tililläsi käyttääksesi tätä ominaisuutta.</string>
     <string name="steps">askelta</string>
     <string name="text_color">Tekstin väri:</string>
     <string name="background_color">Taustan väri:</string>
