@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="de.j4velin.pedometer"
-    android:versionCode="1511"
-    android:versionName="1.5.11">
-
-    <uses-sdk android:targetSdkVersion="33" />
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
@@ -13,6 +8,9 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission
         android:name="android.permission.WAKE_LOCK"
         android:maxSdkVersion="26" />
@@ -50,7 +48,9 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".SensorListener" />
+        <service
+            android:name=".SensorListener"
+            android:foregroundServiceType="health" />
 
         <service
             android:name=".widget.DashClock"

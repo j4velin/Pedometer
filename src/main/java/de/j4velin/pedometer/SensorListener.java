@@ -16,6 +16,7 @@
 
 package de.j4velin.pedometer;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -26,12 +27,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.IBinder;
+
+import androidx.core.app.ServiceCompat;
+import androidx.core.content.ContextCompat;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -63,6 +69,32 @@ public class SensorListener extends Service implements SensorEventListener {
     private static long lastSaveTime;
 
     private final BroadcastReceiver shutdownReceiver = new ShutdownRecevier();
+
+    /**
+     * @return true, if the step counter may be read. Since Android 10, this requires the
+     * ACTIVITY_RECOGNITION runtime permission, which is also needed to run the service as a
+     * 'health' foreground service
+     */
+    public static boolean hasPermission(final Context context) {
+        return Build.VERSION.SDK_INT < 29 ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACTIVITY_RECOGNITION) ==
+                        PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * Starts the service, if the required permission is granted
+     */
+    public static void start(final Context context) {
+        if (!hasPermission(context)) {
+            if (BuildConfig.DEBUG) Logger.log("can not start SensorListener: permission missing");
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= 26) {
+            API26Wrapper.startForegroundService(context, new Intent(context, SensorListener.class));
+        } else {
+            context.startService(new Intent(context, SensorListener.class));
+        }
+    }
 
     @Override
     public void onAccuracyChanged(final Sensor sensor, int accuracy) {
@@ -117,7 +149,14 @@ public class SensorListener extends Service implements SensorEventListener {
 
     private void showNotification() {
         if (Build.VERSION.SDK_INT >= 26) {
-            startForeground(NOTIFICATION_ID, getNotification(this));
+            try {
+                ServiceCompat.startForeground(this, NOTIFICATION_ID, getNotification(this),
+                        Build.VERSION.SDK_INT >= 34 ? ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH : 0);
+            } catch (SecurityException e) {
+                // permission got revoked
+                if (BuildConfig.DEBUG) Logger.log(e);
+                stopSelf();
+            }
         } else if (getSharedPreferences("pedometer", Context.MODE_PRIVATE)
                 .getBoolean("notification", true)) {
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
@@ -146,7 +185,7 @@ public class SensorListener extends Service implements SensorEventListener {
                 (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         PendingIntent pi = PendingIntent
                 .getService(getApplicationContext(), 2, new Intent(this, SensorListener.class),
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         if (Build.VERSION.SDK_INT >= 23) {
             API23Wrapper.setAlarmWhileIdle(am, AlarmManager.RTC, nextUpdate, pi);
         } else {
@@ -169,7 +208,8 @@ public class SensorListener extends Service implements SensorEventListener {
         // Restart service in 500 ms
         ((AlarmManager) getSystemService(Context.ALARM_SERVICE))
                 .set(AlarmManager.RTC, System.currentTimeMillis() + 500, PendingIntent
-                        .getService(this, 3, new Intent(this, SensorListener.class), 0));
+                        .getService(this, 3, new Intent(this, SensorListener.class),
+                                PendingIntent.FLAG_IMMUTABLE));
     }
 
     @Override
@@ -215,7 +255,7 @@ public class SensorListener extends Service implements SensorEventListener {
         notificationBuilder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
                 .setContentIntent(PendingIntent
                         .getActivity(context, 0, new Intent(context, Activity_Main.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT))
+                                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE))
                 .setSmallIcon(R.drawable.ic_notification).setOngoing(true);
         return notificationBuilder.build();
     }
@@ -224,7 +264,8 @@ public class SensorListener extends Service implements SensorEventListener {
         if (BuildConfig.DEBUG) Logger.log("register broadcastreceiver");
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SHUTDOWN);
-        registerReceiver(shutdownReceiver, filter);
+        ContextCompat.registerReceiver(this, shutdownReceiver, filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED);
     }
 
     private void reRegisterSensor() {

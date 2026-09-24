@@ -11,7 +11,7 @@
     <string name="steps">कदम</string>
     <string name="stop">रोकें</string>
     <string name="data_saved">%s डेटा सहेजा गया</string>
-    <string name="about_text_links">इस ऐप को डिज़ाइन किया गया था थॉमस हॉफमैन और पॉल सेक 'के साथ <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> और सर्गे मार्गरिटोव 'के साथ <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> का उपयोग करके।\n\nपेडोमीटर ओपन सोर्स है! कोड और पूरी सदस्य सूची <a href="https://github.com/j4velin/Pedometer">GitHub</a> से प्राप्त करें।</string>
+    <string name="about_text_links">इस ऐप को डिज़ाइन किया गया था थॉमस हॉफमैन और पॉल सेक \'के साथ <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> और सर्गे मार्गरिटोव \'के साथ <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> का उपयोग करके।\n\nपेडोमीटर ओपन सोर्स है! कोड और पूरी सदस्य सूची <a href="https://github.com/j4velin/Pedometer">GitHub</a> से प्राप्त करें।</string>
     <string name="export_summary">अपने डेटा को .csv फ़ाइल में सहेजें</string>
     <string name="goal">लक्ष्य</string>
     <string name="set_goal">लक्ष्य सेट करें</string>

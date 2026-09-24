@@ -23,9 +23,8 @@ import android.preference.Preference;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.games.Games;
+import com.google.android.gms.games.PlayGames;
 
-import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.ui.Activity_Main;
 
@@ -41,7 +40,7 @@ public class PlaySettingsWrapper {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(main);
-                View v = main.getLayoutInflater().inflate(R.layout.signin, null);
+                final View v = main.getLayoutInflater().inflate(R.layout.signin, null);
                 builder.setView(v);
                 builder.setNegativeButton(android.R.string.cancel,
                         new DialogInterface.OnClickListener() {
@@ -50,24 +49,12 @@ public class PlaySettingsWrapper {
                                 dialog.dismiss();
                             }
                         });
-                if (main.getGC().isConnected()) {
-                    ((TextView) v.findViewById(R.id.signedin)).setText(
-                            main.getString(R.string.signed_in,
-                                    Games.Players.getCurrentPlayer(main.getGC()).getDisplayName()));
-                    v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-                    builder.setPositiveButton(R.string.sign_out,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    main.signOut();
-                                    preference.setSummary(main.getString(R.string.sign_in));
-                                    dialog.dismiss();
-                                }
-                            });
-                }
                 final Dialog d = builder.create();
-
-                if (!main.getGC().isConnected()) {
+                if (main.isSignedIn()) {
+                    // Play Games v2 has no sign out: players manage that in the Play Games app
+                    v.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+                    showPlayerName(main, (TextView) v.findViewById(R.id.signedin), null);
+                } else {
                     v.findViewById(R.id.signedin).setVisibility(View.GONE);
                     v.findViewById(R.id.sign_in_button)
                             .setOnClickListener(new View.OnClickListener() {
@@ -83,33 +70,22 @@ public class PlaySettingsWrapper {
                 return false;
             }
         });
-        // If created for the first time, the GameClient should be setup and be
-        // connected, but when recreating the fragment (due to orientation
-        // change for example), then the fragment's onCreate is called before
-        // the new GamesClient is setup. In this case, just use the player name
-        // saved in the savedInstanceState bundle
-        if ((savedInstanceState == null && main.getGC().
-
-                isConnected()
-
-        ) || (savedInstanceState != null && savedInstanceState.containsKey("player")))
-
-        {
-            account.setSummary(main.getString(R.string.signed_in, savedInstanceState == null ?
-                    Games.Players.getCurrentPlayer(main.getGC()).getDisplayName() :
-                    savedInstanceState.getString("player")));
+        if (main.isSignedIn()) {
+            showPlayerName(main, null, account);
         }
+    }
 
+    private static void showPlayerName(final Activity_Main main, final TextView view,
+                                       final Preference preference) {
+        PlayGames.getPlayersClient(main).getCurrentPlayer().addOnSuccessListener(player -> {
+            String text = main.getString(R.string.signed_in, player.getDisplayName());
+            if (view != null) view.setText(text);
+            if (preference != null) preference.setSummary(text);
+        });
     }
 
     public static void onSavedInstance(final Bundle outState, final Activity_Main main) {
-        try {
-            if (main.getGC().isConnected()) outState.putString("player",
-                    Games.Players.getCurrentPlayer(main.getGC()).getDisplayName());
-            else outState.remove("player");
-        } catch (Exception e) {
-            if (BuildConfig.DEBUG) Logger.log(e);
-        }
+
     }
 
 }

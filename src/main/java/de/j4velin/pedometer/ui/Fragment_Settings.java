@@ -15,7 +15,7 @@
  */
 package de.j4velin.pedometer.ui;
 
-import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -24,14 +24,14 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.provider.OpenableColumns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,28 +40,33 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
-import de.j4velin.pedometer.util.API23Wrapper;
 import de.j4velin.pedometer.util.API26Wrapper;
 import de.j4velin.pedometer.util.PlaySettingsWrapper;
+import de.j4velin.pedometer.util.Util;
 
 public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
 
     final static int DEFAULT_GOAL = 10000;
     final static float DEFAULT_STEP_SIZE = Locale.getDefault() == Locale.US ? 2.5f : 75f;
     final static String DEFAULT_STEP_UNIT = Locale.getDefault() == Locale.US ? "ft" : "cm";
+
+    private final static int REQUEST_EXPORT = 1;
+    private final static int REQUEST_IMPORT = 2;
+    private final static String CSV_MIME_TYPE = "text/csv";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -126,8 +131,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         super.onResume();
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         if (Build.VERSION.SDK_INT >= 26) { // notification settings might have changed
-            API26Wrapper.startForegroundService(getActivity(),
-                    new Intent(getActivity(), SensorListener.class));
+            SensorListener.start(getActivity());
         }
     }
 
@@ -154,238 +158,124 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         View v;
         final SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        switch (preference.getTitleRes()) {
-            case R.string.goal:
-                builder = new AlertDialog.Builder(getActivity());
-                final NumberPicker np = new NumberPicker(getActivity());
-                np.setMinValue(1);
-                np.setMaxValue(100000);
-                np.setValue(prefs.getInt("goal", 10000));
-                builder.setView(np);
-                builder.setTitle(R.string.set_goal);
-                builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        np.clearFocus();
-                        prefs.edit().putInt("goal", np.getValue()).commit();
-                        preference.setSummary(getString(R.string.goal_summary, np.getValue()));
-                        dialog.dismiss();
-                        getActivity().startService(new Intent(getActivity(), SensorListener.class)
-                                .putExtra("updateNotificationState", true));
-                    }
-                });
-                builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                Dialog dialog = builder.create();
-                dialog.getWindow().setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                dialog.show();
-                break;
-            case R.string.step_size:
-                builder = new AlertDialog.Builder(getActivity());
-                v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);
-                final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
-                final EditText value = (EditText) v.findViewById(R.id.value);
-                unit.check(
-                        prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm :
-                                R.id.ft);
-                value.setText(String.valueOf(prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE)));
-                builder.setView(v);
-                builder.setTitle(R.string.set_step_size);
-                builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            prefs.edit().putFloat("stepsize_value",
-                                    Float.valueOf(value.getText().toString()))
-                                    .putString("stepsize_unit",
-                                            unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft")
-                                    .apply();
-                            preference.setSummary(getString(R.string.step_size_summary,
-                                    Float.valueOf(value.getText().toString()),
-                                    unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
-                        } catch (NumberFormatException nfe) {
-                            nfe.printStackTrace();
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
-                break;
-            case R.string.import_title:
-            case R.string.export_title:
-                if (hasWriteExternalPermission()) {
-                    if (preference.getTitleRes() == R.string.import_title) {
-                        importCsv();
-                    } else {
-                        exportCsv();
-                    }
-                } else if (Build.VERSION.SDK_INT >= 23) {
-                    API23Wrapper.requestPermission(getActivity(),
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
-                } else {
-                    Toast.makeText(getActivity(), R.string.permission_external_storage,
-                            Toast.LENGTH_SHORT).show();
+        final String key = preference.getKey();
+        if ("goal".equals(key)) {
+            builder = new AlertDialog.Builder(getActivity());
+            final NumberPicker np = new NumberPicker(getActivity());
+            np.setMinValue(1);
+            np.setMaxValue(100000);
+            np.setValue(prefs.getInt("goal", 10000));
+            builder.setView(np);
+            builder.setTitle(R.string.set_goal);
+            builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    np.clearFocus();
+                    prefs.edit().putInt("goal", np.getValue()).commit();
+                    preference.setSummary(getString(R.string.goal_summary, np.getValue()));
+                    dialog.dismiss();
+                    SensorListener.start(getActivity());
                 }
-                break;
-            case R.string.notification_settings:
-                API26Wrapper.launchNotificationSettings(getActivity());
-                break;
+            });
+            builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            Dialog dialog = builder.create();
+            dialog.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            dialog.show();
+        } else if ("stepsize".equals(key)) {
+            builder = new AlertDialog.Builder(getActivity());
+            v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);
+            final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
+            final EditText value = (EditText) v.findViewById(R.id.value);
+            unit.check(
+                    prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm :
+                            R.id.ft);
+            value.setText(String.valueOf(prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE)));
+            builder.setView(v);
+            builder.setTitle(R.string.set_step_size);
+            builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        prefs.edit().putFloat("stepsize_value",
+                                Float.valueOf(value.getText().toString()))
+                                .putString("stepsize_unit",
+                                        unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft")
+                                .apply();
+                        preference.setSummary(getString(R.string.step_size_summary,
+                                Float.valueOf(value.getText().toString()),
+                                unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
+                    } catch (NumberFormatException nfe) {
+                        nfe.printStackTrace();
+                    }
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.create().show();
+        } else if ("export".equals(key)) {
+            startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT)
+                    .addCategory(Intent.CATEGORY_OPENABLE).setType(CSV_MIME_TYPE)
+                    .putExtra(Intent.EXTRA_TITLE, "Pedometer.csv"), REQUEST_EXPORT);
+        } else if ("import".equals(key)) {
+            startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    .addCategory(Intent.CATEGORY_OPENABLE).setType("*/*")
+                    .putExtra(Intent.EXTRA_MIME_TYPES,
+                            new String[]{CSV_MIME_TYPE, "text/comma-separated-values",
+                                    "text/plain", "application/octet-stream"}), REQUEST_IMPORT);
+        } else if ("notification".equals(key)) {
+            API26Wrapper.launchNotificationSettings(getActivity());
         }
         return false;
     }
 
-    private boolean hasWriteExternalPermission() {
-        return getActivity().getPackageManager()
-                .checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        getActivity().getPackageName()) == PackageManager.PERMISSION_GRANTED;
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (resultCode != Activity.RESULT_OK || data == null || data.getData() == null) {
+            super.onActivityResult(requestCode, resultCode, data);
+        } else if (requestCode == REQUEST_EXPORT) {
+            exportCsv(data.getData());
+        } else if (requestCode == REQUEST_IMPORT) {
+            importCsv(data.getData());
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
-    /**
-     * Creates the CSV file containing data about past days and the steps taken on them
-     * <p/>
-     * Requires external storage to be writeable
-     */
-    private void exportCsv() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            final File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
-            if (f.exists()) {
-                new AlertDialog.Builder(getActivity()).setMessage(R.string.file_already_exists)
-                        .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                writeToFile(f);
-                            }
-                        }).setNegativeButton(android.R.string.cancel, new OnClickListener() {
+    private void showMessage(final String message) {
+        new AlertDialog.Builder(getActivity()).setMessage(message)
+                .setPositiveButton(android.R.string.ok, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 }).create().show();
-            } else {
-                writeToFile(f);
-            }
-        } else {
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.error_external_storage_not_available)
-                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
-        }
     }
 
     /**
-     * Imports previously exported data from a csv file
-     * <p/>
-     * Requires external storage to be readable. Overwrites days for which there is already an entry in the database
+     * Writes a CSV file containing data about past days and the steps taken on them
+     *
+     * @param uri the document picked by the user
      */
-    private void importCsv() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File f = new File(Environment.getExternalStorageDirectory(), "Pedometer.csv");
-            if (!f.exists() || !f.canRead()) {
-                new AlertDialog.Builder(getActivity())
-                        .setMessage(getString(R.string.file_cant_read, f.getAbsolutePath()))
-                        .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create().show();
-                return;
-            }
-            Database db = Database.getInstance(getActivity());
-            String line;
-            String[] data;
-            int ignored = 0, inserted = 0, overwritten = 0;
-            BufferedReader in;
-            try {
-                in = new BufferedReader(new FileReader(f));
-                while ((line = in.readLine()) != null) {
-                    data = line.split(";");
-                    try {
-                        if (db.insertDayFromBackup(Long.valueOf(data[0]),
-                                Integer.valueOf(data[1]))) {
-                            inserted++;
-                        } else {
-                            overwritten++;
-                        }
-                    } catch (Exception nfe) {
-                        ignored++;
-                    }
-                }
-                in.close();
-            } catch (IOException e) {
-                new AlertDialog.Builder(getActivity())
-                        .setMessage(getString(R.string.error_file, e.getMessage()))
-                        .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create().show();
-                e.printStackTrace();
-                return;
-            } finally {
-                db.close();
-            }
-            String message = getString(R.string.entries_imported, inserted + overwritten);
-            if (overwritten > 0)
-                message += "\n\n" + getString(R.string.entries_overwritten, overwritten);
-            if (ignored > 0) message += "\n\n" + getString(R.string.entries_ignored, ignored);
-            new AlertDialog.Builder(getActivity()).setMessage(message)
-                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
-        } else {
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.error_external_storage_not_available)
-                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
-        }
-    }
-
-    private void writeToFile(final File f) {
-        BufferedWriter out;
-        try {
-            f.createNewFile();
-            out = new BufferedWriter(new FileWriter(f));
-        } catch (IOException e) {
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(getString(R.string.error_file, e.getMessage()))
-                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
-            e.printStackTrace();
-            return;
-        }
+    private void exportCsv(final Uri uri) {
         Database db = Database.getInstance(getActivity());
-        Cursor c =
-                db.query(new String[]{"date", "steps"}, "date > 0", null, null, null, "date", null);
-        try {
+        // today's entry is not a step count yet, but the negative sensor value at the start of
+        // the day - exporting it (as 0) would reset today's steps when importing the file again
+        Cursor c = db.query(new String[]{"date", "steps"}, "date > 0 AND date < ?",
+                new String[]{String.valueOf(Util.getToday())}, null, null, "date", null);
+        try (OutputStream os = getActivity().getContentResolver().openOutputStream(uri, "wt")) {
+            if (os == null) throw new IOException(uri.toString());
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
             if (c != null && c.moveToFirst()) {
                 while (!c.isAfterLast()) {
                     out.append(c.getString(0)).append(";")
@@ -394,29 +284,69 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                 }
             }
             out.flush();
-            out.close();
-        } catch (IOException e) {
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(getString(R.string.error_file, e.getMessage()))
-                    .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
+        } catch (IOException | SecurityException e) {
+            showMessage(getString(R.string.error_file, e.getMessage()));
             e.printStackTrace();
             return;
         } finally {
             if (c != null) c.close();
             db.close();
         }
-        new AlertDialog.Builder(getActivity())
-                .setMessage(getString(R.string.data_saved, f.getAbsolutePath()))
-                .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+        showMessage(getString(R.string.data_saved, getDisplayName(uri)));
+    }
+
+    /**
+     * Imports previously exported data from a csv file.
+     * Overwrites days for which there is already an entry in the database
+     *
+     * @param uri the document picked by the user
+     */
+    private void importCsv(final Uri uri) {
+        Database db = Database.getInstance(getActivity());
+        String line;
+        String[] data;
+        int ignored = 0, inserted = 0, overwritten = 0;
+        final long today = Util.getToday();
+        try (InputStream is = getActivity().getContentResolver().openInputStream(uri)) {
+            if (is == null) throw new IOException(uri.toString());
+            BufferedReader in = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            while ((line = in.readLine()) != null) {
+                data = line.split(";");
+                try {
+                    long date = Long.parseLong(data[0]);
+                    // files exported by older versions contain today's entry (as 0 steps),
+                    // which would overwrite today's offset and thereby the steps taken so far
+                    if (date >= today) continue;
+                    if (db.insertDayFromBackup(date, Integer.valueOf(data[1]))) {
+                        inserted++;
+                    } else {
+                        overwritten++;
                     }
-                }).create().show();
+                } catch (Exception nfe) {
+                    ignored++;
+                }
+            }
+        } catch (IOException | SecurityException e) {
+            showMessage(getString(R.string.file_cant_read, getDisplayName(uri)));
+            e.printStackTrace();
+            return;
+        } finally {
+            db.close();
+        }
+        String message = getString(R.string.entries_imported, inserted + overwritten);
+        if (overwritten > 0)
+            message += "\n\n" + getString(R.string.entries_overwritten, overwritten);
+        if (ignored > 0) message += "\n\n" + getString(R.string.entries_ignored, ignored);
+        showMessage(message);
+    }
+
+    private String getDisplayName(final Uri uri) {
+        try (Cursor c = getActivity().getContentResolver()
+                .query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+            if (c != null && c.moveToFirst()) return c.getString(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return uri.getLastPathSegment();
     }
 }

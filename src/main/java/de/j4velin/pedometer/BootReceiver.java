@@ -21,17 +21,48 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.provider.Settings;
 
-import de.j4velin.pedometer.util.API26Wrapper;
 import de.j4velin.pedometer.util.Logger;
 
 public class BootReceiver extends BroadcastReceiver {
+
+    private final static String PREF_BOOT_COUNT = "bootCount";
+
+    /**
+     * @return the number of times the device has booted or -1, if not available
+     */
+    private static int getBootCount(final Context context) {
+        return Build.VERSION.SDK_INT >= 24 ? Settings.Global
+                .getInt(context.getContentResolver(), Settings.Global.BOOT_COUNT, -1) : -1;
+    }
+
+    /**
+     * Remembers the current boot, so that a BOOT_COMPLETED broadcast for it is not mistaken
+     * for a reboot
+     */
+    static void saveBootCount(final Context context) {
+        context.getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
+                .putInt(PREF_BOOT_COUNT, getBootCount(context)).apply();
+    }
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
         if (BuildConfig.DEBUG) Logger.log("booted");
 
         SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+
+        // Since Android 15, BOOT_COMPLETED is also sent when the app is started for the first
+        // time after being installed or force stopped. The step counter is only reset by an
+        // actual reboot though, and treating anything else as one would drop today's offset
+        int bootCount = getBootCount(context);
+        int lastBootCount = prefs.getInt(PREF_BOOT_COUNT, -1);
+        prefs.edit().putInt(PREF_BOOT_COUNT, bootCount).apply();
+        if (bootCount != -1 && (lastBootCount == -1 || bootCount == lastBootCount)) {
+            if (BuildConfig.DEBUG) Logger.log("not a reboot, boot count: " + bootCount);
+            SensorListener.start(context);
+            return;
+        }
 
         Database db = Database.getInstance(context);
 
@@ -49,10 +80,6 @@ public class BootReceiver extends BroadcastReceiver {
         db.close();
         prefs.edit().remove("correctShutdown").apply();
         
-        if (Build.VERSION.SDK_INT >= 26) {
-            API26Wrapper.startForegroundService(context, new Intent(context, SensorListener.class));
-        } else {
-            context.startService(new Intent(context, SensorListener.class));
-        }
+        SensorListener.start(context);
     }
 }

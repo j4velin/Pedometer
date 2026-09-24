@@ -16,13 +16,13 @@
 
 package de.j4velin.pedometer.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
+import com.google.android.gms.games.PlayGames;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
@@ -35,52 +35,49 @@ public abstract class PlayServices {
     /**
      * Updates the 'most steps walked' leaderboard score
      *
-     * @param gc         the GamesClient
+     * @param gc         the Activity
      * @param c          the Context
      * @param totalSteps the new score = total steps walked
      */
-    private static void updateTotalLeaderboard(final GoogleApiClient gc, final Context c, int totalSteps) {
+    private static void updateTotalLeaderboard(final Activity gc, final Context c, int totalSteps) {
         // some cheat detection needed?
-        Games.Leaderboards
-                .submitScore(gc, c.getString(R.string.leaderboard_most_steps_walked), totalSteps);
+        PlayGames.getLeaderboardsClient(gc).submitScore(c.getString(R.string.leaderboard_most_steps_walked), totalSteps);
     }
 
     /**
      * Updates the 'most steps walked in one day' leaderboard score
      *
-     * @param gc    the GamesClient
+     * @param gc    the Activity
      * @param c     the Context
      * @param steps the new score = max number of steps walked in one day
      */
-    private static void updateOneDayLeaderboard(final GoogleApiClient gc, final Context c, int steps) {
+    private static void updateOneDayLeaderboard(final Activity gc, final Context c, int steps) {
         // some cheat detection needed?
-        Games.Leaderboards
-                .submitScore(gc, c.getString(R.string.leaderboard_most_steps_walked_in_one_day),
+        PlayGames.getLeaderboardsClient(gc).submitScore(c.getString(R.string.leaderboard_most_steps_walked_in_one_day),
                         steps);
     }
 
     /**
      * Updates the 'hightest average' leaderboard score
      *
-     * @param gc  the GamesClient
+     * @param gc  the Activity
      * @param c   the Context
      * @param avg the new score = current average
      */
-    private static void updateAverageLeaderboard(final GoogleApiClient gc, final Context c, float avg) {
+    private static void updateAverageLeaderboard(final Activity gc, final Context c, float avg) {
         // some cheat detection needed?
-        Games.Leaderboards
-                .submitScore(gc, c.getString(R.string.leaderboard_highest_average), (long) avg);
+        PlayGames.getLeaderboardsClient(gc).submitScore(c.getString(R.string.leaderboard_highest_average), (long) avg);
     }
 
     /**
      * Check the conditions for not-yet-unlocked achievements and unlock them if
      * the condition is met and updates the leaderboard
      *
-     * @param gc      the GamesClient
+     * @param gc      the Activity, the player must be signed in
      * @param context the Context
      */
-    public static void achievementsAndLeaderboard(final GoogleApiClient gc, final Context context) {
-        if (gc.isConnected()) {
+    public static void achievementsAndLeaderboard(final Activity gc, final Context context) {
+        {
             Database db = Database.getInstance(context);
             db.removeInvalidEntries();
 
@@ -249,7 +246,7 @@ public abstract class PlayServices {
         }
     }
 
-    private static void unlockAchievement(GoogleApiClient gc, String achivmentName) {
-        Games.Achievements.unlock(gc, achivmentName);
+    private static void unlockAchievement(final Activity gc, final String achivmentName) {
+        PlayGames.getAchievementsClient(gc).unlock(achivmentName);
     }
 }
