@@ -118,22 +118,17 @@ public class SensorListener extends Service implements SensorEventListener {
      * @return true, if notification was updated
      */
     private boolean updateIfNecessary() {
-        if (steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
-                (steps > 0 && System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME)) {
+        // save right after midnight too: until today's entry exists, all new steps are
+        // attributed to yesterday
+        if (steps > lastSaveSteps + SAVE_OFFSET_STEPS || (steps > 0 &&
+                (System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME ||
+                        lastSaveTime < Util.getToday()))) {
             if (BuildConfig.DEBUG) Logger.log(
                     "saving steps: steps=" + steps + " lastSave=" + lastSaveSteps +
                             " lastSaveTime=" + new Date(lastSaveTime));
             Database db = Database.getInstance(this);
             if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
-                int pauseDifference = steps -
-                        getSharedPreferences("pedometer", Context.MODE_PRIVATE)
-                                .getInt("pauseCount", steps);
-                db.insertNewDay(Util.getToday(), steps - pauseDifference);
-                if (pauseDifference > 0) {
-                    // update pauseCount for the new day
-                    getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
-                            .putInt("pauseCount", steps).commit();
-                }
+                db.insertNewDay(Util.getToday(), steps);
             }
             db.saveCurrentSteps(steps);
             db.close();
@@ -172,7 +167,6 @@ public class SensorListener extends Service implements SensorEventListener {
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
         reRegisterSensor();
-        registerBroadcastReceiver();
         if (!updateIfNecessary()) {
             showNotification();
         }
@@ -199,6 +193,7 @@ public class SensorListener extends Service implements SensorEventListener {
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) Logger.log("SensorListener onCreate");
+        registerBroadcastReceiver();
     }
 
     @Override
@@ -216,6 +211,7 @@ public class SensorListener extends Service implements SensorEventListener {
     public void onDestroy() {
         super.onDestroy();
         if (BuildConfig.DEBUG) Logger.log("SensorListener onDestroy");
+        unregisterReceiver(shutdownReceiver);
         try {
             SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
             sm.unregisterListener(this);
@@ -223,6 +219,13 @@ public class SensorListener extends Service implements SensorEventListener {
             if (BuildConfig.DEBUG) Logger.log(e);
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @return the latest step counter value this service received, or 0 if there was none yet
+     */
+    static int getLastSensorValue() {
+        return steps;
     }
 
     public static Notification getNotification(final Context context) {

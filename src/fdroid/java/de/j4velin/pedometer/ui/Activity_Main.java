@@ -50,7 +50,7 @@ public class Activity_Main extends FragmentActivity {
             // Commit the transaction
             transaction.commit();
         }
-        ActivityHelper.onCreate(this);
+        ActivityHelper.onCreate(this, b);
     }
 
     @Override

@@ -48,6 +48,8 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
+        // the receiver is exported, so other apps could send anything to it
+        if (!Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) return;
         if (BuildConfig.DEBUG) Logger.log("booted");
 
         SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_PRIVATE);

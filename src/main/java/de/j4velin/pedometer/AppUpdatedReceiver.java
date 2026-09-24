@@ -26,10 +26,15 @@ public class AppUpdatedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
+        // the receiver is exported, so other apps could send anything to it
+        if (!Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())) return;
         if (BuildConfig.DEBUG) Logger.log("app updated");
         // older versions did not store the boot count, so the first real reboot after
         // the update would otherwise not be recognized as one
         BootReceiver.saveBootCount(context);
+        // left over from the removed "pause" feature
+        context.getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
+                .remove("pauseCount").apply();
         SensorListener.start(context);
     }
 

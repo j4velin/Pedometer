@@ -270,6 +270,7 @@ public class Database extends SQLiteOpenHelper {
                 result.add(new Pair<>(c.getLong(0), c.getInt(1)));
             } while (c.moveToNext());
         }
+        c.close();
         return result;
     }
 

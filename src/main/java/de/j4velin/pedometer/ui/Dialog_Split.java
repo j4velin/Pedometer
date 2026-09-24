@@ -41,9 +41,9 @@ abstract class Dialog_Split {
         int split_steps = prefs.getInt("split_steps", totalSteps);
         ((TextView) d.findViewById(R.id.steps))
                 .setText(Fragment_Overview.formatter.format(totalSteps - split_steps));
-        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
+        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.getDefaultStepSize());
         float distance = (totalSteps - split_steps) * stepsize;
-        if (prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT).equals("cm")) {
+        if (prefs.getString("stepsize_unit", Fragment_Settings.getDefaultStepUnit()).equals("cm")) {
             distance /= 100000;
             ((TextView) d.findViewById(R.id.distanceunit)).setText("km");
         } else {

@@ -63,7 +63,7 @@ public class Activity_Main extends FragmentActivity {
             transaction.commit();
         }
 
-        ActivityHelper.onCreate(this);
+        ActivityHelper.onCreate(this, b);
 
         // Play Games v2 signs the player in automatically, if possible
         PlayGamesSdk.initialize(this);

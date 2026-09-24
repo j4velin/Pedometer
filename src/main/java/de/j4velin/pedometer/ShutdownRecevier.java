@@ -39,12 +39,14 @@ public class ShutdownRecevier extends BroadcastReceiver {
                 .putBoolean("correctShutdown", true).commit();
 
         Database db = Database.getInstance(context);
+        // the saved value might be up to an hour old, while the service (which registered this
+        // receiver) has received newer values in the meantime
+        int steps = Math.max(db.getCurrentSteps(), SensorListener.getLastSensorValue());
         // if it's already a new day, add the temp. steps to the last one
         if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
-            int steps = db.getCurrentSteps();
             db.insertNewDay(Util.getToday(), steps);
         } else {
-            db.addToLastEntry(db.getCurrentSteps());
+            db.addToLastEntry(steps);
         }
         // current steps will be reset on boot @see BootReceiver
         db.close();

@@ -64,6 +64,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     private PieChart pg;
 
     private int todayOffset, total_start, goal, since_boot, total_days;
+    private long today;
     public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
     private boolean showSteps = true;
 
@@ -114,14 +115,14 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
         if (BuildConfig.DEBUG) db.logState();
         // read todays offset
-        todayOffset = db.getSteps(Util.getToday());
+        today = Util.getToday();
+        todayOffset = db.getSteps(today);
 
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
         goal = prefs.getInt("goal", Fragment_Settings.DEFAULT_GOAL);
         since_boot = db.getCurrentSteps();
-        int pauseDifference = since_boot - prefs.getInt("pauseCount", since_boot);
 
         // register a sensorlistener to live update the UI if a step is taken
         SensorManager sm = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -144,8 +145,6 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI, 0);
         }
 
-        since_boot -= pauseDifference;
-
         total_start = db.getTotalWithoutToday();
         total_days = db.getDays();
 
@@ -163,7 +162,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             ((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
         } else {
             String unit = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
-                    .getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT);
+                    .getString("stepsize_unit", Fragment_Settings.getDefaultStepUnit());
             if (unit.equals("cm")) {
                 unit = "km";
             } else {
@@ -220,16 +219,33 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         if (event.values[0] > Integer.MAX_VALUE || event.values[0] == 0) {
             return;
         }
+        boolean dayChanged = Util.getToday() != today;
+        if (dayChanged) {
+            // the app was open at midnight: today's entry might already have been created by
+            // the SensorListener
+            today = Util.getToday();
+            Database db = Database.getInstance(getActivity());
+            todayOffset = db.getSteps(today);
+            db.close();
+        }
         if (todayOffset == Integer.MIN_VALUE) {
             // no values for today
             // we dont know when the reboot was, so set todays steps to 0 by
             // initializing them with -STEPS_SINCE_BOOT
             todayOffset = -(int) event.values[0];
             Database db = Database.getInstance(getActivity());
-            db.insertNewDay(Util.getToday(), (int) event.values[0]);
+            db.insertNewDay(today, (int) event.values[0]);
             db.close();
         }
         since_boot = (int) event.values[0];
+        if (dayChanged) {
+            // yesterday is now part of the total and the bar chart
+            Database db = Database.getInstance(getActivity());
+            total_start = db.getTotalWithoutToday();
+            total_days = db.getDays();
+            db.close();
+            updateBars();
+        }
         updatePie();
     }
 
@@ -265,10 +281,10 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             // update only every 10 steps when displaying distance
             SharedPreferences prefs =
                     getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-            float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
+            float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.getDefaultStepSize());
             float distance_today = steps_today * stepsize;
             float distance_total = (total_start + steps_today) * stepsize;
-            if (prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT)
+            if (prefs.getString("stepsize_unit", Fragment_Settings.getDefaultStepUnit())
                     .equals("cm")) {
                 distance_today /= 100000;
                 distance_total /= 100000;
@@ -291,14 +307,14 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         BarChart barChart = (BarChart) getView().findViewById(R.id.bargraph);
         if (barChart.getData().size() > 0) barChart.clearChart();
         int steps;
-        float distance, stepsize = Fragment_Settings.DEFAULT_STEP_SIZE;
+        float distance, stepsize = Fragment_Settings.getDefaultStepSize();
         boolean stepsize_cm = true;
         if (!showSteps) {
             // load some more settings if distance is needed
             SharedPreferences prefs =
                     getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-            stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-            stepsize_cm = prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT)
+            stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.getDefaultStepSize());
+            stepsize_cm = prefs.getString("stepsize_unit", Fragment_Settings.getDefaultStepUnit())
                     .equals("cm");
         }
         barChart.setShowDecimal(!showSteps); // show decimal in distance view only
@@ -328,6 +344,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             }
         }
         if (barChart.getData().size() > 0) {
+            barChart.setVisibility(View.VISIBLE);
             barChart.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(final View v) {

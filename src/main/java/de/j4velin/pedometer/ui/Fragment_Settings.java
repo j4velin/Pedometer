@@ -61,8 +61,18 @@ import de.j4velin.pedometer.util.Util;
 public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
 
     final static int DEFAULT_GOAL = 10000;
-    final static float DEFAULT_STEP_SIZE = Locale.getDefault() == Locale.US ? 2.5f : 75f;
-    final static String DEFAULT_STEP_UNIT = Locale.getDefault() == Locale.US ? "ft" : "cm";
+    // not constants, as the locale might change while the app is running
+    private static boolean isUS() {
+        return "US".equals(Locale.getDefault().getCountry());
+    }
+
+    static float getDefaultStepSize() {
+        return isUS() ? 2.5f : 75f;
+    }
+
+    static String getDefaultStepUnit() {
+        return isUS() ? "ft" : "cm";
+    }
 
     private final static int REQUEST_EXPORT = 1;
     private final static int REQUEST_IMPORT = 2;
@@ -114,8 +124,8 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         Preference stepsize = findPreference("stepsize");
         stepsize.setOnPreferenceClickListener(this);
         stepsize.setSummary(getString(R.string.step_size_summary,
-                prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE),
-                prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT)));
+                prefs.getFloat("stepsize_value", getDefaultStepSize()),
+                prefs.getString("stepsize_unit", getDefaultStepUnit())));
 
         setHasOptionsMenu(true);
     }
@@ -193,22 +203,23 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
             final EditText value = (EditText) v.findViewById(R.id.value);
             unit.check(
-                    prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm :
+                    prefs.getString("stepsize_unit", getDefaultStepUnit()).equals("cm") ? R.id.cm :
                             R.id.ft);
-            value.setText(String.valueOf(prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE)));
+            value.setText(String.valueOf(prefs.getFloat("stepsize_value", getDefaultStepSize())));
             builder.setView(v);
             builder.setTitle(R.string.set_step_size);
             builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     try {
-                        prefs.edit().putFloat("stepsize_value",
-                                Float.valueOf(value.getText().toString()))
+                        // the keyboard might use the locale's decimal separator
+                        float stepsize = Float.parseFloat(
+                                value.getText().toString().trim().replace(',', '.'));
+                        prefs.edit().putFloat("stepsize_value", stepsize)
                                 .putString("stepsize_unit",
                                         unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft")
                                 .apply();
-                        preference.setSummary(getString(R.string.step_size_summary,
-                                Float.valueOf(value.getText().toString()),
+                        preference.setSummary(getString(R.string.step_size_summary, stepsize,
                                 unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
                     } catch (NumberFormatException nfe) {
                         nfe.printStackTrace();
@@ -273,7 +284,9 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         // the day - exporting it (as 0) would reset today's steps when importing the file again
         Cursor c = db.query(new String[]{"date", "steps"}, "date > 0 AND date < ?",
                 new String[]{String.valueOf(Util.getToday())}, null, null, "date", null);
-        try (OutputStream os = getActivity().getContentResolver().openOutputStream(uri, "wt")) {
+        // the document was just created by ACTION_CREATE_DOCUMENT, so there is nothing to truncate
+        // (and not every provider supports "wt")
+        try (OutputStream os = getActivity().getContentResolver().openOutputStream(uri, "w")) {
             if (os == null) throw new IOException(uri.toString());
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
             if (c != null && c.moveToFirst()) {

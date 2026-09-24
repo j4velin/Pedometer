@@ -19,6 +19,7 @@ package de.j4velin.pedometer.ui;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
@@ -45,8 +46,12 @@ abstract class ActivityHelper {
      * Requests the runtime permissions the step counter service needs (or starts the service if
      * they are already granted) and keeps the content out of the system bars, which the app draws
      * behind since targeting Android 15
+     *
+     * @param savedInstanceState the activity's saved state: the permissions are only requested
+     *                           when the activity is created for the first time, not when it is
+     *                           recreated (for example after a rotation)
      */
-    static void onCreate(final ComponentActivity activity) {
+    static void onCreate(final ComponentActivity activity, final Bundle savedInstanceState) {
         // the fragments are framework fragments, so their back stack is handled here
         activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
             @Override
@@ -79,7 +84,7 @@ abstract class ActivityHelper {
         }
         if (missing.isEmpty()) {
             SensorListener.start(activity);
-        } else {
+        } else if (savedInstanceState == null) {
             activity.requestPermissions(missing.toArray(new String[0]), REQUEST_PERMISSIONS);
         }
     }
