@@ -30,6 +30,7 @@ import de.j4velin.pedometer.domain.TodaySteps
 import de.j4velin.pedometer.ui.Formats
 import de.j4velin.pedometer.ui.theme.HistoryBlue
 import de.j4velin.pedometer.ui.theme.StepsGreen
+import de.j4velin.pedometer.util.Util
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -165,13 +166,15 @@ class OverviewViewModel(private val app: PedometerApp) : ViewModel(), SensorEven
     /** The statistics dialog's figures. Today counts with its steps so far. */
     suspend fun statistics(): Statistics {
         val record = app.history.record()
+        // the calendar in the local time zone; today's entry might be at another zone's midnight
+        val localToday = Util.getToday(accounting.now())
         val today = accounting.today()
         val date = Calendar.getInstance()
-        date.timeInMillis = today
+        date.timeInMillis = localToday
         val daysThisMonth = date.get(Calendar.DAY_OF_MONTH)
         date.add(Calendar.DATE, -6)
         val thisWeek = app.history.stepsSince(date.timeInMillis, today) + stepsToday
-        date.timeInMillis = today
+        date.timeInMillis = localToday
         date.set(Calendar.DAY_OF_MONTH, 1)
         val thisMonth = app.history.stepsSince(date.timeInMillis, today) + stepsToday
         return Statistics(

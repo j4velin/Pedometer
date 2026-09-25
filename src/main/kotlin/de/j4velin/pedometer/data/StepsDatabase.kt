@@ -145,6 +145,18 @@ class StepsDatabase(context: Context) :
         query(arrayOf("steps"), "date = ?", arrayOf(date.toString()), null, null, null, null)
             .use { if (it.moveToFirst()) it.getInt(0) else Int.MIN_VALUE }
 
+    /**
+     * The day of the entry closest to [midnight], if one is less than 12 hours away, or else
+     * [midnight] itself. Each day is stored as its local midnight, and after a change of the time
+     * zone the same date has a different midnight: this finds the entry the date already has.
+     */
+    fun dayNear(midnight: Long): Long =
+        query(
+            arrayOf("date"), "date > ? AND date < ?",
+            arrayOf((midnight - HALF_DAY).toString(), (midnight + HALF_DAY).toString()),
+            null, null, "ABS(date - $midnight)", "1"
+        ).use { if (it.moveToFirst()) it.getLong(0) else midnight }
+
     /** The last [num] days before [day] as date to steps, newest first */
     fun lastDaysBefore(day: Long, num: Int): List<Pair<Long, Int>> =
         query(
@@ -194,5 +206,6 @@ class StepsDatabase(context: Context) :
     private companion object {
         const val DB_NAME = "steps"
         const val DB_VERSION = 2
+        const val HALF_DAY = 12 * 60 * 60 * 1000L
     }
 }

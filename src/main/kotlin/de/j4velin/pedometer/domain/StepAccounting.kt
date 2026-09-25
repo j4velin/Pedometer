@@ -78,8 +78,12 @@ class StepAccounting(
     /** The current time in ms since 1970 */
     fun now(): Long = clock()
 
-    /** The start of the current day */
-    fun today(): Long = Util.getToday(clock())
+    /**
+     * The current day, as its entry stores it: the local midnight - or, if the time zone changed
+     * during the day, the midnight of the zone the day started in, so that the day keeps its
+     * one entry. See [StepsDatabase.dayNear].
+     */
+    fun today(): Long = db.dayNear(Util.getToday(clock()))
 
     /**
      * Reads today's steps anew and publishes them: for a new day, a changed goal, or when the
@@ -167,15 +171,14 @@ class StepAccounting(
     fun saveIfNecessary(): Boolean {
         val steps = lastSensorValue
         val now = clock()
-        // save right after midnight too: until today's entry exists, all new steps are
-        // attributed to yesterday
-        val necessary = steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
-                (steps > 0 && (now > lastSaveTime + SAVE_OFFSET_TIME || lastSaveTime < today()))
-        if (!necessary) return false
         val today = today()
-        if (db.getSteps(today) == Int.MIN_VALUE) {
-            db.insertNewDay(today, steps)
-        }
+        // save as soon as today has no entry, after midnight or a flight into the next date:
+        // until it has one, all new steps are attributed to the day before
+        val started = db.getSteps(today) != Int.MIN_VALUE
+        val necessary = steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
+                (steps > 0 && (now > lastSaveTime + SAVE_OFFSET_TIME || !started))
+        if (!necessary) return false
+        if (!started) db.insertNewDay(today, steps)
         db.saveCurrentSteps(steps)
         lastSaveSteps = steps
         lastSaveTime = now
@@ -263,6 +266,12 @@ class StepAccounting(
         out.flush()
     }
 
+    /**
+     * The day an imported [date] belongs to. Exported in another time zone, it is the midnight of
+     * that zone: this is the closest local midnight, or an entry for that date already there.
+     */
+    private fun day(date: Long): Long = db.dayNear(Util.getToday(date + HALF_DAY))
+
     class ImportResult(val inserted: Int, val overwritten: Int, val ignored: Int)
 
     /**
@@ -279,7 +288,7 @@ class StepAccounting(
         input.buffered().lineSequence().forEach { line ->
             try {
                 val data = line.split(";")
-                val date = data[0].toLong()
+                val date = day(data[0].toLong())
                 if (date >= today) return@forEach
                 if (db.insertDayFromBackup(date, data[1].toInt())) inserted++ else overwritten++
             } catch (e: Exception) {
@@ -292,5 +301,6 @@ class StepAccounting(
     companion object {
         private const val SAVE_OFFSET_TIME = 60 * 60 * 1000L
         private const val SAVE_OFFSET_STEPS = 500
+        private const val HALF_DAY = 12 * 60 * 60 * 1000L
     }
 }
