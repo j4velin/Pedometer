@@ -20,12 +20,8 @@
     <string name="import_title">İçeriye akar/Geri yükle</string>
     <string name="set_goal">Hedef ver</string>
     <string name="set_step_size">Adım boyutunu gir</string>
-    <string name="sign_out">Çıkış yap</string>
     <string name="file_cant_read">Hata: %s okunmadı</string>
     <string name="error_file">Dosyaya erişimde hata: %s</string>
-    <string name="error_external_storage_not_available">Hata: Harici depolama alanı kullanılabilir
-        değil
-    </string>
     <string name="data_saved">Veri %s konumuna kaydedildi.</string>
     <string name="entries_imported">%d girdi içeriye aktarıldı</string>
     <string name="entries_ignored">%d girdi, geçerli veri içermediğinden görmezden gelindi</string>
@@ -51,8 +47,6 @@
     <string name="average_last_7_days">Son 7 günün ortalaması</string>
     <string name="total_this_month">Bu ayın toplamı</string>
     <string name="average_this_month">Bu ayın ortalaması</string>
-    <string name="file_already_exists">Dosya zaten var. Üzerine yazmak istediğinize emin misiniz?
-    </string>
     <string name="about_text_links">Bu uygulama Thomas Hoffmann tarafından oluşturulmuştur (<a
         href="https://www.j4velin.de">www.j4velin.de</a>) ve Paul Cech tarafından oluşturulan <a
         href="https://github.com/blackfizz/EazeGraph">EazeGraph
@@ -71,14 +65,8 @@
         için başlata basınız
     </string>
     <string name="split_count">Sayımı böl</string>
-    <string name="pause">Duraklat</string>
-    <string name="resume">Devam et</string>
-    <string name="ispaused">Pedometer durduruldu</string>
-    <string name="pause_on_power_title">Şarj olurken duraklat</string>
-    <string name="pause_on_power_summary">Cihaz şarj olurken Pedometer\'i duraklat</string>
     <string name="no_sensor">Algılayıcı bulunamadı</string>
     <string name="no_sensor_explain">Bu uygulama -cihazınızda bulunmayan- adım algılayıcı özel
         donanıma ihtiyaç duyar. Bu uygulama cihazınız çalışmayacak.
     </string>
-    <string name="permission_external_storage">Harici depolama alanına erişim izni yok</string>
 </resources>

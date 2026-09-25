@@ -18,10 +18,8 @@
     <string name="import_title">Tuo tiedostosta</string>
     <string name="set_goal">Aseta tavoite</string>
     <string name="set_step_size">Aseta askeleen koko</string>
-    <string name="sign_out">Kirjaudu ulos</string>
     <string name="file_cant_read">Virhe: %s ei voitu lukea</string>
     <string name="error_file">Virhe käsiteltäessä tiedostoa: %s</string>
-    <string name="error_external_storage_not_available">Virhe: Ulkoinen tallennustila ei saatavilla</string>
     <string name="data_saved">Tiedot tallennettu tiedostoon %s</string>
     <string name="entries_imported">%d merkintää tuotu</string>
     <string name="entries_ignored">%d merkintää ei huomioitu koska ne eivät olleet oikeassa muodossa</string>
@@ -46,7 +44,6 @@
     <string name="average_last_7_days">Keskiarvo viimeisenä 7 päivänä</string>
     <string name="total_this_month">Yhteensä tässä kuussa</string>
     <string name="average_this_month">Keskiarvo tässä kuussa</string>
-    <string name="file_already_exists">Tiedosto on jo olemassa. Haluatko ylikirjoittaa sen?</string>
     <string name="about_text_links">Tämän sovelluksen teki Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) käyttäen <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> (Paul Cech) ja <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> (Sergey Margaritov).\n\nAskelmittari on avoimen lähdekoodin sovellus! Lähdekoodi sekä kaikkien avustajien lista löytyy täältä: <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Sovelluksen versio: %s</string>
     <string name="since">Aloitettu: %s</string>
@@ -57,6 +54,5 @@
     <string name="split_count">Alilaskuri</string>
     <string name="no_sensor">Sensoria ei löydetty</string>
     <string name="no_sensor_explain">Tämä sovellus tarvitsee erillisen laitteistosensorin jota laittessasi ei ole. Sovellus ei toimi laitteessasi.</string>
-    <string name="permission_external_storage">Ei lupaa ulkoisen muistin käsittelyyn</string>
 </resources>
 

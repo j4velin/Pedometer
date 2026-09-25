@@ -1,7 +1,9 @@
 package de.j4velin.pedometer
 
+import android.content.Context
 import android.content.Intent
 import de.j4velin.pedometer.testing.StepsTest
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -135,6 +137,19 @@ class RebootTest : StepsTest() {
         at(day1, 12, 35)
         reboot(bootCount = 5)
         assertEquals("the reboot is recognised as one", 2000, stored(day1))
+    }
+
+    @Test
+    fun appUpdateRemovesStalePreferenceFiles() {
+        for (name in listOf("GoogleFit", "pedometer_playservices")) {
+            context.getSharedPreferences(name, Context.MODE_PRIVATE).edit()
+                .putBoolean("stale", true).commit()
+        }
+        appUpdated()
+        for (name in listOf("GoogleFit", "pedometer_playservices")) {
+            assertFalse(name, File(context.dataDir, "shared_prefs/$name.xml").exists())
+        }
+        assertEquals("the app's own settings stay", 1, prefs.getInt("bootCount", -1))
     }
 
     @Test

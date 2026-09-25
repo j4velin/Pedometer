@@ -28,6 +28,12 @@ class AppUpdatedReceiver : BroadcastReceiver() {
         if (intent.action != Intent.ACTION_MY_PACKAGE_REPLACED) return
         if (BuildConfig.DEBUG) Logger.log("app updated")
         PedometerApp.get(context).accounting.onAppUpdated(BootReceiver.getBootCount(context))
+        STALE_PREFERENCES.forEach { context.deleteSharedPreferences(it) }
         SensorListener.start(context)
+    }
+
+    private companion object {
+        /** Preference files of features earlier versions had: the Google Fit sync and Play Games */
+        val STALE_PREFERENCES = listOf("GoogleFit", "pedometer_playservices")
     }
 }

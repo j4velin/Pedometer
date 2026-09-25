@@ -18,10 +18,8 @@
     <string name="import_title">Import/Restore</string>
     <string name="set_goal">Set goal</string>
     <string name="set_step_size">Set step size</string>
-    <string name="sign_out">Sign out</string>
     <string name="file_cant_read">Error: %s can not be read</string>
     <string name="error_file">Error accessing the file: %s</string>
-    <string name="error_external_storage_not_available">Error: External storage not available</string>
     <string name="data_saved">Data saved in %s</string>
     <string name="entries_imported">%d entries imported</string>
     <string name="entries_ignored">%d entries were ignored as they did not contain valid data</string>
@@ -46,7 +44,6 @@
     <string name="average_last_7_days">Average last 7 days</string>
     <string name="total_this_month">Total this month</string>
     <string name="average_this_month">Average this month</string>
-    <string name="file_already_exists">File already exists. Are you sure you want to overwrite it?</string>
     <string name="about_text_links">This app was created by Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) and uses <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech and <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov.\n\nPedometer is open source! Get the code and the full list of contributors from <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">App version: %s</string>
     <string name="since">Since %s</string>
@@ -57,7 +54,6 @@
     <string name="split_count">Split count</string>
     <string name="no_sensor">Sensor not found</string>
     <string name="no_sensor_explain">This app requires a dedicated hardware step sensor - which your device does not have. This app won\'t run on your device.</string>
-    <string name="permission_external_storage">No permission to access external storage</string>
     <string name="notification_settings">Notification settings</string>
     <string name="permission_activity_recognition">Steps can not be counted without the physical activity permission</string>
     <string name="hue">Hue</string>

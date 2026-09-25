@@ -10,11 +10,7 @@
     <string name="close">uždaryti</string>
     <string name="faq">DUK</string>
     <string name="goal">Tikslas</string>
-    <string name="ispaused"></string>
-    <string name="pause">Pauzė</string>
     <string name="record">Įrašas</string>
-    <string name="resume">Tęsti</string>
-    <string name="sign_out">Atsijungti</string>
     <string name="settings">Nustatymai</string>
     <string name="start">Pradėti</string>
     <string name="step_size">Žingsnio dydis</string>
@@ -24,7 +20,6 @@
     <string name="total">Iš viso</string>
     <string name="since">Nuo %s</string>
     <string name="signed_in">Prisijungta kaip %s</string>
-    <string name="pause_on_power_summary"></string>
     <string name="no_sensor">Jutiklis nerastas</string>
     <string name="import_title">Importuoti/Atkurti</string>
     <string name="export_title">Eksportuoti/Išsaugoti</string>

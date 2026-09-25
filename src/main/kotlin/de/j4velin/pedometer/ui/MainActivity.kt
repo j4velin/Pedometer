@@ -253,7 +253,7 @@ class MainActivity : ComponentActivity() {
      * @param onSettings shown on the settings too, not only on the overview
      * @param games only in builds with Play Games
      */
-    enum class MenuEntry(@StringRes val title: Int, val onSettings: Boolean, val games: Boolean) {
+    enum class MenuEntry(@param:StringRes val title: Int, val onSettings: Boolean, val games: Boolean) {
         SETTINGS(R.string.settings, onSettings = false, games = false),
         ACHIEVEMENTS(R.string.achievements, onSettings = true, games = true),
         LEADERBOARD(R.string.leaderboard, onSettings = true, games = true),

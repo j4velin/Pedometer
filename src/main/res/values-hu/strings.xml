@@ -20,10 +20,8 @@
     <string name="import_title">Importálás/Visszaállítás</string>
     <string name="set_goal">Cél beállítása</string>
     <string name="set_step_size">Lépéshossz beállítása</string>
-    <string name="sign_out">Kijelentkezés</string>
     <string name="file_cant_read">Hiba: %s nem olvasható</string>
     <string name="error_file">Hiba történt a %s fájl elérése közben</string>
-    <string name="error_external_storage_not_available">Hiba: külső tárhely nem elérhető</string>
     <string name="data_saved">Adat elmentve ide: %s</string>
     <string name="entries_imported">%d bejegyzés importálva</string>
     <string name="entries_ignored">%d bejegyzés figyelmen kívül lett hagyva, mert nem tartalmazott
@@ -52,7 +50,6 @@
     <string name="average_last_7_days">Utolsó 7 nap átlaga</string>
     <string name="total_this_month">E hónapi összesen</string>
     <string name="average_this_month">E hónap átlaga</string>
-    <string name="file_already_exists">A fájl már létezik. Biztos benne, hogy felülírja?</string>
     <string name="about_text_links">Ezt a programot Thomas Hoffmann készítette (<a
         href="https://www.j4velin.de">www.j4velin.de</a>) és felhasználja:<a
         href="https://github.com/blackfizz/EazeGraph">az EazeGraph-ot
@@ -71,15 +68,8 @@
         megkezdéséhez
     </string>
     <string name="split_count">Osztott számlálás</string>
-    <string name="pause">Megállít</string>
-    <string name="resume">Folytat</string>
-    <string name="ispaused">Pedometer megállítva</string>
-    <string name="pause_on_power_title">Szüneteljen töltés közben</string>
-    <string name="pause_on_power_summary">Szüneteltesse a Lépésszámlálót az eszköz töltése közben
-    </string>
     <string name="no_sensor">Nem található szenzor</string>
     <string name="no_sensor_explain">Ez az alkalmazás egy külön hardveres lépésérzékelőt igényel -
         amellyel a készülék nem rendelkezik. Ez az alkalmazás nem fog futni a készüléken.
     </string>
-    <string name="permission_external_storage">Nincs engedély a külső tárhely elérésére</string>
 </resources>

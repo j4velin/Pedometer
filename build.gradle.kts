@@ -26,8 +26,8 @@ android {
         applicationId = "de.j4velin.pedometer"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1511
-        versionName = "1.5.11"
+        versionCode = 2000
+        versionName = "2.0.0"
     }
 
     buildFeatures {
@@ -62,8 +62,10 @@ android {
 
     lint {
         disable += setOf("MissingTranslation", "ExtraTranslation")
-        // What the Java code already had when the migration started. New issues still fail the
-        // build; the baseline shrinks as the phases replace the code it lists.
+        // flags the Compose compiler plugin, which is pinned on purpose (see libs.versions.toml)
+        disable += "NewerVersionAvailable"
+        // Warnings accepted when the migration was finished: the "%d steps" strings, which
+        // would need plurals in every translation, and isShrinkResources = false.
         baseline = file("lint-baseline.xml")
     }
 
@@ -101,7 +103,6 @@ kotlin {
 dependencies {
     implementation(libs.core)
     implementation(libs.glance)
-    implementation(libs.dashclock)
     "playImplementation"(libs.playGames)
     // Play Games brings an old androidx.fragment, which breaks the Activity Result API
     "playImplementation"(libs.fragment)

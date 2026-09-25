@@ -16,10 +16,8 @@
     <string name="import_title">导入/还原</string>
     <string name="set_goal">设定目标</string>
     <string name="set_step_size">设定步幅</string>
-    <string name="sign_out">登出</string>
     <string name="file_cant_read">错误：无法读取 %s</string>
     <string name="error_file">访问文件错误：%s</string>
-    <string name="error_external_storage_not_available">错误：外部存储不可用</string>
     <string name="data_saved">数据保存到 %s</string>
     <string name="entries_imported">%d 项条目已导入</string>
     <string name="entries_ignored">%d 项条目被跳过，因为它们不包含有效数据</string>

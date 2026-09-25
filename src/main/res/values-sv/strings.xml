@@ -18,10 +18,8 @@
     <string name="import_title">Importera/Återställa</string>
     <string name="set_goal">Ange mål</string>
     <string name="set_step_size">Ange steglängd</string>
-    <string name="sign_out">Logga ut</string>
     <string name="file_cant_read">Fel: %s kan inte läsas</string>
     <string name="error_file">Fel vid filåtkomst: %s</string>
-    <string name="error_external_storage_not_available">Fel: Extern lagring inte tillgänglig</string>
     <string name="data_saved">Data sparad i %s</string>
     <string name="entries_imported">%d poster importerade</string>
     <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
@@ -46,7 +44,6 @@
     <string name="average_last_7_days">Genomsnitt senaste 7 dagarna</string>
     <string name="total_this_month">Totalt den här månaden</string>
     <string name="average_this_month">Genomsnitt den här månaden</string>
-    <string name="file_already_exists">Filen existerar redan. Är du säker på att du vill skriva över den?</string>
     <string name="about_text_links">Den här appen skapades av Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) och använder <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> av Paul Cech och <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> av Sergey Margaritov.\n\nPedometer är öppen källkod! Hämta koden och en fullständig lista på de som bidragit på <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Appens version: %s</string>
     <string name="since">Sedan %s</string>
@@ -57,6 +54,5 @@
     <string name="split_count">Dela räknare</string>
     <string name="no_sensor">Sensor hittades inte</string>
     <string name="no_sensor_explain">Denna app kräver en dedikerad stegräknare i hårdvara, som din enhet saknar. Den här appen kan inte köra på din enhet.</string>
-    <string name="permission_external_storage">Saknar tillstånd att komma åt extern lagring</string>
     <string name="notification_settings">Notifieringsinställningar</string>
 </resources>

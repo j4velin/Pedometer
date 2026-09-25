@@ -12,7 +12,6 @@ navigation      = "2.10.2"
 fragment        = "1.9.1"
 lifecycle       = "2.11.0"
 glance          = "1.2.0"
-dashclock       = "2.0.0"
 playGames       = "22.1.0"
 
 junit           = "4.13.2"
@@ -38,7 +37,6 @@ lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", versio
 lifecycleViewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 glance          = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
 glance-testing  = { module = "androidx.glance:glance-appwidget-testing", version.ref = "glance" }
-dashclock       = { module = "com.google.android.apps.dashclock:dashclock-api", version.ref = "dashclock" }
 playGames       = { module = "com.google.android.gms:play-services-games-v2", version.ref = "playGames" }
 
 junit           = { module = "junit:junit", version.ref = "junit" }
