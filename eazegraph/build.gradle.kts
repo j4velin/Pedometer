@@ -1,18 +1,18 @@
 plugins {
-    id 'com.android.library'
+    alias(libs.plugins.androidLibrary)
 }
 
 // Vendored copy of https://github.com/j4velin/EazeGraph (fork of blackfizz/EazeGraph, Apache 2.0),
 // as the published 1.0.3 artifact was only available on JCenter
 android {
-    namespace = 'org.eazegraph.lib'
-    compileSdk = 37
+    namespace = "org.eazegraph.lib"
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 23
+        minSdk = libs.versions.minSdk.get().toInt()
     }
 }
 
 dependencies {
-    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation(libs.nineoldandroids)
 }

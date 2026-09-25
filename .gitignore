@@ -32,3 +32,5 @@ Thumbs.db
 .gradle
 build/
 *.iml
+# shell crash dumps
+*.stackdump

@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 9.4.1" type="baseline" client="gradle" dependencies="false" name="AGP (9.4.1)" variant="all" version="9.4.1">
+
+    <issue
+        id="ApplySharedPref"
+        message="Consider using `apply()` instead; `commit` writes its data to persistent storage immediately, whereas `apply` will handle it in the background"
+        errorLine1="                    prefs.edit().putInt(&quot;goal&quot;, np.getValue()).commit();"
+        errorLine2="                                                               ~~~~~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/ui/Fragment_Settings.java"
+            line="184"
+            column="64"/>
+    </issue>
+
+    <issue
+        id="ApplySharedPref"
+        message="Consider using `apply()` instead; `commit` writes its data to persistent storage immediately, whereas `apply` will handle it in the background"
+        errorLine1="                .putBoolean(&quot;correctShutdown&quot;, true).commit();"
+        errorLine2="                                                     ~~~~~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/ShutdownRecevier.java"
+            line="39"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        errorLine1="        final View v = inflater.inflate(R.layout.fragment_overview, null);"
+        errorLine2="                                                                    ~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/ui/Fragment_Overview.java"
+            line="80"
+            column="69"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        errorLine1="            v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);"
+        errorLine2="                                                                             ~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/ui/Fragment_Settings.java"
+            line="202"
+            column="78"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.M)` instead of `@TargetApi` to propagate the requirement to users of `API23Wrapper`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.M)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/util/API23Wrapper.java"
+            line="25"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UseRequiresApi"
+        message="Use `@RequiresApi(Build.VERSION_CODES.O)` instead of `@TargetApi` to propagate the requirement to users of `API26Wrapper`"
+        errorLine1="@TargetApi(Build.VERSION_CODES.O)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/util/API26Wrapper.java"
+            line="30"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;steps&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;goal_summary&quot;>Current goal: %,d steps&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="11"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;entries&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;entries_imported&quot;>%d entries imported&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="27"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;entries&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;entries_ignored&quot;>%d entries were ignored as they did not contain valid data&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="28"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;entries&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;entries_overwritten&quot;>%d entries were overwritten with imported data&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="29"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 23"
+        errorLine1="@TargetApi(Build.VERSION_CODES.M)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/util/API23Wrapper.java"
+            line="25"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 24"
+        errorLine1="        return Build.VERSION.SDK_INT >= 24 ? Settings.Global"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/BootReceiver.java"
+            line="36"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 24"
+        errorLine1="        if (Build.VERSION.SDK_INT >= 23) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/SensorListener.java"
+            line="183"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.drawable.ic_pause` appears to be unused">
+        <location
+            file="src/main/res/drawable-hdpi/ic_pause.png"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.drawable.ic_resume` appears to be unused">
+        <location
+            file="src/main/res/drawable-hdpi/ic_resume.png"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.resume` appears to be unused"
+        errorLine1="    &lt;string name=&quot;resume&quot;>পুনরারম্ভ&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-bn/strings.xml"
+            line="19"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.sign_out` appears to be unused"
+        errorLine1="    &lt;string name=&quot;sign_out&quot;>Sign out&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="22"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.error_external_storage_not_available` appears to be unused"
+        errorLine1="    &lt;string name=&quot;error_external_storage_not_available&quot;>Error: External storage not available&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="25"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.pause_on_power_title` appears to be unused"
+        errorLine1="    &lt;string name=&quot;pause_on_power_title&quot;>চার্জ হওয়ার সময় বিরাম&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-bn/strings.xml"
+            line="30"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.pause` appears to be unused"
+        errorLine1="    &lt;string name=&quot;pause&quot;>বিরতি&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-bn/strings.xml"
+            line="31"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.ispaused` appears to be unused"
+        errorLine1="    &lt;string name=&quot;ispaused&quot;>প্যাডেমোটার বিরত আছে&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-bn/strings.xml"
+            line="48"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.file_already_exists` appears to be unused"
+        errorLine1="    &lt;string name=&quot;file_already_exists&quot;>File already exists. Are you sure you want to overwrite it?&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="50"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.pause_on_power_summary` appears to be unused"
+        errorLine1="    &lt;string name=&quot;pause_on_power_summary&quot;>ডিভাইস চার্জ করার সময় প্যাসিমেটার বিরত&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-bn/strings.xml"
+            line="60"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.permission_external_storage` appears to be unused"
+        errorLine1="    &lt;string name=&quot;permission_external_storage&quot;>No permission to access external storage&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="61"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="NotShrinkingResources"
+        message="Avoid setting isShrinkResources = false"
+        errorLine1="            isShrinkResources = false"
+        errorLine2="                                ~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="85"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="NotShrinkingResources"
+        message="Avoid setting isShrinkResources = false"
+        errorLine1="            isShrinkResources = false"
+        errorLine2="                                ~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="85"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="    &lt;EditText"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/stepsize.xml"
+            line="8"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="    &lt;EditText"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/stepsize.xml"
+            line="8"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ConstantLocale"
+        message="Assigning `Locale.getDefault()` to a final static field is suspicious; this code will not work correctly if the user changes locale while the app is running"
+        errorLine1="    public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());"
+        errorLine2="                                                                          ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/ui/Fragment_Overview.java"
+            line="68"
+            column="75"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="            ((TextView) d.findViewById(R.id.distanceunit)).setText(&quot;km&quot;);"
+        errorLine2="                                                                   ~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/ui/Dialog_Split.java"
+            line="48"
+            column="68"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="            ((TextView) d.findViewById(R.id.distanceunit)).setText(&quot;mi&quot;);"
+        errorLine2="                                                                   ~~~~">
+        <location
+            file="src/main/java/de/j4velin/pedometer/ui/Dialog_Split.java"
+            line="51"
+            column="68"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                Fragment_Overview.formatter.format(record.second) + &quot; @ &quot;"
+        errorLine2="                ^">
+        <location
+            file="src/main/java/de/j4velin/pedometer/ui/Dialog_Statistics.java"
+            line="62"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;10.000&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;10.000&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/fragment_overview.xml"
+            line="22"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;10.000&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;10.000&quot;/>"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_overview.xml"
+            line="25"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;cm&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;cm&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/stepsize.xml"
+            line="29"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;ft&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;ft&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/stepsize.xml"
+            line="35"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="RelativeOverlap"
+        message="`@id/textView2` can overlap `@id/steps` if @id/steps, @string/steps grow due to localized text expansion"
+        errorLine1="            &lt;TextView"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_split.xml"
+            line="57"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentLeft` with `android:layout_alignParentStart=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="                android:layout_alignParentLeft=&quot;true&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_split.xml"
+            line="29"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="                android:layout_alignParentRight=&quot;true&quot; />"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_split.xml"
+            line="39"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="                android:layout_alignParentRight=&quot;true&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_split.xml"
+            line="62"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentLeft` with `android:layout_alignParentStart=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentLeft=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/fragment_overview.xml"
+            line="14"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentLeft` with `android:layout_alignParentStart=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentLeft=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_overview.xml"
+            line="40"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignLeft` with `android:layout_alignStart=&quot;@+id/bargraph&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignLeft=&quot;@+id/bargraph&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/fragment_overview.xml"
+            line="42"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentRight=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/fragment_overview.xml"
+            line="43"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignLeft` with `android:layout_alignStart=&quot;@+id/averageandtotal&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignLeft=&quot;@+id/averageandtotal&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/fragment_overview.xml"
+            line="69"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentRight=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/fragment_overview.xml"
+            line="96"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_toRightOf` with `android:layout_toEndOf=&quot;@+id/graph&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_toRightOf=&quot;@+id/graph&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/fragment_overview.xml"
+            line="97"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentRight=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/statistics.xml"
+            line="26"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentRight=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/statistics.xml"
+            line="42"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentRight=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/statistics.xml"
+            line="58"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentRight=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/statistics.xml"
+            line="75"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentLeft` with `android:layout_alignParentStart=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentLeft=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widgetconfig.xml"
+            line="11"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignParentLeft` with `android:layout_alignParentStart=&quot;true&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignParentLeft=&quot;true&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widgetconfig.xml"
+            line="19"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_toRightOf` with `android:layout_toEndOf=&quot;@+id/bgtext&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_toRightOf=&quot;@+id/bgtext&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widgetconfig.xml"
+            line="29"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_marginLeft` with `android:layout_marginStart=&quot;15dp&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_marginLeft=&quot;15dp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widgetconfig.xml"
+            line="30"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_alignLeft` with `android:layout_alignStart=&quot;@+id/bgcolor&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_alignLeft=&quot;@+id/bgcolor&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widgetconfig.xml"
+            line="38"
+            column="9"/>
+    </issue>
+
+</issues>
