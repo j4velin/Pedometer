@@ -23,8 +23,6 @@ import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.core.database.sqlite.transaction
-import de.j4velin.pedometer.BuildConfig
-import de.j4velin.pedometer.util.Logger
 import java.util.Date
 
 /**
@@ -86,10 +84,6 @@ class StepsDatabase(context: Context) :
                     put("steps", -steps)
                 })
             }
-            if (BuildConfig.DEBUG) {
-                Logger.log("insertDay $date / $steps")
-                logState()
-            }
         }
     }
 
@@ -118,13 +112,6 @@ class StepsDatabase(context: Context) :
             }
         }
         return newEntryCreated
-    }
-
-    /** Writes the latest entries to the debug log */
-    fun logState() {
-        if (BuildConfig.DEBUG) {
-            query(null, null, null, null, null, "date DESC", "5").use { Logger.log(it) }
-        }
     }
 
     /** The steps taken on all days before [day] */
@@ -192,7 +179,6 @@ class StepsDatabase(context: Context) :
             values.put("date", -1)
             writableDatabase.insert(DB_NAME, null, values)
         }
-        if (BuildConfig.DEBUG) Logger.log("saving steps in db: $steps")
     }
 
     /** The last saved "steps since boot" value, or 0 if there is none */

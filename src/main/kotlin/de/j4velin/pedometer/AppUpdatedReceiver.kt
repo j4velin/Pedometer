@@ -19,14 +19,12 @@ package de.j4velin.pedometer
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import de.j4velin.pedometer.util.Logger
 
 class AppUpdatedReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         // the receiver is exported, so other apps could send anything to it
         if (intent.action != Intent.ACTION_MY_PACKAGE_REPLACED) return
-        if (BuildConfig.DEBUG) Logger.log("app updated")
         PedometerApp.get(context).accounting.onAppUpdated(BootReceiver.getBootCount(context))
         STALE_PREFERENCES.forEach { context.deleteSharedPreferences(it) }
         SensorListener.start(context)

@@ -20,14 +20,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import de.j4velin.pedometer.util.Logger
 
 class BootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         // the receiver is exported, so other apps could send anything to it
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        if (BuildConfig.DEBUG) Logger.log("booted")
         PedometerApp.get(context).accounting.onBootCompleted(getBootCount(context))
         SensorListener.start(context)
     }

@@ -23,10 +23,8 @@ import com.google.android.gms.games.AuthenticationResult
 import com.google.android.gms.games.PlayGames
 import com.google.android.gms.games.PlayGamesSdk
 import com.google.android.gms.tasks.Task
-import de.j4velin.pedometer.BuildConfig
 import de.j4velin.pedometer.PedometerApp
 import de.j4velin.pedometer.R
-import de.j4velin.pedometer.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -60,7 +58,6 @@ private class PlayGamesIntegration : GamesIntegration {
 
     private fun onSignInResult(activity: Activity, task: Task<AuthenticationResult>) {
         val signedIn = task.isSuccessful && task.result.isAuthenticated
-        if (BuildConfig.DEBUG) Logger.log("Play Games signed in: $signedIn")
         _state.value = GamesState(signedIn)
         if (!signedIn) return
         PlayGames.getPlayersClient(activity).currentPlayer.addOnSuccessListener { player ->

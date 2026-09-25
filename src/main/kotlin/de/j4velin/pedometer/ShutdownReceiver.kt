@@ -19,14 +19,16 @@ package de.j4velin.pedometer
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import de.j4velin.pedometer.util.Logger
 
-/** Registered by [SensorListener] while it runs, as ACTION_SHUTDOWN can't be received otherwise */
-class ShutdownRecevier : BroadcastReceiver() {
+/**
+ * Moves today's steps into the history when the device shuts down, as the step counter starts at
+ * 0 again after the reboot. Registered by [SensorListener] while it runs, as ACTION_SHUTDOWN can't
+ * be received otherwise. Without the broadcast (a crash, or a root shutdown script), the next boot
+ * recovers what it can from the last saved value.
+ */
+class ShutdownReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (BuildConfig.DEBUG) Logger.log("shutting down")
-        context.startService(Intent(context, SensorListener::class.java))
         PedometerApp.get(context).accounting.onShutdown()
     }
 }

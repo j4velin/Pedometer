@@ -14,7 +14,7 @@ import de.j4velin.pedometer.AppUpdatedReceiver
 import de.j4velin.pedometer.BootReceiver
 import de.j4velin.pedometer.PedometerApp
 import de.j4velin.pedometer.SensorListener
-import de.j4velin.pedometer.ShutdownRecevier
+import de.j4velin.pedometer.ShutdownReceiver
 import de.j4velin.pedometer.data.StepsDatabase
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -136,7 +136,7 @@ abstract class StepsTest {
 
     /** The system shuts down cleanly: the service's shutdown receiver gets ACTION_SHUTDOWN */
     protected fun shutdown() {
-        ShutdownRecevier().onReceive(context, Intent(Intent.ACTION_SHUTDOWN))
+        ShutdownReceiver().onReceive(context, Intent(Intent.ACTION_SHUTDOWN))
     }
 
     /** The device boots with a new boot count; the step counter starts at 0 again */

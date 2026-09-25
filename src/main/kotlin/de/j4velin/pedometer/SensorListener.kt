@@ -33,10 +33,8 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
-import de.j4velin.pedometer.util.Logger
 import de.j4velin.pedometer.util.Util
 import de.j4velin.pedometer.widget.Widget
-import java.util.Date
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -59,20 +57,18 @@ import kotlinx.coroutines.launch
  */
 class SensorListener : Service(), SensorEventListener {
 
-    private val shutdownReceiver = ShutdownRecevier()
+    private val shutdownReceiver = ShutdownReceiver()
     private val accounting get() = PedometerApp.get(this).accounting
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
         // nobody knows what happens here: step value might magically decrease
         // when this method is called...
-        if (BuildConfig.DEBUG) Logger.log("${sensor.name} accuracy changed: $accuracy")
     }
 
     override fun onSensorChanged(event: SensorEvent) {
         val value = event.values[0]
         if (value > Int.MAX_VALUE) {
-            if (BuildConfig.DEBUG) Logger.log("probably not a real value: $value")
             return
         }
         accounting.onStepCounter(value.toInt())
@@ -87,7 +83,6 @@ class SensorListener : Service(), SensorEventListener {
             )
         } catch (e: SecurityException) {
             // permission got revoked
-            if (BuildConfig.DEBUG) Logger.log(e)
             stopSelf()
         }
     }
@@ -102,8 +97,6 @@ class SensorListener : Service(), SensorEventListener {
         // restart service every hour to save the current step count
         val nextUpdate =
             minOf(Util.getTomorrow(), System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR)
-        @Suppress("DEPRECATION")
-        if (BuildConfig.DEBUG) Logger.log("next update: " + Date(nextUpdate).toLocaleString())
         // a foreground service start, as Android 8+ allows no plain service start from the
         // background. It works while the service runs, and before Android 12 also if it was
         // stopped in the meantime.
@@ -119,7 +112,6 @@ class SensorListener : Service(), SensorEventListener {
 
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.DEBUG) Logger.log("SensorListener onCreate")
         registerBroadcastReceiver()
         showToday()
     }
@@ -147,7 +139,6 @@ class SensorListener : Service(), SensorEventListener {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        if (BuildConfig.DEBUG) Logger.log("sensor service task removed")
         // Restart service in 500 ms
         getSystemService(AlarmManager::class.java).set(
             AlarmManager.RTC, System.currentTimeMillis() + 500,
@@ -159,19 +150,16 @@ class SensorListener : Service(), SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (BuildConfig.DEBUG) Logger.log("SensorListener onDestroy")
         scope.cancel()
         unregisterReceiver(shutdownReceiver)
         try {
             getSystemService(SensorManager::class.java).unregisterListener(this)
         } catch (e: Exception) {
-            if (BuildConfig.DEBUG) Logger.log(e)
             e.printStackTrace()
         }
     }
 
     private fun registerBroadcastReceiver() {
-        if (BuildConfig.DEBUG) Logger.log("register broadcastreceiver")
         ContextCompat.registerReceiver(
             this, shutdownReceiver, IntentFilter(Intent.ACTION_SHUTDOWN),
             ContextCompat.RECEIVER_NOT_EXPORTED
@@ -179,24 +167,18 @@ class SensorListener : Service(), SensorEventListener {
     }
 
     private fun reRegisterSensor() {
-        if (BuildConfig.DEBUG) Logger.log("re-register sensor listener")
         val sm = getSystemService(SensorManager::class.java)
         try {
             sm.unregisterListener(this)
         } catch (e: Exception) {
-            if (BuildConfig.DEBUG) Logger.log(e)
             e.printStackTrace()
         }
 
-        if (BuildConfig.DEBUG) {
-            Logger.log("step sensors: " + sm.getSensorList(Sensor.TYPE_STEP_COUNTER).size)
-            if (sm.getSensorList(Sensor.TYPE_STEP_COUNTER).isEmpty()) return // emulator
-            Logger.log("default: " + sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!!.name)
-        }
-
+        // none on an emulator
+        val sensor = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) ?: return
         // enable batching with delay of max 5 min
         sm.registerListener(
-            this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
+            this, sensor,
             SensorManager.SENSOR_DELAY_NORMAL, (5 * MICROSECONDS_IN_ONE_MINUTE).toInt()
         )
     }
@@ -221,7 +203,6 @@ class SensorListener : Service(), SensorEventListener {
         @JvmStatic
         fun start(context: Context) {
             if (!hasPermission(context)) {
-                if (BuildConfig.DEBUG) Logger.log("can not start SensorListener: permission missing")
                 return
             }
             context.startForegroundService(Intent(context, SensorListener::class.java))

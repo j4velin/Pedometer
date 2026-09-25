@@ -20,8 +20,6 @@ import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
-import de.j4velin.pedometer.BuildConfig
-import de.j4velin.pedometer.util.Logger
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,9 +36,10 @@ class Widget : GlanceAppWidgetReceiver() {
 
     companion object {
 
+        // a failed update must not crash the app: the next one will try again
         private val scope = CoroutineScope(
             SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, e ->
-                if (BuildConfig.DEBUG) Logger.log(e)
+                e.printStackTrace()
             }
         )
 

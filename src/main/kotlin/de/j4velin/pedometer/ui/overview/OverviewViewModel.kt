@@ -23,7 +23,6 @@ import android.hardware.SensorManager
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.j4velin.pedometer.BuildConfig
 import de.j4velin.pedometer.PedometerApp
 import de.j4velin.pedometer.R
 import de.j4velin.pedometer.data.HistorySummary
@@ -31,7 +30,6 @@ import de.j4velin.pedometer.domain.TodaySteps
 import de.j4velin.pedometer.ui.Formats
 import de.j4velin.pedometer.ui.theme.HistoryBlue
 import de.j4velin.pedometer.ui.theme.StepsGreen
-import de.j4velin.pedometer.util.Logger
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -126,11 +124,7 @@ class OverviewViewModel(private val app: PedometerApp) : ViewModel(), SensorEven
 
     /** The screen is hidden: stops listening and saves the latest step counter value */
     fun pause() {
-        try {
-            sensorManager.unregisterListener(this)
-        } catch (e: Exception) {
-            if (BuildConfig.DEBUG) Logger.log(e)
-        }
+        sensorManager.unregisterListener(this)
         accounting.saveLatest()
     }
 
@@ -145,7 +139,6 @@ class OverviewViewModel(private val app: PedometerApp) : ViewModel(), SensorEven
 
     override fun onSensorChanged(event: SensorEvent) {
         val value = event.values[0]
-        if (BuildConfig.DEBUG) Logger.log("UI - sensorChanged | since boot: $value")
         if (value > Int.MAX_VALUE) return
         accounting.onLiveStepCounter(value.toInt())
     }

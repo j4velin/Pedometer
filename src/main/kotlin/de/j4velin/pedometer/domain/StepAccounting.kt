@@ -16,15 +16,12 @@
 
 package de.j4velin.pedometer.domain
 
-import de.j4velin.pedometer.BuildConfig
 import de.j4velin.pedometer.data.Settings
 import de.j4velin.pedometer.data.StepsDatabase
-import de.j4velin.pedometer.util.Logger
 import de.j4velin.pedometer.util.Util
 import java.io.IOException
 import java.io.Reader
 import java.io.Writer
-import java.util.Date
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -175,9 +172,6 @@ class StepAccounting(
         val necessary = steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
                 (steps > 0 && (now > lastSaveTime + SAVE_OFFSET_TIME || lastSaveTime < today()))
         if (!necessary) return false
-        if (BuildConfig.DEBUG) Logger.log(
-            "saving steps: steps=$steps lastSave=$lastSaveSteps lastSaveTime=${Date(lastSaveTime)}"
-        )
         val today = today()
         if (db.getSteps(today) == Int.MIN_VALUE) {
             db.insertNewDay(today, steps)
@@ -222,15 +216,12 @@ class StepAccounting(
         val lastBootCount = settings.bootCount
         settings.bootCount = bootCount
         if (bootCount != -1 && (lastBootCount == -1 || bootCount == lastBootCount)) {
-            if (BuildConfig.DEBUG) Logger.log("not a reboot, boot count: $bootCount")
             return false
         }
 
         if (!settings.correctShutdown) {
-            if (BuildConfig.DEBUG) Logger.log("Incorrect shutdown")
             // can we at least recover some steps?
             val steps = maxOf(0, db.currentSteps)
-            if (BuildConfig.DEBUG) Logger.log("Trying to recover $steps steps")
             db.addToLastEntry(steps)
         }
         // the last entry might still be a negative offset, which is meaningless after a reboot
