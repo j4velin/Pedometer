@@ -16,7 +16,6 @@
     <string name="export_title">Exportera/Säkerhetskopiera</string>
     <string name="import_summary">Importera tidigare sparad data</string>
     <string name="import_title">Importera/Återställa</string>
-    <string name="notification">Visa notifiering</string>
     <string name="set_goal">Ange mål</string>
     <string name="set_step_size">Ange steglängd</string>
     <string name="sign_out">Logga ut</string>

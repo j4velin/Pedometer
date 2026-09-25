@@ -16,11 +16,9 @@
 
 package de.j4velin.pedometer
 
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.provider.Settings
 import de.j4velin.pedometer.util.Logger
 
@@ -36,12 +34,7 @@ class BootReceiver : BroadcastReceiver() {
 
     companion object {
         /** @return the number of times the device has booted, or -1 if not available */
-        @SuppressLint("ObsoleteSdkInt") // only obsolete in play; fdroid still runs on 23
         fun getBootCount(context: Context): Int =
-            if (Build.VERSION.SDK_INT >= 24) {
-                Settings.Global.getInt(context.contentResolver, Settings.Global.BOOT_COUNT, -1)
-            } else {
-                -1
-            }
+            Settings.Global.getInt(context.contentResolver, Settings.Global.BOOT_COUNT, -1)
     }
 }

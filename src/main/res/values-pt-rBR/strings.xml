@@ -16,7 +16,6 @@
     <string name="export_title">Exportar/Backup</string>
     <string name="import_summary">Importa dados salvos anteriormente</string>
     <string name="import_title">Importa/Restaurar</string>
-    <string name="notification">Mostrar notificação</string>
     <string name="set_goal">Definir meta</string>
     <string name="set_step_size">Definir tamanho do passo</string>
     <string name="sign_out">Sign out</string>

@@ -49,7 +49,6 @@
     <string name="leaderboard">লিডারবোর্ড</string>
     <string name="no_sensor_explain">এই অ্যাপটি একটি ডেডিকেটেড হার্ডওয়্যার ধাপ সেন্সর প্রয়োজন - যা আপনার ডিভাইসে নেই। এই অ্যাপটি আপনার ডিভাইসে চালানো হবে না।</string>
     <string name="notification_text">%s পদক্ষেপ যেতে হবে</string>
-    <string name="notification">বিজ্ঞপ্তি দেখাবে</string>
     <string name="import_title">আমদানি / পুনরুদ্ধার করুন</string>
     <string name="export_title">রপ্তানি / ব্যাকআপ</string>
     <string name="file_cant_read">ত্রুটি: %s পড়া যাচ্ছে না</string>

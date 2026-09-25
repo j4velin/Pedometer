@@ -14,7 +14,6 @@
     <string name="export_title">내보내기/백업</string>
     <string name="import_summary">기존에 저장된 자료 불러오기</string>
     <string name="import_title">불러오기/복원</string>
-    <string name="notification">알림 표시</string>
     <string name="set_goal">목표 설정</string>
     <string name="set_step_size">보폭 설정</string>
     <string name="sign_out">로그아웃</string>

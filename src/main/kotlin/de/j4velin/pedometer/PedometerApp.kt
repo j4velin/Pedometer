@@ -22,6 +22,8 @@ import androidx.annotation.VisibleForTesting
 import de.j4velin.pedometer.data.Settings
 import de.j4velin.pedometer.data.StepsDatabase
 import de.j4velin.pedometer.domain.StepAccounting
+import de.j4velin.pedometer.games.GamesIntegration
+import de.j4velin.pedometer.games.createGamesIntegration
 
 /** Holds the objects that live as long as the process */
 class PedometerApp : Application() {
@@ -32,6 +34,9 @@ class PedometerApp : Application() {
         private set
     lateinit var accounting: StepAccounting
         private set
+
+    /** Play Games in the play flavor, nothing in fdroid */
+    val games: GamesIntegration by lazy { createGamesIntegration() }
 
     override fun onCreate() {
         super.onCreate()

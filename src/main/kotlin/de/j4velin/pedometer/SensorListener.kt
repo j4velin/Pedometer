@@ -19,9 +19,11 @@ package de.j4velin.pedometer
 import android.Manifest
 import android.app.AlarmManager
 import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -33,10 +35,11 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.os.IBinder
+import android.provider.Settings
+import android.widget.Toast
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
-import de.j4velin.pedometer.ui.Activity_Main
-import de.j4velin.pedometer.util.API26Wrapper
+import de.j4velin.pedometer.ui.MainActivity
 import de.j4velin.pedometer.util.Logger
 import de.j4velin.pedometer.util.Util
 import de.j4velin.pedometer.widget.WidgetUpdateService
@@ -79,20 +82,15 @@ class SensorListener : Service(), SensorEventListener {
     }
 
     private fun showNotification() {
-        if (Build.VERSION.SDK_INT >= 26) {
-            try {
-                ServiceCompat.startForeground(
-                    this, NOTIFICATION_ID, getNotification(this),
-                    if (Build.VERSION.SDK_INT >= 34) ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH else 0
-                )
-            } catch (e: SecurityException) {
-                // permission got revoked
-                if (BuildConfig.DEBUG) Logger.log(e)
-                stopSelf()
-            }
-        } else if (PedometerApp.get(this).settings.showNotification) {
-            getSystemService(NotificationManager::class.java)
-                .notify(NOTIFICATION_ID, getNotification(this))
+        try {
+            ServiceCompat.startForeground(
+                this, NOTIFICATION_ID, getNotification(this),
+                if (Build.VERSION.SDK_INT >= 34) ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH else 0
+            )
+        } catch (e: SecurityException) {
+            // permission got revoked
+            if (BuildConfig.DEBUG) Logger.log(e)
+            stopSelf()
         }
     }
 
@@ -200,11 +198,42 @@ class SensorListener : Service(), SensorEventListener {
                 if (BuildConfig.DEBUG) Logger.log("can not start SensorListener: permission missing")
                 return
             }
-            val intent = Intent(context, SensorListener::class.java)
-            if (Build.VERSION.SDK_INT >= 26) {
-                API26Wrapper.startForegroundService(context, intent)
-            } else {
-                context.startService(intent)
+            context.startForegroundService(Intent(context, SensorListener::class.java))
+        }
+
+        /** Keeps the id of the earlier versions, so that the user's settings for it stay */
+        private const val NOTIFICATION_CHANNEL_ID = "Notification"
+
+        /** Creates the notification's channel, if it does not exist yet */
+        private fun notificationChannel(context: Context): String {
+            val channel = NotificationChannel(
+                NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_NONE
+            ).apply {
+                importance = NotificationManager.IMPORTANCE_MIN
+                enableLights(false)
+                enableVibration(false)
+                setBypassDnd(false)
+                setSound(null, null)
+            }
+            context.getSystemService(NotificationManager::class.java)
+                .createNotificationChannel(channel)
+            return NOTIFICATION_CHANNEL_ID
+        }
+
+        /** Opens the system settings of the notification's channel */
+        fun openNotificationSettings(context: Context) {
+            try {
+                context.startActivity(
+                    Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                        .putExtra(Settings.EXTRA_CHANNEL_ID, NOTIFICATION_CHANNEL_ID)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                )
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(
+                    context,
+                    "Settings not found - please search for the notification settings in the Android settings manually",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -214,12 +243,7 @@ class SensorListener : Service(), SensorEventListener {
             val app = PedometerApp.get(context)
             val goal = app.settings.goal
             val stepsToday = app.accounting.stepsTodayForNotification()
-            val builder = if (Build.VERSION.SDK_INT >= 26) {
-                API26Wrapper.getNotificationBuilder(context)
-            } else {
-                @Suppress("DEPRECATION")
-                Notification.Builder(context)
-            }
+            val builder = Notification.Builder(context, notificationChannel(context))
             if (stepsToday != null) {
                 val format = NumberFormat.getInstance(Locale.getDefault())
                 builder.setProgress(goal, stepsToday, false)
@@ -239,11 +263,10 @@ class SensorListener : Service(), SensorEventListener {
                 builder.setContentText(context.getString(R.string.your_progress_will_be_shown_here_soon))
                     .setContentTitle(context.getString(R.string.notification_title))
             }
-            @Suppress("DEPRECATION")
-            builder.setPriority(Notification.PRIORITY_MIN).setShowWhen(false)
+            builder.setShowWhen(false)
                 .setContentIntent(
                     PendingIntent.getActivity(
-                        context, 0, Intent(context, Activity_Main::class.java),
+                        context, 0, Intent(context, MainActivity::class.java),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )
                 )

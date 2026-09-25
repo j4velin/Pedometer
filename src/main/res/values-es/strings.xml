@@ -14,7 +14,6 @@
     <string name="export_title">Exportar/Copia de seguridad</string>
     <string name="import_summary">Recupera datos guardados con anterioridad</string>
     <string name="import_title">Importar/Restaurar</string>
-    <string name="notification">Mostrar notificación</string>
     <string name="set_goal">Establecer objetivo</string>
     <string name="set_step_size">Establecer longitud de paso</string>
     <string name="sign_out">Cerrar sesión</string>

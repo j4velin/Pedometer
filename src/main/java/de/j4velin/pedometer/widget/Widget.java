@@ -26,7 +26,7 @@ import android.graphics.Color;
 import android.widget.RemoteViews;
 
 import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.ui.Activity_Main;
+import de.j4velin.pedometer.ui.MainActivity;
 
 public class Widget extends AppWidgetProvider {
 
@@ -39,7 +39,7 @@ public class Widget extends AppWidgetProvider {
         final SharedPreferences prefs =
                 context.getSharedPreferences("Widgets", Context.MODE_PRIVATE);
         final PendingIntent pendingIntent = PendingIntent
-                .getActivity(context, appWidgetId, new Intent(context, Activity_Main.class),
+                .getActivity(context, appWidgetId, new Intent(context, MainActivity.class),
                         PendingIntent.FLAG_IMMUTABLE);
 
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);

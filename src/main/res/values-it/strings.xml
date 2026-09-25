@@ -26,7 +26,6 @@
     <string name="ispaused">Pedometro in pausa</string>
     <string name="leaderboard">Classifiche</string>
     <string name="no_split_active">Nessun contatore parziale arrivo. Premi per iniziare il conteggio dei passi da qui</string>
-    <string name="notification">Mostra notifica</string>
     <string name="notification_text">%s passi mancanti</string>
     <string name="notification_title">Sto contando i passi</string>
     <string name="pause">In pausa</string>

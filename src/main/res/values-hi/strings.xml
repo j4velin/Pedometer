@@ -49,7 +49,6 @@
     <string name="leaderboard">लीडरबोर्ड</string>
     <string name="no_sensor_explain">इस ऐप को एक डेडिकेटेड हार्डवेयर वॉक सेंसर की आवश्यकता है - जो आपके डिवाइस में नहीं है। इस ऐप को आपके डिवाइस पर नहीं चलाया जा सकता है।</string>
     <string name="notification_text">%s कदम चलने के लिए होने की आवश्यकता है</string>
-    <string name="notification">सूचना</string>
     <string name="import_title">आयात / पुनर्प्राप्त करें</string>
     <string name="export_title">रिकॉर्ड / बैकअप करें</string>
     <string name="file_cant_read">त्रुटि: %s पढ़ी नहीं जा सकती है</string>

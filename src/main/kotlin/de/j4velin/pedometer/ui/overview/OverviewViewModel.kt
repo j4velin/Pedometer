@@ -31,6 +31,7 @@ import de.j4velin.pedometer.ui.theme.StepsGreen
 import de.j4velin.pedometer.util.Logger
 import de.j4velin.pedometer.util.Util
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -43,6 +44,15 @@ data class Bar(val label: String, val value: Float, val color: Color, val decima
     /** The value as the chart shows it above the bar: "8000" steps, "6.0" km */
     val text: String get() = if (decimal) value.toString() else value.toInt().toString()
 }
+
+/** The record day, and the steps of the last seven days and of this month */
+data class Statistics(
+    val recordSteps: Int,
+    val recordDate: Date,
+    val thisWeek: Int,
+    val thisMonth: Int,
+    val daysThisMonth: Int,
+)
 
 data class OverviewState(
     /** Today's steps, for the ring */
@@ -156,6 +166,20 @@ class OverviewViewModel(private val app: PedometerApp) : ViewModel(), SensorEven
             totalDays = db.days
         }
         update(bars = dayChanged)
+    }
+
+    /** The statistics dialog's figures. Today counts with its steps so far. */
+    fun statistics(): Statistics {
+        val (recordDate, recordSteps) = db.recordData
+        val date = Calendar.getInstance()
+        date.timeInMillis = Util.getToday()
+        val daysThisMonth = date.get(Calendar.DAY_OF_MONTH)
+        date.add(Calendar.DATE, -6)
+        val thisWeek = db.getSteps(date.timeInMillis, System.currentTimeMillis()) + sinceBoot
+        date.timeInMillis = Util.getToday()
+        date.set(Calendar.DAY_OF_MONTH, 1)
+        val thisMonth = db.getSteps(date.timeInMillis, System.currentTimeMillis()) + sinceBoot
+        return Statistics(recordSteps, recordDate, thisWeek, thisMonth, daysThisMonth)
     }
 
     override fun onCleared() {

@@ -18,7 +18,6 @@
     <string name="export_title">Exportálás/Mentés</string>
     <string name="import_summary">Importálja az előzőleg mentett adatokat</string>
     <string name="import_title">Importálás/Visszaállítás</string>
-    <string name="notification">Értesítések mutatása</string>
     <string name="set_goal">Cél beállítása</string>
     <string name="set_step_size">Lépéshossz beállítása</string>
     <string name="sign_out">Kijelentkezés</string>

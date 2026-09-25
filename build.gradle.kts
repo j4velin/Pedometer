@@ -54,7 +54,6 @@ android {
     productFlavors {
         create("play") {
             dimension = "main"
-            minSdk = libs.versions.minSdkPlay.get().toInt()
         }
         create("fdroid") {
             dimension = "main"
@@ -101,10 +100,11 @@ kotlin {
 
 dependencies {
     implementation(libs.core)
-    implementation(libs.fragment)
     implementation(libs.colorpicker)
     implementation(libs.dashclock)
     "playImplementation"(libs.playGames)
+    // Play Games brings an old androidx.fragment, which breaks the Activity Result API
+    "playImplementation"(libs.fragment)
 
     implementation(libs.coroutines)
     implementation(libs.activity)
@@ -119,6 +119,7 @@ dependencies {
     implementation(libs.compose.activity)
     implementation(libs.compose.lifecycleRuntime)
     implementation(libs.compose.lifecycleViewmodel)
+    implementation(libs.compose.navigation)
     implementation(libs.compose.tooling.preview)
     debugImplementation(libs.compose.tooling)
 

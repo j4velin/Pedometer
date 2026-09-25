@@ -14,7 +14,6 @@
     <string name="export_title">Экспорт/Резервное копирование</string>
     <string name="import_summary">Импорт сохранённых данных</string>
     <string name="import_title">Импорт/Восстановление</string>
-    <string name="notification">Показывать уведомление</string>
     <string name="set_goal">Установить цель</string>
     <string name="set_step_size">Указать размер шага</string>
     <string name="sign_out">Выйти</string>

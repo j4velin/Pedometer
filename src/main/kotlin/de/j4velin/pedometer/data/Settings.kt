@@ -45,10 +45,6 @@ class Settings(context: Context) {
         get() = prefs.getString(STEP_UNIT, defaultStepUnit) ?: defaultStepUnit
         set(value) = prefs.edit { putString(STEP_UNIT, value) }
 
-    /** Whether to show the notification. Only used before Android 8, which has channels for it. */
-    val showNotification: Boolean
-        get() = prefs.getBoolean(NOTIFICATION, true)
-
     /** When the split counter was started, or -1 if it is not running */
     val splitDate: Long
         get() = prefs.getLong(SPLIT_DATE, -1)
@@ -87,7 +83,6 @@ class Settings(context: Context) {
         private const val GOAL = "goal"
         private const val STEP_SIZE = "stepsize_value"
         private const val STEP_UNIT = "stepsize_unit"
-        private const val NOTIFICATION = "notification"
         private const val SPLIT_DATE = "split_date"
         private const val SPLIT_STEPS = "split_steps"
         private const val CORRECT_SHUTDOWN = "correctShutdown"

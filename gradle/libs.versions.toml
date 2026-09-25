@@ -1,14 +1,14 @@
 [versions]
 agp             = "9.4.1"
 compileSdk      = "37"
-# play needs 24 for Play Games v2; fdroid still runs on 23. Both move to 26 in a later phase.
-minSdk          = "23"
-minSdkPlay      = "24"
+# Android 8: notification channels and startForegroundService, no API wrappers needed
+minSdk          = "26"
 targetSdk       = "37"
 
 activity        = "1.13.0"
 core            = "1.19.1"
 coroutines      = "1.11.0"
+navigation      = "2.10.2"
 fragment        = "1.9.1"
 lifecycle       = "2.11.0"
 colorpicker     = "1.27.1"
@@ -54,6 +54,7 @@ compose-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 compose-lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 compose-lifecycleViewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
 [plugins]

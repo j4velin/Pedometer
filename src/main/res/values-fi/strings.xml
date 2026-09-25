@@ -16,7 +16,6 @@
     <string name="export_title">Vie tiedostoon</string>
     <string name="import_summary">Tuo aiemmin tallennetut tiedot</string>
     <string name="import_title">Tuo tiedostosta</string>
-    <string name="notification">Näytä ilmoitus</string>
     <string name="set_goal">Aseta tavoite</string>
     <string name="set_step_size">Aseta askeleen koko</string>
     <string name="sign_out">Kirjaudu ulos</string>

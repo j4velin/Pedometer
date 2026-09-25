@@ -14,7 +14,6 @@
     <string name="export_title">Exportieren</string>
     <string name="import_summary">Lade Daten aus einer .csv Datei</string>
     <string name="import_title">Importieren</string>
-    <string name="notification">Zeige Benachrichtigung</string>
     <string name="set_goal">Ziel setzen</string>
     <string name="set_step_size">Schrittweite ändern</string>
     <string name="sign_out">Ausloggen</string>

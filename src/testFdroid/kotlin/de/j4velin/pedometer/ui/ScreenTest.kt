@@ -2,7 +2,6 @@ package de.j4velin.pedometer.ui
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
@@ -12,14 +11,17 @@ import android.os.Looper
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.ViewModelProvider
 import de.j4velin.pedometer.R
 import de.j4velin.pedometer.testing.StepsTest
+import de.j4velin.pedometer.ui.dialogs.DialogTags
 import de.j4velin.pedometer.ui.overview.OverviewTags
 import de.j4velin.pedometer.ui.overview.OverviewViewModel
+import de.j4velin.pedometer.ui.settings.SettingsViewModel
 import java.io.File
 import org.junit.After
 import org.junit.Before
@@ -27,12 +29,11 @@ import org.junit.Rule
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.android.controller.ActivityController
-import org.robolectric.shadows.ShadowAlertDialog
 import org.robolectric.shadows.ShadowSensor
 
 /**
- * Base for tests that drive the screens. Only in the fdroid flavor: the play flavor's
- * Activity_Main talks to Play Games, and the screens are the same in both.
+ * Base for tests that drive the screens. Only in the fdroid flavor: the play flavor talks to
+ * Play Games, and the screens are the same in both.
  */
 abstract class ScreenTest : StepsTest() {
 
@@ -48,7 +49,7 @@ abstract class ScreenTest : StepsTest() {
         shadowOf(sm).addSensor(ShadowSensor.newInstance(Sensor.TYPE_STEP_COUNTER))
     }
 
-    private val opened = mutableListOf<ActivityController<Activity_Main>>()
+    private val opened = mutableListOf<ActivityController<MainActivity>>()
 
     /** Closes the screens a test opened, so that the next test only finds its own */
     @After
@@ -67,9 +68,9 @@ abstract class ScreenTest : StepsTest() {
 
     /** The overview, as it looks after the app was opened */
     protected inner class Overview {
-        val controller: ActivityController<Activity_Main> =
-            Robolectric.buildActivity(Activity_Main::class.java).setup()
-        val activity: Activity_Main get() = controller.get()
+        val controller: ActivityController<MainActivity> =
+            Robolectric.buildActivity(MainActivity::class.java).setup()
+        val activity: MainActivity get() = controller.get()
         private val viewModel: OverviewViewModel
             get() = ViewModelProvider(activity)[OverviewViewModel::class.java]
 
@@ -113,34 +114,59 @@ abstract class ScreenTest : StepsTest() {
             idle()
         }
 
-        fun menu(id: Int) {
-            compose.onNodeWithTag(PedometerActivity.MENU_TAG).performClick()
-            val entry = PedometerActivity.MENU.first { it.id == id }
+        fun menu(entry: MainActivity.MenuEntry) {
+            compose.onNodeWithTag(MainActivity.MENU_TAG).performClick()
             compose.onNodeWithText(context.getString(entry.title)).performClick()
-            idle()
-            @Suppress("DEPRECATION")
-            activity.fragmentManager.executePendingTransactions()
             idle()
         }
 
-        fun settings(): Fragment_Settings {
-            menu(R.id.action_settings)
-            @Suppress("DEPRECATION")
-            return activity.fragmentManager.findFragmentByTag(PedometerActivity.SETTINGS_TAG) as Fragment_Settings
+        fun settings(): SettingsScreen {
+            menu(MainActivity.MenuEntry.SETTINGS)
+            return SettingsScreen(activity)
+        }
+    }
+
+    protected inner class SettingsScreen(private val activity: MainActivity) {
+        private val viewModel: SettingsViewModel
+            get() = ViewModelProvider(activity)[SettingsViewModel::class.java]
+
+        /**
+         * Picks [file] as the document to export to (1) or import from (2), and waits for the
+         * result message
+         */
+        fun documentPicked(requestCode: Int, file: File) {
+            viewModel.dismissMessage()
+            val title = if (requestCode == 1) R.string.export_title else R.string.import_title
+            compose.onNodeWithText(context.getString(title)).performClick()
+            idle()
+            val picker = shadowOf(activity).nextStartedActivityForResult
+            shadowOf(activity).receiveResult(
+                picker.intent, Activity.RESULT_OK, Intent().setData(Uri.fromFile(file))
+            )
+            // the file is written on a background thread, the result comes back on the main looper
+            compose.waitUntil(10_000) {
+                shadowOf(Looper.getMainLooper()).idle()
+                viewModel.state.value.message != null
+            }
+            idle()
         }
     }
 
     protected fun overview() = Overview()
 
-    /** Hands [file] to the settings screen as the document picked for export (1) or import (2) */
-    protected fun Fragment_Settings.documentPicked(requestCode: Int, file: File) {
-        onActivityResult(requestCode, Activity.RESULT_OK, Intent().setData(Uri.fromFile(file)))
-        idle()
-    }
+    /** The message the settings showed last, if it is still shown */
+    protected fun latestMessage(): String? =
+        compose.onAllNodesWithTag(DialogTags.MESSAGE).fetchSemanticsNodes().firstOrNull()
+            ?.config?.get(SemanticsProperties.Text)?.joinToString("") { it.text }
 
-    protected fun latestMessage(): String? {
-        val dialog = ShadowAlertDialog.getLatestAlertDialog() as AlertDialog? ?: return null
-        return shadowOf(dialog).message?.toString()
+    /** The text of the dialog element tagged [tag] */
+    protected fun dialogText(tag: String): String =
+        compose.onNodeWithTag(tag, useUnmergedTree = true).fetchSemanticsNode()
+            .config[SemanticsProperties.Text].joinToString("") { it.text }
+
+    protected fun click(tag: String) {
+        compose.onNodeWithTag(tag).performClick()
+        idle()
     }
 
     protected fun format(value: Number): String = Formats.number().format(value)

@@ -24,7 +24,7 @@ import com.google.android.apps.dashclock.api.ExtensionData;
 import de.j4velin.pedometer.PedometerApp;
 import de.j4velin.pedometer.data.StepsDatabase;
 import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.ui.Activity_Main;
+import de.j4velin.pedometer.ui.MainActivity;
 import de.j4velin.pedometer.ui.Formats;
 import de.j4velin.pedometer.util.Util;
 
@@ -41,7 +41,7 @@ public class DashClock extends DashClockExtension {
         int steps = Math.max(db.getCurrentSteps() + db.getSteps(Util.getToday()), 0);
         data.visible(true).status(Formats.number().format(steps))
                 .icon(R.drawable.ic_dashclock)
-                .clickIntent(new Intent(DashClock.this, Activity_Main.class));
+                .clickIntent(new Intent(DashClock.this, MainActivity.class));
         publishUpdate(data);
     }
 

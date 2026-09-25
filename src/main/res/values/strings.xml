@@ -16,7 +16,6 @@
     <string name="export_title">Export/Backup</string>
     <string name="import_summary">Imports previously saved data</string>
     <string name="import_title">Import/Restore</string>
-    <string name="notification">Show notification</string>
     <string name="set_goal">Set goal</string>
     <string name="set_step_size">Set step size</string>
     <string name="sign_out">Sign out</string>

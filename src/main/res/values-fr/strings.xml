@@ -16,7 +16,6 @@
     <string name="export_title">Exporter/Sauvegarder</string>
     <string name="import_summary">Importer les données sauvegardées</string>
     <string name="import_title">Importer/Restaurer</string>
-    <string name="notification">Activer les notifications</string>
     <string name="set_goal">Fixer objectif</string>
     <string name="set_step_size">Fixer l\'unité de pas</string>
     <string name="sign_out">Déconnecter</string>

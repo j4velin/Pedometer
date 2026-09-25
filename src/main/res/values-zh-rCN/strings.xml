@@ -14,7 +14,6 @@
     <string name="export_title">导出/保存</string>
     <string name="import_summary">导入之前保存的数据</string>
     <string name="import_title">导入/还原</string>
-    <string name="notification">显示通知</string>
     <string name="set_goal">设定目标</string>
     <string name="set_step_size">设定步幅</string>
     <string name="sign_out">登出</string>

@@ -18,7 +18,6 @@
     <string name="export_title">İçeriye aktar/Yedekle</string>
     <string name="import_summary">Önceden kaydedilen veriyi içeriye aktarır</string>
     <string name="import_title">İçeriye akar/Geri yükle</string>
-    <string name="notification">Bildirim göster</string>
     <string name="set_goal">Hedef ver</string>
     <string name="set_step_size">Adım boyutunu gir</string>
     <string name="sign_out">Çıkış yap</string>

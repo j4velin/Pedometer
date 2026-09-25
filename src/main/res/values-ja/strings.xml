@@ -13,7 +13,6 @@
     <string name="export_title">エクスポート/バックアップ</string>
     <string name="import_summary">前回保存したデータから復元</string>
     <string name="import_title">インポート/リストア</string>
-    <string name="notification">通知を表示</string>
     <string name="set_goal">目標の設定</string>
     <string name="set_step_size">歩幅の設定</string>
     <string name="sign_out">サインアウト</string>

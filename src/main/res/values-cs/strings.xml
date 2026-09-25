@@ -13,7 +13,6 @@
     <string name="export_title">Export/Záloha</string>
     <string name="import_summary">Import dříve uložených dat</string>
     <string name="import_title">Import/Obnovit</string>
-    <string name="notification">Zobrazit oznámení</string>
     <string name="set_goal">Nastavit cíl</string>
     <string name="set_step_size">Nastavit délku kroku</string>
     <string name="sign_out">Odhlásit</string>
