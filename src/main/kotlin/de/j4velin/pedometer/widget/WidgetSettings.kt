@@ -21,7 +21,6 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.content.edit
 import de.j4velin.pedometer.PedometerApp
-import de.j4velin.pedometer.util.Util
 
 /** What a widget shows */
 data class WidgetData(val steps: Int, @param:ColorInt val textColor: Int, @param:ColorInt val background: Int)
@@ -49,12 +48,7 @@ class WidgetSettings(private val context: Context) {
     /** Reads the database: not on the main thread */
     fun data(appWidgetId: Int) = WidgetData(stepsToday(), textColor(appWidgetId), background(appWidgetId))
 
-    /** Today's steps as of the last saved sensor value, 0 if today has no entry yet */
-    private fun stepsToday(): Int {
-        val db = PedometerApp.get(context).database
-        // getSteps is Int.MIN_VALUE without an entry for today
-        return (db.currentSteps + db.getSteps(Util.getToday())).coerceAtLeast(0)
-    }
+    private fun stepsToday(): Int = PedometerApp.get(context).accounting.refresh().steps ?: 0
 
     private companion object {
         const val PREFS = "Widgets"

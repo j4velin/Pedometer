@@ -49,6 +49,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.j4velin.pedometer.R
 import de.j4velin.pedometer.SensorListener
+import de.j4velin.pedometer.StepsNotification
 import de.j4velin.pedometer.games.GamesState
 import de.j4velin.pedometer.ui.dialogs.MessageDialog
 
@@ -105,7 +106,7 @@ fun SettingsScreen(
             )
         }
         Setting(stringResource(R.string.notification_settings)) {
-            SensorListener.openNotificationSettings(context)
+            StepsNotification.openSettings(context)
         }
         Setting(stringResource(R.string.export_title), stringResource(R.string.export_summary)) {
             export.launch("Pedometer.csv")

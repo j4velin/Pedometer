@@ -92,8 +92,9 @@ fun StatisticsDialog(statistics: Statistics, onDismiss: () -> Unit) {
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Figure(
-                    format.format(statistics.recordSteps) + " @ " +
-                        DateFormat.getDateInstance().format(statistics.recordDate),
+                    format.format(statistics.recordSteps) + (statistics.recordDate?.let {
+                        " @ " + DateFormat.getDateInstance().format(it)
+                    } ?: ""),
                     stringResource(R.string.record), DialogTags.RECORD
                 )
                 Figure(
@@ -133,9 +134,10 @@ private fun Figure(value: String, label: String, tag: String) {
  * open and shows that no split counter is running.
  *
  * @param totalSteps all steps taken so far
+ * @param now the current time in ms since 1970
  */
 @Composable
-fun SplitDialog(settings: Settings, totalSteps: Int, onDismiss: () -> Unit) {
+fun SplitDialog(settings: Settings, totalSteps: Int, now: () -> Long, onDismiss: () -> Unit) {
     var active by remember { mutableStateOf(settings.splitDate > 0) }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -178,7 +180,7 @@ fun SplitDialog(settings: Settings, totalSteps: Int, onDismiss: () -> Unit) {
                         settings.stopSplit()
                         active = false
                     } else {
-                        settings.startSplit(System.currentTimeMillis(), totalSteps)
+                        settings.startSplit(now(), totalSteps)
                         onDismiss()
                     }
                 },

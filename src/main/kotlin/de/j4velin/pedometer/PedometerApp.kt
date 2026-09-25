@@ -21,9 +21,12 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import de.j4velin.pedometer.data.Settings
 import de.j4velin.pedometer.data.StepsDatabase
+import de.j4velin.pedometer.data.StepsHistory
 import de.j4velin.pedometer.domain.StepAccounting
 import de.j4velin.pedometer.games.GamesIntegration
 import de.j4velin.pedometer.games.createGamesIntegration
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 /** Holds the objects that live as long as the process */
 class PedometerApp : Application() {
@@ -34,6 +37,12 @@ class PedometerApp : Application() {
         private set
     lateinit var accounting: StepAccounting
         private set
+    lateinit var history: StepsHistory
+        private set
+
+    /** Where reading the history and files happens. Tests run it inline. */
+    var io: CoroutineDispatcher = Dispatchers.IO
+        @VisibleForTesting set
 
     /** Play Games in the play flavor, nothing in fdroid */
     val games: GamesIntegration by lazy { createGamesIntegration() }
@@ -49,6 +58,7 @@ class PedometerApp : Application() {
         database = StepsDatabase(this)
         settings = Settings(this)
         accounting = StepAccounting(database, settings)
+        history = StepsHistory(database, io)
     }
 
     companion object {

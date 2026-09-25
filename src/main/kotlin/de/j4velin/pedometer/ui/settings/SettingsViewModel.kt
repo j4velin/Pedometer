@@ -22,12 +22,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.j4velin.pedometer.PedometerApp
 import de.j4velin.pedometer.R
-import de.j4velin.pedometer.SensorListener
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,7 +44,7 @@ data class SettingsState(
 /** The settings, and the export and import of the history */
 class SettingsViewModel(
     private val app: PedometerApp,
-    private val io: CoroutineDispatcher = Dispatchers.IO,
+    private val io: CoroutineDispatcher = app.io,
 ) : ViewModel() {
 
     private val settings get() = app.settings
@@ -69,8 +67,8 @@ class SettingsViewModel(
     fun setGoal(goal: Int) {
         settings.goal = goal
         reload()
-        // the notification shows the progress towards the goal
-        SensorListener.start(app)
+        // the notification and the overview show the progress towards the goal
+        app.accounting.refresh()
     }
 
     fun setStepSize(size: Float, unit: String) {

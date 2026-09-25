@@ -22,6 +22,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Locale
 import java.util.TimeZone
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
@@ -67,6 +68,8 @@ abstract class StepsTest {
         previousLocale = Locale.getDefault()
         TimeZone.setDefault(TimeZone.getTimeZone(zone))
         Locale.setDefault(Locale.GERMANY)
+        // reading the history happens inline, so that the screens are complete after idling
+        app.io = Dispatchers.Unconfined
         newProcess()
         at(day1, 8, 0)
     }

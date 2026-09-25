@@ -25,6 +25,20 @@ import java.io.IOException
 import java.io.Reader
 import java.io.Writer
 import java.util.Date
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+/**
+ * Today's steps, as far as the app knows them
+ *
+ * @param day the day, as [Util.getToday] returns it
+ * @param steps the steps taken today, or null while there is no step counter value yet
+ * @param goal the daily goal
+ * @param started whether today has its entry yet. Until it has, the steps since the last save
+ * still go to the day before, so that day is not finished yet.
+ */
+data class TodaySteps(val day: Long, val steps: Int?, val goal: Int, val started: Boolean)
 
 /**
  * The rules for turning the step counter's "steps since boot" into a history of steps per day.
@@ -34,8 +48,10 @@ import java.util.Date
  * last counter value is saved every [SAVE_OFFSET_STEPS] steps or [SAVE_OFFSET_TIME] ms, so a
  * reboot or a new day loses as little as possible.
  *
- * One instance lives as long as the process: it keeps the step counter service's latest values,
- * which the shutdown and the notification need.
+ * One instance lives as long as the process: it keeps the latest step counter values, which the
+ * shutdown needs, and publishes today's steps as [today] for the notification, the widget and the
+ * overview. Two listeners feed it: the service, which gets batched values every few minutes, and
+ * the overview, which gets them live while it is shown.
  *
  * @param clock the current time in ms since 1970
  */
@@ -46,12 +62,51 @@ class StepAccounting(
 ) {
 
     /** The latest step counter value the service received, or 0 if there was none yet */
-    var lastSensorValue = 0
-        private set
+    private var lastSensorValue = 0
+
+    /** The latest step counter value the overview received, or 0 if there was none yet */
+    private var lastLiveValue = 0
+
+    /** The value received last, from either listener */
+    private var latestValue = 0
+
     private var lastSaveSteps = 0
     private var lastSaveTime = 0L
 
-    private fun today() = Util.getToday(clock())
+    private val _today = MutableStateFlow(computeToday())
+
+    /** Today's steps. Updated with every step counter value and every change of the day. */
+    val today: StateFlow<TodaySteps> = _today.asStateFlow()
+
+    /** The current time in ms since 1970 */
+    fun now(): Long = clock()
+
+    /** The start of the current day */
+    fun today(): Long = Util.getToday(clock())
+
+    /**
+     * Reads today's steps anew and publishes them: for a new day, a changed goal, or when the
+     * history might have changed
+     */
+    fun refresh(): TodaySteps = computeToday().also { _today.value = it }
+
+    /**
+     * Today's steps: today's offset plus the latest step counter value. Before any value arrived,
+     * the last saved one is the latest.
+     */
+    private fun computeToday(): TodaySteps {
+        val today = today()
+        val sinceBoot = latestValue.takeIf { it > 0 } ?: db.currentSteps
+        val offset = db.getSteps(today)
+        val started = offset != Int.MIN_VALUE
+        val steps = when {
+            sinceBoot <= 0 -> null
+            // no entry yet: today starts with the next save
+            !started -> 0
+            else -> maxOf(offset + sinceBoot, 0)
+        }
+        return TodaySteps(today, steps, settings.goal, started)
+    }
 
     /**
      * The step counter service received [stepsSinceBoot].
@@ -60,7 +115,50 @@ class StepAccounting(
      */
     fun onStepCounter(stepsSinceBoot: Int): Boolean {
         lastSensorValue = stepsSinceBoot
-        return saveIfNecessary()
+        latestValue = stepsSinceBoot
+        return saveIfNecessary().also { refresh() }
+    }
+
+    /**
+     * The service was started, by the app or by its hourly alarm: saves if necessary. Until the
+     * step counter reports, the last saved value is taken as the latest one, so that the first
+     * save after midnight starts the new day even without new steps.
+     *
+     * @return true, if a value was saved
+     */
+    fun onServiceStarted(): Boolean {
+        val saved = saveIfNecessary()
+        if (lastSensorValue == 0) lastSensorValue = db.currentSteps
+        refresh()
+        return saved
+    }
+
+    /**
+     * The overview received [stepsSinceBoot] while it is shown. Starts today at 0 steps if today
+     * has no entry yet, but saves nothing else: [saveLatest] does when the overview is left.
+     */
+    fun onLiveStepCounter(stepsSinceBoot: Int) {
+        if (stepsSinceBoot <= 0) return
+        lastLiveValue = stepsSinceBoot
+        latestValue = stepsSinceBoot
+        val today = today()
+        if (db.getSteps(today) == Int.MIN_VALUE) {
+            // we don't know when the reboot was, so today starts at 0 steps
+            db.insertNewDay(today, stepsSinceBoot)
+        }
+        refresh()
+    }
+
+    /**
+     * Saves the latest step counter value either listener received - unless the saved one is
+     * newer, which it is if the service saved while the overview got no new value.
+     */
+    fun saveLatest() {
+        val steps = maxOf(lastSensorValue, lastLiveValue)
+        if (steps <= db.currentSteps) return
+        db.saveCurrentSteps(steps)
+        lastSaveSteps = steps
+        lastSaveTime = clock()
     }
 
     /**
@@ -91,31 +189,6 @@ class StepAccounting(
     }
 
     /**
-     * Today's steps as the notification shows them, or null while there is no step counter
-     * value yet. Before the service got its first value, the last saved one is used - and from
-     * then on treated as the latest value.
-     */
-    fun stepsTodayForNotification(): Int? {
-        val offset = db.getSteps(today())
-        if (lastSensorValue == 0) lastSensorValue = db.currentSteps
-        val steps = lastSensorValue
-        if (steps <= 0) return null
-        return (if (offset == Int.MIN_VALUE) -steps else offset) + steps
-    }
-
-    /**
-     * The overview received [stepsSinceBoot] while today has no entry yet: starts today at 0
-     * steps, unless the service started it in the meantime.
-     *
-     * @return today's offset
-     */
-    fun startToday(stepsSinceBoot: Int): Int {
-        val today = today()
-        db.insertNewDay(today, stepsSinceBoot)
-        return db.getSteps(today)
-    }
-
-    /**
      * The device shuts down: moves the steps since the day started into the history, as the
      * step counter starts at 0 again after the reboot.
      */
@@ -124,9 +197,9 @@ class StepAccounting(
         // Therefore the next boot checks this setting
         settings.correctShutdown = true
 
-        // the saved value might be up to an hour old, while the service has received newer
+        // the saved value might be up to an hour old, while the listeners have received newer
         // values in the meantime
-        val steps = maxOf(db.currentSteps, lastSensorValue)
+        val steps = maxOf(db.currentSteps, lastSensorValue, lastLiveValue)
         val today = today()
         if (db.getSteps(today) == Int.MIN_VALUE) {
             // already a new day: the steps belong to the last one
@@ -164,6 +237,12 @@ class StepAccounting(
         db.removeNegativeEntries()
         db.saveCurrentSteps(0)
         settings.correctShutdown = false
+        // values this process might have from before the reboot are meaningless now
+        lastSensorValue = 0
+        lastLiveValue = 0
+        latestValue = 0
+        lastSaveSteps = 0
+        refresh()
         return true
     }
 

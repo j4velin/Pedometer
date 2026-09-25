@@ -22,22 +22,26 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import de.j4velin.pedometer.BuildConfig
 import de.j4velin.pedometer.PedometerApp
 import de.j4velin.pedometer.R
+import de.j4velin.pedometer.data.HistorySummary
+import de.j4velin.pedometer.domain.TodaySteps
 import de.j4velin.pedometer.ui.Formats
 import de.j4velin.pedometer.ui.theme.HistoryBlue
 import de.j4velin.pedometer.ui.theme.StepsGreen
 import de.j4velin.pedometer.util.Logger
-import de.j4velin.pedometer.util.Util
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /** One day in the week chart */
 data class Bar(val label: String, val value: Float, val color: Color, val decimal: Boolean) {
@@ -48,7 +52,8 @@ data class Bar(val label: String, val value: Float, val color: Color, val decima
 /** The record day, and the steps of the last seven days and of this month */
 data class Statistics(
     val recordSteps: Int,
-    val recordDate: Date,
+    /** null if there is no finished day yet */
+    val recordDate: Date?,
     val thisWeek: Int,
     val thisMonth: Int,
     val daysThisMonth: Int,
@@ -72,55 +77,51 @@ data class OverviewState(
 )
 
 /**
- * The overview: today's steps, the average and total, and the last week. While the screen is
- * resumed, it listens to the step counter itself to update live, and starts today's entry if the
- * service did not yet.
+ * The overview: today's steps, the average and total, and the last week.
+ *
+ * Today's steps come from [de.j4velin.pedometer.domain.StepAccounting.today], the finished days
+ * from [de.j4velin.pedometer.data.StepsHistory]. While the screen is resumed, it also listens to
+ * the step counter itself and passes the values on, as the service only gets them every few
+ * minutes.
  */
 class OverviewViewModel(private val app: PedometerApp) : ViewModel(), SensorEventListener {
-    private val db get() = app.database
+    private val accounting = app.accounting
     private val settings get() = app.settings
 
     private val _state = MutableStateFlow(OverviewState())
     val state: StateFlow<OverviewState> = _state.asStateFlow()
 
-    private var today = 0L
-    private var todayOffset = Int.MIN_VALUE
-    private var totalStart = 0
-    private var totalDays = 1
-    private var goal = 0
+    private var today: TodaySteps = accounting.today.value
+    /** The finished days before [historyDay], or null while they are loading */
+    private var history: HistorySummary? = null
+    private var historyDay = 0L
+    /** Whether today had its entry when the history was read: the day before was finished */
+    private var historyComplete = false
+    private var historyJob: Job? = null
     private var showSteps = true
 
-    /** The latest step counter value, for the statistics dialog */
-    var sinceBoot = 0
-        private set
-
     /** All steps taken so far, for the split counter */
-    val totalSteps: Int get() = totalStart + stepsToday
+    val totalSteps: Int get() = (history?.total ?: 0) + stepsToday
 
-    private val stepsToday: Int
-        // todayOffset might still be Int.MIN_VALUE on first start
-        get() = maxOf(todayOffset + sinceBoot, 0)
+    private val stepsToday: Int get() = today.steps ?: 0
 
     private val sensorManager get() = app.getSystemService(SensorManager::class.java)
 
+    init {
+        viewModelScope.launch { accounting.today.collect(::onToday) }
+    }
+
     /** The screen is shown: reads everything anew and starts listening to the step counter */
     fun resume() {
-        if (BuildConfig.DEBUG) db.logState()
-        today = Util.getToday()
-        todayOffset = db.getSteps(today)
-        goal = settings.goal
-        sinceBoot = db.currentSteps
-
         val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         if (sensor == null) {
             _state.value = _state.value.copy(noSensor = true)
         } else {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI, 0)
         }
-
-        totalStart = db.totalWithoutToday
-        totalDays = db.days
-        update(bars = true)
+        // the history or the settings might have changed while the screen was hidden
+        today = accounting.refresh()
+        loadHistory()
     }
 
     /** The screen is hidden: stops listening and saves the latest step counter value */
@@ -130,12 +131,12 @@ class OverviewViewModel(private val app: PedometerApp) : ViewModel(), SensorEven
         } catch (e: Exception) {
             if (BuildConfig.DEBUG) Logger.log(e)
         }
-        db.saveCurrentSteps(sinceBoot)
+        accounting.saveLatest()
     }
 
     fun toggleStepsAndDistance() {
         showSteps = !showSteps
-        update(bars = true)
+        update()
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
@@ -144,92 +145,94 @@ class OverviewViewModel(private val app: PedometerApp) : ViewModel(), SensorEven
 
     override fun onSensorChanged(event: SensorEvent) {
         val value = event.values[0]
-        if (BuildConfig.DEBUG) Logger.log(
-            "UI - sensorChanged | todayOffset: $todayOffset since boot: $value"
-        )
-        if (value > Int.MAX_VALUE || value == 0f) return
-        val dayChanged = Util.getToday() != today
-        if (dayChanged) {
-            // the app was open at midnight: today's entry might already have been created by
-            // the SensorListener
-            today = Util.getToday()
-            todayOffset = db.getSteps(today)
+        if (BuildConfig.DEBUG) Logger.log("UI - sensorChanged | since boot: $value")
+        if (value > Int.MAX_VALUE) return
+        accounting.onLiveStepCounter(value.toInt())
+    }
+
+    private fun onToday(today: TodaySteps) {
+        this.today = today
+        // after midnight, yesterday becomes part of the total and the bar chart - once today has
+        // its entry, as until then the new steps still go to yesterday
+        if (today.day != historyDay || today.started != historyComplete) loadHistory() else update()
+    }
+
+    private fun loadHistory() {
+        historyJob?.cancel()
+        historyJob = viewModelScope.launch {
+            val day = today.day
+            val complete = today.started
+            history = app.history.summary(day)
+            historyDay = day
+            historyComplete = complete
+            update()
         }
-        if (todayOffset == Int.MIN_VALUE) {
-            // no values for today: we don't know when the reboot was, so today starts at 0 steps
-            todayOffset = app.accounting.startToday(value.toInt())
-        }
-        sinceBoot = value.toInt()
-        if (dayChanged) {
-            // yesterday is now part of the total and the bar chart
-            totalStart = db.totalWithoutToday
-            totalDays = db.days
-        }
-        update(bars = dayChanged)
     }
 
     /** The statistics dialog's figures. Today counts with its steps so far. */
-    fun statistics(): Statistics {
-        val (recordDate, recordSteps) = db.recordData
+    suspend fun statistics(): Statistics {
+        val record = app.history.record()
+        val today = accounting.today()
         val date = Calendar.getInstance()
-        date.timeInMillis = Util.getToday()
+        date.timeInMillis = today
         val daysThisMonth = date.get(Calendar.DAY_OF_MONTH)
         date.add(Calendar.DATE, -6)
-        val thisWeek = db.getSteps(date.timeInMillis, System.currentTimeMillis()) + sinceBoot
-        date.timeInMillis = Util.getToday()
+        val thisWeek = app.history.stepsSince(date.timeInMillis, today) + stepsToday
+        date.timeInMillis = today
         date.set(Calendar.DAY_OF_MONTH, 1)
-        val thisMonth = db.getSteps(date.timeInMillis, System.currentTimeMillis()) + sinceBoot
-        return Statistics(recordSteps, recordDate, thisWeek, thisMonth, daysThisMonth)
+        val thisMonth = app.history.stepsSince(date.timeInMillis, today) + stepsToday
+        return Statistics(
+            record?.second ?: 0, record?.first, thisWeek, thisMonth, daysThisMonth
+        )
     }
 
     override fun onCleared() {
         sensorManager.unregisterListener(this)
     }
 
-    private fun update(bars: Boolean) {
+    private fun update() {
+        val history = history ?: return
         val format = Formats.number()
         val steps = stepsToday
         val metric = settings.stepUnit == "cm"
         val stepSize = settings.stepSize
+        // today counts as a day, so this is never 0
+        val days = history.days + 1
+        val total = history.total + steps
         _state.value = _state.value.copy(
             stepsToday = steps,
-            goal = goal,
+            goal = today.goal,
             showSteps = showSteps,
             unit = when {
                 showSteps -> app.getString(R.string.steps)
                 metric -> "km"
                 else -> "mi"
             },
-            bars = if (bars) loadBars(metric, stepSize) else _state.value.bars,
+            bars = bars(history, metric, stepSize),
         ).let {
             if (showSteps) {
-                val total = totalStart + steps
                 it.copy(
                     today = format.format(steps),
                     total = format.format(total),
-                    average = format.format(total / totalDays),
+                    average = format.format(total / days),
                 )
             } else {
                 // cm -> km, or ft -> mi
                 val divisor = if (metric) 100000 else 5280
-                val distanceToday = steps * stepSize / divisor
-                val distanceTotal = (totalStart + steps) * stepSize / divisor
+                val distanceTotal = total * stepSize / divisor
                 it.copy(
-                    today = format.format(distanceToday),
+                    today = format.format(steps * stepSize / divisor),
                     total = format.format(distanceTotal),
-                    average = format.format(distanceTotal / totalDays),
+                    average = format.format(distanceTotal / days),
                 )
             }
         }
     }
 
-    /**
-     * The days before today with steps, oldest first. The newest entry is left out, as that is
-     * today's.
-     */
-    private fun loadBars(metric: Boolean, stepSize: Float): List<Bar> {
+    /** The last week's days with steps, oldest first */
+    private fun bars(history: HistorySummary, metric: Boolean, stepSize: Float): List<Bar> {
         val dayName = SimpleDateFormat("E", Locale.getDefault())
-        return db.getLastEntries(8).drop(1).reversed()
+        return history.lastWeek
             .filter { (_, steps) -> steps > 0 }
             .map { (date, steps) ->
                 val value = if (showSteps) {
@@ -240,7 +243,7 @@ class OverviewViewModel(private val app: PedometerApp) : ViewModel(), SensorEven
                 }
                 Bar(
                     dayName.format(Date(date)), value,
-                    if (steps > goal) StepsGreen else HistoryBlue, decimal = !showSteps
+                    if (steps > today.goal) StepsGreen else HistoryBlue, decimal = !showSteps
                 )
             }
     }

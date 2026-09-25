@@ -26,19 +26,25 @@ class DatabaseTest : StepsTest() {
 
     @Test
     fun totalCountsOnlyFinishedDaysWithSteps() {
-        assertEquals(20000, withDb { it.totalWithoutToday })
+        assertEquals(20000, withDb { it.totalBefore(millis(today)) })
     }
 
     @Test
-    fun daysCountFinishedDaysWithStepsPlusToday() {
-        assertEquals(2, withDb { it.daysWithoutToday })
-        assertEquals(3, withDb { it.days })
+    fun daysCountFinishedDaysWithSteps() {
+        assertEquals(2, withDb { it.daysBefore(millis(today)) })
+    }
+
+    @Test
+    fun daysWithAtLeastSomeSteps() {
+        assertEquals(2, withDb { it.daysWithAtLeast(8000, millis(today)) })
+        assertEquals(1, withDb { it.daysWithAtLeast(8001, millis(today)) })
+        assertEquals(1, withDb { it.daysWithAtLeast(8000, millis(day2)) })
     }
 
     @Test
     fun recordIsTheBestDay() {
         assertEquals(12000, withDb { it.record })
-        val (date, steps) = withDb { it.recordData }.let { it.first to it.second }
+        val (date, steps) = withDb { it.recordData }!!
         assertEquals(millis(day2), date.time)
         assertEquals(12000, steps)
     }
@@ -60,14 +66,19 @@ class DatabaseTest : StepsTest() {
     }
 
     @Test
-    fun lastEntriesAreNewestFirstWithoutTheSinceBootRow() {
-        val entries = withDb { it.getLastEntries(8) }.map { it.first to it.second }
+    fun lastDaysAreNewestFirstWithoutTodayAndTheSinceBootRow() {
+        val entries = withDb { it.lastDaysBefore(millis(today), 8) }
         assertEquals(
-            listOf(millis(today) to -4000, millis(day2) to 12000, millis(day1) to 8000,
-                millis(day1.minusDays(1)) to 0),
+            listOf(millis(day2) to 12000, millis(day1) to 8000, millis(day1.minusDays(1)) to 0),
             entries
         )
-        assertEquals(2, withDb { it.getLastEntries(2) }.size)
+        assertEquals(2, withDb { it.lastDaysBefore(millis(today), 2) }.size)
+    }
+
+    @Test
+    fun noRecordWithoutDays() {
+        withDb { it.writableDatabase.delete("steps", null, null) }
+        assertEquals(null, withDb { it.recordData })
     }
 
     @Test

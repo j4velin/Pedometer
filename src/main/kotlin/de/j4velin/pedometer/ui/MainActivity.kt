@@ -43,6 +43,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -67,6 +68,7 @@ import de.j4velin.pedometer.ui.dialogs.SplitDialog
 import de.j4velin.pedometer.ui.dialogs.StatisticsDialog
 import de.j4velin.pedometer.ui.overview.OverviewScreen
 import de.j4velin.pedometer.ui.overview.OverviewViewModel
+import de.j4velin.pedometer.ui.overview.Statistics
 import de.j4velin.pedometer.ui.settings.SettingsScreen
 import de.j4velin.pedometer.ui.settings.SettingsViewModel
 import de.j4velin.pedometer.ui.theme.PedometerTheme
@@ -205,8 +207,12 @@ class MainActivity : ComponentActivity() {
 
         val close = { dialog = null }
         when (dialog) {
-            MainDialog.STATISTICS -> StatisticsDialog(remember { overview.statistics() }, close)
-            MainDialog.SPLIT -> SplitDialog(app.settings, overview.totalSteps, close)
+            MainDialog.STATISTICS -> {
+                val statistics by produceState<Statistics?>(null) { value = overview.statistics() }
+                statistics?.let { StatisticsDialog(it, close) }
+            }
+            MainDialog.SPLIT ->
+                SplitDialog(app.settings, overview.totalSteps, app.accounting::now, close)
             MainDialog.ABOUT -> AboutDialog(close)
             MainDialog.SIGN_IN_NECESSARY -> AlertDialog(
                 onDismissRequest = close,

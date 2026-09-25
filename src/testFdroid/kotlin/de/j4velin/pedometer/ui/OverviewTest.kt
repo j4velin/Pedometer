@@ -24,6 +24,21 @@ class OverviewTest : ScreenTest() {
     }
 
     @Test
+    fun leavingKeepsANewerValueTheServiceSaved() {
+        givenRows(day1 to -1000)
+        givenSavedSinceBoot(1000)
+        // standing still: the overview gets no value while it is open
+        val overview = overview()
+        at(day1, 9, 0)
+        service().sensor(1600)
+        assertEquals(1600, savedSinceBoot())
+        assertEquals("the overview shows the service's value", format(600), overview.steps)
+
+        overview.leave()
+        assertEquals(1600, savedSinceBoot())
+    }
+
+    @Test
     fun zeroFromTheSensorIsIgnored() {
         val overview = overview()
         overview.sensor(0)

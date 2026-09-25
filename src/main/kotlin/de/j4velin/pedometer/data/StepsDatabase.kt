@@ -25,7 +25,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import androidx.core.database.sqlite.transaction
 import de.j4velin.pedometer.BuildConfig
 import de.j4velin.pedometer.util.Logger
-import de.j4velin.pedometer.util.Util
 import java.util.Date
 
 /**
@@ -128,28 +127,30 @@ class StepsDatabase(context: Context) :
         }
     }
 
-    /** The steps taken on all days before today */
-    val totalWithoutToday: Int
-        get() = queryInt(
-            "SUM(steps)", "steps > 0 AND date > 0 AND date < ?", Util.getToday().toString()
-        )
+    /** The steps taken on all days before [day] */
+    fun totalBefore(day: Long): Int =
+        queryInt("SUM(steps)", "steps > 0 AND date > 0 AND date < ?", day.toString())
+
+    /** The number of days before [day] with more than 0 steps */
+    fun daysBefore(day: Long): Int =
+        queryInt("COUNT(*)", "steps > 0 AND date > 0 AND date < ?", day.toString())
+
+    /** The number of days before [day] with at least [steps] steps */
+    fun daysWithAtLeast(steps: Int, day: Long): Int =
+        queryInt("COUNT(*)", "steps >= ? AND date > 0 AND date < ?", steps.toString(), day.toString())
 
     /** The most steps taken on one day */
     val record: Int
         get() = queryInt("MAX(steps)", "date > 0")
 
-    /** The day with the most steps and its step count */
-    val recordData: Pair<Date, Int>
+    /** The day with the most steps and its step count, or null if there are no days yet */
+    val recordData: Pair<Date, Int>?
         get() = query(arrayOf("date", "steps"), "date > 0", null, null, null, "steps DESC", "1")
-            .use {
-                it.moveToFirst()
-                Date(it.getLong(0)) to it.getInt(1)
-            }
+            .use { if (it.moveToFirst()) Date(it.getLong(0)) to it.getInt(1) else null }
 
     /**
-     * The stored value for [date]. For a past day that is its step count; for
-     * [Util.getToday] it is the offset, which gives today's steps when added to the
-     * "steps since boot" value.
+     * The stored value for [date]. For a past day that is its step count; for today it is the
+     * offset, which gives today's steps when added to the "steps since boot" value.
      *
      * @return the value, or Int.MIN_VALUE if there is no entry for [date]
      */
@@ -157,13 +158,12 @@ class StepsDatabase(context: Context) :
         query(arrayOf("steps"), "date = ?", arrayOf(date.toString()), null, null, null, null)
             .use { if (it.moveToFirst()) it.getInt(0) else Int.MIN_VALUE }
 
-    /**
-     * @return the last [num] entries (without the "steps since boot" row) as date to steps,
-     * newest first
-     */
-    fun getLastEntries(num: Int): List<Pair<Long, Int>> =
-        query(arrayOf("date", "steps"), "date > 0", null, null, null, "date DESC", num.toString())
-            .use { c -> buildList { while (c.moveToNext()) add(c.getLong(0) to c.getInt(1)) } }
+    /** The last [num] days before [day] as date to steps, newest first */
+    fun lastDaysBefore(day: Long, num: Int): List<Pair<Long, Int>> =
+        query(
+            arrayOf("date", "steps"), "date > 0 AND date < ?", arrayOf(day.toString()), null, null,
+            "date DESC", num.toString()
+        ).use { c -> buildList { while (c.moveToNext()) add(c.getLong(0) to c.getInt(1)) } }
 
     /**
      * The steps taken from [start] to [end], both included. If the range includes today, the
@@ -184,16 +184,6 @@ class StepsDatabase(context: Context) :
     fun removeInvalidEntries() {
         writableDatabase.delete(DB_NAME, "steps >= ?", arrayOf("200000"))
     }
-
-    /** The number of days before today with more than 0 steps */
-    val daysWithoutToday: Int
-        get() = queryInt(
-            "COUNT(*)", "steps > ? AND date < ? AND date > 0", "0", Util.getToday().toString()
-        ).coerceAtLeast(0)
-
-    /** The number of days with more than 0 steps, plus today. Safe to divide by: at least 1. */
-    val days: Int
-        get() = daysWithoutToday + 1
 
     /** Saves the current "steps since boot" sensor value */
     fun saveCurrentSteps(steps: Int) {

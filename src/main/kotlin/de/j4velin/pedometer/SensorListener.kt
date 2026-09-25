@@ -18,12 +18,8 @@ package de.j4velin.pedometer
 
 import android.Manifest
 import android.app.AlarmManager
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -35,22 +31,28 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.os.IBinder
-import android.provider.Settings
-import android.widget.Toast
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
-import de.j4velin.pedometer.ui.MainActivity
 import de.j4velin.pedometer.util.Logger
 import de.j4velin.pedometer.util.Util
 import de.j4velin.pedometer.widget.Widget
-import java.text.NumberFormat
 import java.util.Date
-import java.util.Locale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 /**
  * Foreground service which keeps the step counter listener alive, to always get the number of
  * steps since boot. The rules for what to save when live in
- * [de.j4velin.pedometer.domain.StepAccounting].
+ * [de.j4velin.pedometer.domain.StepAccounting]; the service passes the values on and shows
+ * [de.j4velin.pedometer.domain.StepAccounting.today] in its notification and the widgets.
  *
  * This service won't be needed any more if there is a way to read the step value without
  * waiting for a sensor event.
@@ -59,6 +61,7 @@ class SensorListener : Service(), SensorEventListener {
 
     private val shutdownReceiver = ShutdownRecevier()
     private val accounting get() = PedometerApp.get(this).accounting
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
         // nobody knows what happens here: step value might magically decrease
@@ -72,19 +75,14 @@ class SensorListener : Service(), SensorEventListener {
             if (BuildConfig.DEBUG) Logger.log("probably not a real value: $value")
             return
         }
-        if (accounting.onStepCounter(value.toInt())) saved()
+        accounting.onStepCounter(value.toInt())
     }
 
-    /** Shows the saved value in the notification and the widgets */
-    private fun saved() {
-        showNotification()
-        Widget.update(this)
-    }
-
-    private fun showNotification() {
+    /** Shows the notification and makes this a foreground service */
+    private fun startForeground() {
         try {
             ServiceCompat.startForeground(
-                this, NOTIFICATION_ID, getNotification(this),
+                this, StepsNotification.ID, StepsNotification.build(this, accounting.today.value),
                 if (Build.VERSION.SDK_INT >= 34) ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH else 0
             )
         } catch (e: SecurityException) {
@@ -98,7 +96,8 @@ class SensorListener : Service(), SensorEventListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         reRegisterSensor()
-        if (accounting.saveIfNecessary()) saved() else showNotification()
+        accounting.onServiceStarted()
+        startForeground()
 
         // restart service every hour to save the current step count
         val nextUpdate =
@@ -122,6 +121,28 @@ class SensorListener : Service(), SensorEventListener {
         super.onCreate()
         if (BuildConfig.DEBUG) Logger.log("SensorListener onCreate")
         registerBroadcastReceiver()
+        showToday()
+    }
+
+    /**
+     * Keeps the notification and the widgets up to date with today's steps. While the overview
+     * is open, new values arrive with every step: the notification then changes at most every
+     * [NOTIFICATION_INTERVAL] ms and the widgets every [WIDGET_INTERVAL] ms.
+     */
+    private fun showToday() {
+        // the first value is the one startForeground shows
+        scope.launch {
+            accounting.today.drop(1).conflate().collect {
+                StepsNotification.update(this@SensorListener, it)
+                delay(NOTIFICATION_INTERVAL)
+            }
+        }
+        scope.launch {
+            accounting.today.map { it.day to it.steps }.distinctUntilChanged().conflate().collect {
+                Widget.update(this@SensorListener)
+                delay(WIDGET_INTERVAL)
+            }
+        }
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -139,6 +160,7 @@ class SensorListener : Service(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         if (BuildConfig.DEBUG) Logger.log("SensorListener onDestroy")
+        scope.cancel()
         unregisterReceiver(shutdownReceiver)
         try {
             getSystemService(SensorManager::class.java).unregisterListener(this)
@@ -180,8 +202,9 @@ class SensorListener : Service(), SensorEventListener {
     }
 
     companion object {
-        const val NOTIFICATION_ID = 1
         private const val MICROSECONDS_IN_ONE_MINUTE = 60_000_000L
+        private const val NOTIFICATION_INTERVAL = 2_000L
+        private const val WIDGET_INTERVAL = 60_000L
 
         /**
          * @return true, if the step counter may be read. Since Android 10, this requires the
@@ -202,79 +225,6 @@ class SensorListener : Service(), SensorEventListener {
                 return
             }
             context.startForegroundService(Intent(context, SensorListener::class.java))
-        }
-
-        /** Keeps the id of the earlier versions, so that the user's settings for it stay */
-        private const val NOTIFICATION_CHANNEL_ID = "Notification"
-
-        /** Creates the notification's channel, if it does not exist yet */
-        private fun notificationChannel(context: Context): String {
-            val channel = NotificationChannel(
-                NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_NONE
-            ).apply {
-                importance = NotificationManager.IMPORTANCE_MIN
-                enableLights(false)
-                enableVibration(false)
-                setBypassDnd(false)
-                setSound(null, null)
-            }
-            context.getSystemService(NotificationManager::class.java)
-                .createNotificationChannel(channel)
-            return NOTIFICATION_CHANNEL_ID
-        }
-
-        /** Opens the system settings of the notification's channel */
-        fun openNotificationSettings(context: Context) {
-            try {
-                context.startActivity(
-                    Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-                        .putExtra(Settings.EXTRA_CHANNEL_ID, NOTIFICATION_CHANNEL_ID)
-                        .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                )
-            } catch (e: ActivityNotFoundException) {
-                Toast.makeText(
-                    context,
-                    "Settings not found - please search for the notification settings in the Android settings manually",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-
-        @JvmStatic
-        fun getNotification(context: Context): Notification {
-            if (BuildConfig.DEBUG) Logger.log("getNotification")
-            val app = PedometerApp.get(context)
-            val goal = app.settings.goal
-            val stepsToday = app.accounting.stepsTodayForNotification()
-            val builder = Notification.Builder(context, notificationChannel(context))
-            if (stepsToday != null) {
-                val format = NumberFormat.getInstance(Locale.getDefault())
-                builder.setProgress(goal, stepsToday, false)
-                    .setContentText(
-                        if (stepsToday >= goal) {
-                            context.getString(
-                                R.string.goal_reached_notification, format.format(stepsToday)
-                            )
-                        } else {
-                            context.getString(
-                                R.string.notification_text, format.format(goal - stepsToday)
-                            )
-                        }
-                    )
-                    .setContentTitle(format.format(stepsToday) + " " + context.getString(R.string.steps))
-            } else { // still no step value?
-                builder.setContentText(context.getString(R.string.your_progress_will_be_shown_here_soon))
-                    .setContentTitle(context.getString(R.string.notification_title))
-            }
-            builder.setShowWhen(false)
-                .setContentIntent(
-                    PendingIntent.getActivity(
-                        context, 0, Intent(context, MainActivity::class.java),
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                    )
-                )
-                .setSmallIcon(R.drawable.ic_notification).setOngoing(true)
-            return builder.build()
         }
     }
 }
