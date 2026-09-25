@@ -64,9 +64,6 @@ android {
         disable += setOf("MissingTranslation", "ExtraTranslation")
         // flags the Compose compiler plugin, which is pinned on purpose (see libs.versions.toml)
         disable += "NewerVersionAvailable"
-        // Warnings accepted when the migration was finished: the "%d steps" strings, which
-        // would need plurals in every translation, and isShrinkResources = false.
-        baseline = file("lint-baseline.xml")
     }
 
     testOptions {
@@ -82,7 +79,7 @@ android {
         release {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
-            isShrinkResources = false
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-project.txt")
         }
         debug {

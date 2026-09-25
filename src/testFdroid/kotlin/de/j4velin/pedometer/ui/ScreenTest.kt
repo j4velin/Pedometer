@@ -170,4 +170,7 @@ abstract class ScreenTest : StepsTest() {
     }
 
     protected fun format(value: Number): String = Formats.number().format(value)
+
+    protected fun plural(id: Int, count: Int): String =
+        context.resources.getQuantityString(id, count, count)
 }

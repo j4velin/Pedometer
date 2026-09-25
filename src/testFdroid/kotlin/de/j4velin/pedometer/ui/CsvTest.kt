@@ -66,9 +66,9 @@ class CsvTest : ScreenTest() {
         assertEquals(-4000, stored(today))
         assertEquals(null, stored(today.plusDays(1)))
         assertEquals(
-            context.getString(R.string.entries_imported, 2) + "\n\n" +
-                context.getString(R.string.entries_overwritten, 1) + "\n\n" +
-                context.getString(R.string.entries_ignored, 2),
+            plural(R.plurals.entries_imported, 2) + "\n\n" +
+                plural(R.plurals.entries_overwritten, 1) + "\n\n" +
+                plural(R.plurals.entries_ignored, 2),
             latestMessage()
         )
     }

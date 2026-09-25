@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
@@ -87,7 +88,7 @@ fun SettingsScreen(
 
     Column(modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         Setting(
-            stringResource(R.string.goal), stringResource(R.string.goal_summary, state.goal)
+            stringResource(R.string.goal), pluralStringResource(R.plurals.goal_summary, state.goal, state.goal)
         ) { dialog = SettingsDialog.GOAL }
         Setting(
             stringResource(R.string.step_size),

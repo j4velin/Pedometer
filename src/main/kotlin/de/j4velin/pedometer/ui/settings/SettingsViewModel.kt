@@ -108,15 +108,15 @@ class SettingsViewModel(
                     .use { app.accounting.importCsv(it) }
                 buildString {
                     append(
-                        app.getString(R.string.entries_imported, result.inserted + result.overwritten)
+                        plural(R.plurals.entries_imported, result.inserted + result.overwritten)
                     )
                     if (result.overwritten > 0) {
                         append("\n\n").append(
-                            app.getString(R.string.entries_overwritten, result.overwritten)
+                            plural(R.plurals.entries_overwritten, result.overwritten)
                         )
                     }
                     if (result.ignored > 0) {
-                        append("\n\n").append(app.getString(R.string.entries_ignored, result.ignored))
+                        append("\n\n").append(plural(R.plurals.entries_ignored, result.ignored))
                     }
                 }
             } catch (e: IOException) {
@@ -133,6 +133,8 @@ class SettingsViewModel(
     fun dismissMessage() {
         _state.value = _state.value.copy(message = null)
     }
+
+    private fun plural(id: Int, count: Int) = app.resources.getQuantityString(id, count, count)
 
     private fun displayName(uri: Uri): String? = try {
         app.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)

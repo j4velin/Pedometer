@@ -17,8 +17,14 @@
     <string name="set_goal">लक्ष्य सेट करें</string>
     <string name="set_step_size">कदम का आकार सेट करें</string>
     <string name="record">रिकॉर्ड करें</string>
-    <string name="entries_imported">%d एन्ट्री आयात की गई</string>
-    <string name="entries_ignored">%d एन्ट्री अनदेखी की गई क्योंकि उनमें वैध डेटा नहीं है</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d एन्ट्री आयात की गई</item>
+        <item quantity="other">%d एन्ट्री आयात की गई</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d एन्ट्री अनदेखी की गई क्योंकि उनमें वैध डेटा नहीं है</item>
+        <item quantity="other">%d एन्ट्री अनदेखी की गई क्योंकि उनमें वैध डेटा नहीं है</item>
+    </plurals>
     <string name="settings">सेटिंग्स</string>
     <string name="total">कुल</string>
     <string name="total_last_7_days">पिछले 7 दिनों का कुल</string>
@@ -26,7 +32,10 @@
     <string name="your_progress_will_be_shown_here_soon">आपकी प्रगति यहाँ जल्द ही दिखाई देगी</string>
     <string name="step_size">कदम का आकार</string>
     <string name="app_name">पेडोमीटर</string>
-    <string name="goal_summary">वर्तमान लक्ष्य: %,d कदम</string>
+    <plurals name="goal_summary">
+        <item quantity="one">वर्तमान लक्ष्य: %,d कदम</item>
+        <item quantity="other">वर्तमान लक्ष्य: %,d कदम</item>
+    </plurals>
     <string name="import_summary">पूर्व में सहेजे गए डेटा आयात करें</string>
     <string name="no_sensor">सेंसर उपलब्ध नहीं है</string>
     <string name="start">शुरू करें</string>

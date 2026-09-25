@@ -5,7 +5,9 @@
     <string name="step_size">歩幅</string>
     <string name="about">情報</string>
     <string name="account">アカウント</string>
-    <string name="goal_summary">現在の目標: %,d 歩</string>
+    <plurals name="goal_summary">
+        <item quantity="other">現在の目標: %,d 歩</item>
+    </plurals>
     <string name="step_size_summary">現在の歩幅: %1$.2f %2$s</string>
     <string name="sign_in">Googleアカウントでサインインすると、実績やリーダーボードが使えるようになります</string>
     <string name="signed_in">%s としてサインイン中</string>
@@ -18,8 +20,12 @@
     <string name="file_cant_read">エラー: %s が読み込めません</string>
     <string name="error_file">ファイル %s にアクセスできません</string>
     <string name="data_saved">%s にデータを保存しました</string>
-    <string name="entries_imported">%d 件のデータを復元しました</string>
-    <string name="entries_ignored">%d 件の無効なデータをスキップしました</string>
+    <plurals name="entries_imported">
+        <item quantity="other">%d 件のデータを復元しました</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="other">%d 件の無効なデータをスキップしました</item>
+    </plurals>
     <string name="sign_in_necessary">サインインが必要です</string>
     <string name="please_sign_in_with_your_google_account">この機能を利用するにはGoogleのアカウントでサインインしてください</string>
     <string name="steps">歩</string>

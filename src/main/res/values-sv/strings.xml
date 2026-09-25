@@ -8,7 +8,10 @@
     <string name="step_size">Steglängd</string>
     <string name="about">Om</string>
     <string name="account">Konto</string>
-    <string name="goal_summary">Nuvarande mål: %,d steg</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Nuvarande mål: %,d steg</item>
+        <item quantity="other">Nuvarande mål: %,d steg</item>
+    </plurals>
     <string name="step_size_summary">Nuvarande steglängd: %1$.2f %2$s</string>
     <string name="sign_in">Logga in med ditt Googlekonto för att använda prestationer och topplistor</string>
     <string name="signed_in">Inloggad som %s</string>
@@ -21,9 +24,18 @@
     <string name="file_cant_read">Fel: %s kan inte läsas</string>
     <string name="error_file">Fel vid filåtkomst: %s</string>
     <string name="data_saved">Data sparad i %s</string>
-    <string name="entries_imported">%d poster importerade</string>
-    <string name="entries_ignored">%d poster ignorerades eftersom de inte innehöll valid data</string>
-    <string name="entries_overwritten">%d poster skrevs över med importerad data</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d post importerad</item>
+        <item quantity="other">%d poster importerade</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d post ignorerades eftersom den inte innehöll giltig data</item>
+        <item quantity="other">%d poster ignorerades eftersom de inte innehöll valid data</item>
+    </plurals>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d post skrevs över med importerad data</item>
+        <item quantity="other">%d poster skrevs över med importerad data</item>
+    </plurals>
     <string name="sign_in_necessary">Inloggning nödvändig</string>
     <string name="please_sign_in_with_your_google_account">Logga in med ditt konto på Google för att använda den här funktionen.</string>
     <string name="steps">steg</string>

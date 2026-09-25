@@ -6,7 +6,12 @@
     <string name="step_size">Размер шага</string>
     <string name="about">О программе</string>
     <string name="account">Учётная запись</string>
-    <string name="goal_summary">Текущая цель: %,d шагов</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Текущая цель: %,d шаг</item>
+        <item quantity="few">Текущая цель: %,d шага</item>
+        <item quantity="many">Текущая цель: %,d шагов</item>
+        <item quantity="other">Текущая цель: %,d шагов</item>
+    </plurals>
     <string name="step_size_summary">Текущий размер шага: %1$.2f %2$s</string>
     <string name="sign_in">Войдите с помощью учётной записи Google для использования Достижений и таблицы лидеров</string>
     <string name="signed_in">Вход выполнен как %s</string>
@@ -19,8 +24,18 @@
     <string name="file_cant_read">Ошибка: %s не может быть прочитан</string>
     <string name="error_file">Ошибка доступа к файлу: %s</string>
     <string name="data_saved">Данные сохранены в %s</string>
-    <string name="entries_imported">%d записей импортировано</string>
-    <string name="entries_ignored">%d записей было проигнорировано, т.к. они не содержат корректных данных</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d запись импортирована</item>
+        <item quantity="few">%d записи импортированы</item>
+        <item quantity="many">%d записей импортировано</item>
+        <item quantity="other">%d записей импортировано</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d запись была проигнорирована, т.к. она не содержит корректных данных</item>
+        <item quantity="few">%d записи были проигнорированы, т.к. они не содержат корректных данных</item>
+        <item quantity="many">%d записей было проигнорировано, т.к. они не содержат корректных данных</item>
+        <item quantity="other">%d записей было проигнорировано, т.к. они не содержат корректных данных</item>
+    </plurals>
     <string name="sign_in_necessary">Необходимо выполнить вход</string>
     <string name="please_sign_in_with_your_google_account">Войдите с помощью учётной записи Google для использования данной функции.</string>
     <string name="steps">шагов</string>

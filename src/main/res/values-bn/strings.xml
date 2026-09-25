@@ -17,8 +17,14 @@
     <string name="set_goal">লক্ষ্য স্থির করুন</string>
     <string name="set_step_size">পদক্ষেপের দীর্ঘ স্থির করুন</string>
     <string name="record">লিপিবদ্ধ করুন</string>
-    <string name="entries_imported">%d এন্ট্রি আমদানি হলো</string>
-    <string name="entries_ignored">%d এন্ট্রিগুলি উপেক্ষা করা হয়েছিল কারণ তাদের কাছে বৈধ তথ্য নেই</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d এন্ট্রি আমদানি হলো</item>
+        <item quantity="other">%d এন্ট্রি আমদানি হলো</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d এন্ট্রিগুলি উপেক্ষা করা হয়েছিল কারণ তাদের কাছে বৈধ তথ্য নেই</item>
+        <item quantity="other">%d এন্ট্রিগুলি উপেক্ষা করা হয়েছিল কারণ তাদের কাছে বৈধ তথ্য নেই</item>
+    </plurals>
     <string name="settings">সেটিংস</string>
     <string name="total">মোট</string>
     <string name="total_last_7_days">গত 7 দিনে মোট</string>
@@ -26,7 +32,10 @@
     <string name="your_progress_will_be_shown_here_soon">আপনার অগ্রগতি এখানে শীঘ্রই দেখানো হবে</string>
     <string name="step_size">পদক্ষেপের দীর্ঘ</string>
     <string name="app_name">প্যাডেমোটার</string>
-    <string name="goal_summary">বর্তমান লক্ষ্য:% ,d টি পদক্ষেপ</string>
+    <plurals name="goal_summary">
+        <item quantity="one">বর্তমান লক্ষ্য: %,d টি পদক্ষেপ</item>
+        <item quantity="other">বর্তমান লক্ষ্য: %,d টি পদক্ষেপ</item>
+    </plurals>
     <string name="import_summary">পূর্বে সংরক্ষিত তথ্য আমদানি করে</string>
     <string name="no_sensor">সেন্সর পাওয়া যায় নি</string>
     <string name="start">শুরু</string>

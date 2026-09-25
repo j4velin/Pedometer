@@ -8,7 +8,10 @@
     <string name="step_size">Adım boyutu</string>
     <string name="about">Hakkında</string>
     <string name="account">Hesap</string>
-    <string name="goal_summary">Şimdiki hedef: %,d adım</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Şimdiki hedef: %,d adım</item>
+        <item quantity="other">Şimdiki hedef: %,d adım</item>
+    </plurals>
     <string name="step_size_summary">Şu anki adım boyutu: %1$.2f %2$s</string>
     <string name="sign_in">Başarılar ve Lider tablosu özelliklerini kullanmak için Google hesabınıza
         giriş yapın
@@ -23,8 +26,14 @@
     <string name="file_cant_read">Hata: %s okunmadı</string>
     <string name="error_file">Dosyaya erişimde hata: %s</string>
     <string name="data_saved">Veri %s konumuna kaydedildi.</string>
-    <string name="entries_imported">%d girdi içeriye aktarıldı</string>
-    <string name="entries_ignored">%d girdi, geçerli veri içermediğinden görmezden gelindi</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d girdi içeriye aktarıldı</item>
+        <item quantity="other">%d girdi içeriye aktarıldı</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d girdi, geçerli veri içermediğinden görmezden gelindi</item>
+        <item quantity="other">%d girdi, geçerli veri içermediğinden görmezden gelindi</item>
+    </plurals>
     <string name="sign_in_necessary">Hesaba giriş gerekli</string>
     <string name="please_sign_in_with_your_google_account">Bu özelliği kullanmak için lütfen Google
         hesabınıza giriş yapın.

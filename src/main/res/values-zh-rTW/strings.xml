@@ -6,7 +6,9 @@
     <string name="step_size">步幅</string>
     <string name="about">關於</string>
     <string name="account">帳戶</string>
-    <string name="goal_summary">目標: %,d 步</string>
+    <plurals name="goal_summary">
+        <item quantity="other">目標: %,d 步</item>
+    </plurals>
     <string name="step_size_summary">目前步幅: %1$.2f %2$s</string>
     <string name="sign_in">登入您的 Google 帳戶來使用成就和排行榜功能</string>
     <string name="signed_in">以 %s 登入</string>
@@ -19,8 +21,12 @@
     <string name="file_cant_read">錯誤：無法讀取 %s</string>
     <string name="error_file">存取檔案錯誤：%s</string>
     <string name="data_saved">資料儲存到 %s</string>
-    <string name="entries_imported">%d 項條目已匯入</string>
-    <string name="entries_ignored">%d 項條目被跳過，因為它們不包含有效資料</string>
+    <plurals name="entries_imported">
+        <item quantity="other">%d 項條目已匯入</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="other">%d 項條目被跳過，因為它們不包含有效資料</item>
+    </plurals>
     <string name="sign_in_necessary">必須要登入</string>
     <string name="please_sign_in_with_your_google_account">請登入您的 Google 帳戶才能使用此功能。</string>
     <string name="steps">步</string>

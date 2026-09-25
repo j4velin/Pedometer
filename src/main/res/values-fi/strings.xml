@@ -8,7 +8,10 @@
     <string name="step_size">Askeleen koko</string>
     <string name="about">Tiedot</string>
     <string name="account">Tili</string>
-    <string name="goal_summary">Nykyinen tavoite: %,d askelta</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Nykyinen tavoite: %,d askel</item>
+        <item quantity="other">Nykyinen tavoite: %,d askelta</item>
+    </plurals>
     <string name="step_size_summary">Nykyinen askeleen koko: %1$.2f %2$s</string>
     <string name="sign_in">Kirjaudu sisään Google-tililläsi käyttääksesi Saavutuksia ja Tulostaulua</string>
     <string name="signed_in">Kirjauduttu sisään käyttäjänä %s</string>
@@ -21,9 +24,18 @@
     <string name="file_cant_read">Virhe: %s ei voitu lukea</string>
     <string name="error_file">Virhe käsiteltäessä tiedostoa: %s</string>
     <string name="data_saved">Tiedot tallennettu tiedostoon %s</string>
-    <string name="entries_imported">%d merkintää tuotu</string>
-    <string name="entries_ignored">%d merkintää ei huomioitu koska ne eivät olleet oikeassa muodossa</string>
-    <string name="entries_overwritten">%d merkintää ylikirjoitettiin tuoduilla tiedoilla</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d merkintä tuotu</item>
+        <item quantity="other">%d merkintää tuotu</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d merkintä ohitettiin, koska se ei ollut oikeassa muodossa</item>
+        <item quantity="other">%d merkintää ei huomioitu koska ne eivät olleet oikeassa muodossa</item>
+    </plurals>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d merkintä ylikirjoitettiin tuoduilla tiedoilla</item>
+        <item quantity="other">%d merkintää ylikirjoitettiin tuoduilla tiedoilla</item>
+    </plurals>
     <string name="sign_in_necessary">Sisäänkirjautuminen vaadittu</string>
     <string name="please_sign_in_with_your_google_account">Kirjaudu sisään Google -tililläsi käyttääksesi tätä ominaisuutta.</string>
     <string name="steps">askelta</string>

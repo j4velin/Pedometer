@@ -6,7 +6,9 @@
     <string name="step_size">보폭</string>
     <string name="about">정보</string>
     <string name="account">계정</string>
-    <string name="goal_summary">현재 목표: %,d 걸음</string>
+    <plurals name="goal_summary">
+        <item quantity="other">현재 목표: %,d 걸음</item>
+    </plurals>
     <string name="step_size_summary">현재 보폭: %1$.2f %2$s</string>
     <string name="sign_in">목표달성과 리더보드 기능을 사용하려면 구글 계정에 로그인하세요</string>
     <string name="signed_in">%s 로그인됨</string>
@@ -19,8 +21,12 @@
     <string name="file_cant_read">오류: %s 읽을 수 없음</string>
     <string name="error_file">다음 파일에 접속 중 오류 발생: %s</string>
     <string name="data_saved">자료 저장됨: %s</string>
-    <string name="entries_imported">%d 개 항목 불러옴</string>
-    <string name="entries_ignored">%d 개 항목은 올바른 자료를 포함하지 않으므로 무시되었습니다</string>
+    <plurals name="entries_imported">
+        <item quantity="other">%d 개 항목 불러옴</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="other">%d 개 항목은 올바른 자료를 포함하지 않으므로 무시되었습니다</item>
+    </plurals>
     <string name="sign_in_necessary">로그인 필요</string>
     <string name="please_sign_in_with_your_google_account">이 기능을 사용하려면 Google 계정에 로그인하세요</string>
     <string name="steps">걸음 수</string>

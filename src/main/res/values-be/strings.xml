@@ -6,7 +6,12 @@
     <string name="step_size">Даўжыня кроку</string>
     <string name="about">Звесткі</string>
     <string name="account">Конт</string>
-    <string name="goal_summary">Дзейная мэта: %,d крокаў</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Дзейная мэта: %,d крок</item>
+        <item quantity="few">Дзейная мэта: %,d крокі</item>
+        <item quantity="many">Дзейная мэта: %,d крокаў</item>
+        <item quantity="other">Дзейная мэта: %,d крокаў</item>
+    </plurals>
     <string name="step_size_summary">Дзейная даўжыня: %1$.2f %2$s</string>
     <string name="sign_in">Зайсці пад вашым Google-контам, каб выконваць Дасягненні і бачыць табліце лідараў</string>
     <string name="signed_in">Зайсці як %s</string>
@@ -19,9 +24,24 @@
     <string name="file_cant_read">Памылка: %s не чытаецца</string>
     <string name="error_file">Памылка доступу да файла: %s</string>
     <string name="data_saved">Даныя захаваныя ў %s</string>
-    <string name="entries_imported">%d запісаў імпартавана</string>
-    <string name="entries_ignored">%d запісаў праігнаравана, бо яны не змяшчаюць правільных даных</string>
-    <string name="entries_overwritten">%d запісаў перазапісана імпартаванымі данымі</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d запіс імпартаваны</item>
+        <item quantity="few">%d запісы імпартаваны</item>
+        <item quantity="many">%d запісаў імпартавана</item>
+        <item quantity="other">%d запісаў імпартавана</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d запіс праігнараваны, бо ён не змяшчае правільных даных</item>
+        <item quantity="few">%d запісы праігнараваны, бо яны не змяшчаюць правільных даных</item>
+        <item quantity="many">%d запісаў праігнаравана, бо яны не змяшчаюць правільных даных</item>
+        <item quantity="other">%d запісаў праігнаравана, бо яны не змяшчаюць правільных даных</item>
+    </plurals>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d запіс перазапісаны імпартаванымі данымі</item>
+        <item quantity="few">%d запісы перазапісаны імпартаванымі данымі</item>
+        <item quantity="many">%d запісаў перазапісана імпартаванымі данымі</item>
+        <item quantity="other">%d запісаў перазапісана імпартаванымі данымі</item>
+    </plurals>
     <string name="sign_in_necessary">Уваход неабходны</string>
     <string name="please_sign_in_with_your_google_account">Калі ласка, зайдзіце пад вашым Google-контам каб скарыстацца гэтай магчымасцю.</string>
     <string name="steps">крокі</string>

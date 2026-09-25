@@ -8,7 +8,10 @@
     <string name="step_size">Step size</string>
     <string name="about">About</string>
     <string name="account">Account</string>
-    <string name="goal_summary">Current goal: %,d steps</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Current goal: %,d step</item>
+        <item quantity="other">Current goal: %,d steps</item>
+    </plurals>
     <string name="step_size_summary">Current step size: %1$.2f %2$s</string>
     <string name="sign_in">Sign in with your Google account to use the Achievements and Leaderboards features</string>
     <string name="signed_in">Signed in as %s</string>
@@ -21,9 +24,18 @@
     <string name="file_cant_read">Error: %s can not be read</string>
     <string name="error_file">Error accessing the file: %s</string>
     <string name="data_saved">Data saved in %s</string>
-    <string name="entries_imported">%d entries imported</string>
-    <string name="entries_ignored">%d entries were ignored as they did not contain valid data</string>
-    <string name="entries_overwritten">%d entries were overwritten with imported data</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d entry imported</item>
+        <item quantity="other">%d entries imported</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d entry was ignored as it did not contain valid data</item>
+        <item quantity="other">%d entries were ignored as they did not contain valid data</item>
+    </plurals>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d entry was overwritten with imported data</item>
+        <item quantity="other">%d entries were overwritten with imported data</item>
+    </plurals>
     <string name="sign_in_necessary">Sign in necessary</string>
     <string name="please_sign_in_with_your_google_account">Please sign in with your Google account to use this feature.</string>
     <string name="steps">steps</string>

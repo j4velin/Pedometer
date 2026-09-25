@@ -8,7 +8,11 @@
     <string name="step_size">Tamanho do passo</string>
     <string name="about">Sobre</string>
     <string name="account">Conta</string>
-    <string name="goal_summary">Meta atual: %,d passos</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Meta atual: %,d passo</item>
+        <item quantity="many">Meta atual: %,d passos</item>
+        <item quantity="other">Meta atual: %,d passos</item>
+    </plurals>
     <string name="step_size_summary">Tamanho do passo atual: %1$.2f %2$s</string>
     <string name="sign_in">Faça login com sua conta do Google para usar os recursos de Conquistas e Líderes</string>
     <string name="signed_in">Logado como %s</string>
@@ -21,9 +25,21 @@
     <string name="file_cant_read">Erro: %s não pode ser lido</string>
     <string name="error_file">Erro acessando o arquivo: %s</string>
     <string name="data_saved">Dados salvo em %s</string>
-    <string name="entries_imported">%d entradas importadas</string>
-    <string name="entries_ignored">%d as entradas foram ignoradas porque não continham dados válidos</string>
-    <string name="entries_overwritten">%d as entradas foram substituídas por dados importados</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d entrada importada</item>
+        <item quantity="many">%d entradas importadas</item>
+        <item quantity="other">%d entradas importadas</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d entrada foi ignorada porque não continha dados válidos</item>
+        <item quantity="many">%d entradas foram ignoradas porque não continham dados válidos</item>
+        <item quantity="other">%d entradas foram ignoradas porque não continham dados válidos</item>
+    </plurals>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d entrada foi substituída por dados importados</item>
+        <item quantity="many">%d entradas foram substituídas por dados importados</item>
+        <item quantity="other">%d entradas foram substituídas por dados importados</item>
+    </plurals>
     <string name="sign_in_necessary">Login necessário</string>
     <string name="please_sign_in_with_your_google_account">Por favor autentique com sua conta Google para usar esse recursos</string>
     <string name="steps">Passos</string>

@@ -18,7 +18,11 @@
     <string name="file_cant_read">Errore: %s non può essere letto</string>
     <string name="goal">Obiettivo</string>
     <string name="goal_reached_notification">Obiettivo raggiunto! %s passi </string>
-    <string name="goal_summary">Obiettivo attuale: %,d passi</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Obiettivo attuale: %,d passo</item>
+        <item quantity="many">Obiettivo attuale: %,d passi</item>
+        <item quantity="other">Obiettivo attuale: %,d passi</item>
+    </plurals>
     <string name="import_summary">Importa i dati salvati in precedenza</string>
     <string name="import_title">Importa/Ripristina</string>
     <string name="leaderboard">Classifiche</string>
@@ -45,7 +49,15 @@
     <string name="total_last_7_days">In totale negli ultimi 7 giorni</string>
     <string name="total_this_month">In totale questo mese</string>
     <string name="your_progress_will_be_shown_here_soon">I tuoi progressi saranno presto visibili qui</string>
-    <string name="entries_ignored">%d voci sono state saltate poiché non contenevano dati validi</string>
-    <string name="entries_imported">Sono state importate %d voci</string>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d voce è stata saltata poiché non conteneva dati validi</item>
+        <item quantity="many">%d voci sono state saltate poiché non contenevano dati validi</item>
+        <item quantity="other">%d voci sono state saltate poiché non contenevano dati validi</item>
+    </plurals>
+    <plurals name="entries_imported">
+        <item quantity="one">È stata importata %d voce</item>
+        <item quantity="many">Sono state importate %d voci</item>
+        <item quantity="other">Sono state importate %d voci</item>
+    </plurals>
 
 </resources>
