@@ -100,7 +100,7 @@ kotlin {
 
 dependencies {
     implementation(libs.core)
-    implementation(libs.colorpicker)
+    implementation(libs.glance)
     implementation(libs.dashclock)
     "playImplementation"(libs.playGames)
     // Play Games brings an old androidx.fragment, which breaks the Activity Result API
@@ -130,4 +130,5 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(platform(libs.compose.bom))
     testImplementation(libs.compose.test.junit4)
+    testImplementation(libs.glance.testing)
 }

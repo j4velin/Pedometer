@@ -9,5 +9,13 @@
         <item name="android:windowBackground">@color/background</item>
     </style>
 
+    <!-- For the widget's configuration, which is only a dialog over the home screen -->
+    <style name="Theme.Pedometer.Translucent">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <color name="background">#FFFAFAEE</color>
 </resources>

@@ -81,7 +81,7 @@
         <activity
             android:name=".widget.WidgetConfig"
             android:exported="true"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar">
+            android:theme="@style/Theme.Pedometer.Translucent">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -98,11 +98,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget" />
         </receiver>
-
-        <service
-            android:name=".widget.WidgetUpdateService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

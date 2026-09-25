@@ -17,8 +17,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // colorpicker is only published on JitPack
-        maven("https://jitpack.io")
     }
 }
 

@@ -11,7 +11,7 @@ coroutines      = "1.11.0"
 navigation      = "2.10.2"
 fragment        = "1.9.1"
 lifecycle       = "2.11.0"
-colorpicker     = "1.27.1"
+glance          = "1.2.0"
 dashclock       = "2.0.0"
 playGames       = "22.1.0"
 
@@ -36,7 +36,8 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 fragment        = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycleViewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
-colorpicker     = { module = "com.github.j4velin:colorpicker", version.ref = "colorpicker" }
+glance          = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
+glance-testing  = { module = "androidx.glance:glance-appwidget-testing", version.ref = "glance" }
 dashclock       = { module = "com.google.android.apps.dashclock:dashclock-api", version.ref = "dashclock" }
 playGames       = { module = "com.google.android.gms:play-services-games-v2", version.ref = "playGames" }
 

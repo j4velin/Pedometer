@@ -42,7 +42,7 @@ import androidx.core.content.ContextCompat
 import de.j4velin.pedometer.ui.MainActivity
 import de.j4velin.pedometer.util.Logger
 import de.j4velin.pedometer.util.Util
-import de.j4velin.pedometer.widget.WidgetUpdateService
+import de.j4velin.pedometer.widget.Widget
 import java.text.NumberFormat
 import java.util.Date
 import java.util.Locale
@@ -78,7 +78,7 @@ class SensorListener : Service(), SensorEventListener {
     /** Shows the saved value in the notification and the widgets */
     private fun saved() {
         showNotification()
-        WidgetUpdateService.enqueueUpdate(this)
+        Widget.update(this)
     }
 
     private fun showNotification() {

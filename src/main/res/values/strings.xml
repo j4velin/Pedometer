@@ -60,4 +60,8 @@
     <string name="permission_external_storage">No permission to access external storage</string>
     <string name="notification_settings">Notification settings</string>
     <string name="permission_activity_recognition">Steps can not be counted without the physical activity permission</string>
+    <string name="hue">Hue</string>
+    <string name="saturation">Saturation</string>
+    <string name="brightness">Brightness</string>
+    <string name="opacity">Opacity</string>
 </resources>
