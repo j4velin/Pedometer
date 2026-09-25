@@ -69,15 +69,16 @@ class StepsDatabase(context: Context) :
      *
      * @param date  the date in ms since 1970
      * @param steps the current step value; must be >= 0
+     * @param addToLastDay false if the steps since boot belong to no day in the history
      */
-    fun insertNewDay(date: Long, steps: Int) {
+    fun insertNewDay(date: Long, steps: Int, addToLastDay: Boolean = true) {
         writableDatabase.transaction {
             val exists = DatabaseUtils.queryNumEntries(
                 this, DB_NAME, "date = ?", arrayOf(date.toString())
             ) > 0
             if (!exists && steps >= 0) {
                 // add 'steps' to yesterday's count
-                addToLastEntry(steps)
+                if (addToLastDay) addToLastEntry(steps)
                 // add today, with the negative steps as offset
                 insert(DB_NAME, null, ContentValues().apply {
                     put("date", date)

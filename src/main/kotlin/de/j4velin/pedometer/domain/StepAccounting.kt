@@ -145,7 +145,7 @@ class StepAccounting(
         val today = today()
         if (db.getSteps(today) == Int.MIN_VALUE) {
             // we don't know when the reboot was, so today starts at 0 steps
-            db.insertNewDay(today, stepsSinceBoot)
+            startDay(today, stepsSinceBoot)
         }
         refresh()
     }
@@ -178,11 +178,21 @@ class StepAccounting(
         val necessary = steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
                 (steps > 0 && (now > lastSaveTime + SAVE_OFFSET_TIME || !started))
         if (!necessary) return false
-        if (!started) db.insertNewDay(today, steps)
+        if (!started) startDay(today, steps)
         db.saveCurrentSteps(steps)
         lastSaveSteps = steps
         lastSaveTime = now
         return true
+    }
+
+    /**
+     * Starts [day] at [stepsSinceBoot]: the steps since the last save go to the day before -
+     * unless the data was just restored from a backup, where they belong to no day.
+     */
+    private fun startDay(day: Long, stepsSinceBoot: Int) {
+        val fresh = settings.startFresh
+        db.insertNewDay(day, stepsSinceBoot, addToLastDay = !fresh)
+        if (fresh) settings.startFresh = false
     }
 
     /**
@@ -200,7 +210,7 @@ class StepAccounting(
         val today = today()
         if (db.getSteps(today) == Int.MIN_VALUE) {
             // already a new day: the steps belong to the last one
-            db.insertNewDay(today, steps)
+            startDay(today, steps)
         } else {
             db.addToLastEntry(steps)
         }
@@ -231,6 +241,8 @@ class StepAccounting(
         db.removeNegativeEntries()
         db.saveCurrentSteps(0)
         settings.correctShutdown = false
+        // the step counter starts at 0 again: from now on, its values are all this device's steps
+        settings.startFresh = false
         // values this process might have from before the reboot are meaningless now
         lastSensorValue = 0
         lastLiveValue = 0
@@ -238,6 +250,25 @@ class StepAccounting(
         lastSaveSteps = 0
         refresh()
         return true
+    }
+
+    /**
+     * The data was restored from another device's backup. The history is valid, but today's
+     * offset, the saved step counter value and the boot count belong to the other device's step
+     * counter. They are dropped - and with them the steps of the day the backup was made - and
+     * the first step counter value starts today at 0.
+     */
+    fun onRestored() {
+        db.removeNegativeEntries()
+        db.saveCurrentSteps(0)
+        settings.bootCount = -1
+        settings.correctShutdown = false
+        settings.startFresh = true
+        lastSensorValue = 0
+        lastLiveValue = 0
+        latestValue = 0
+        lastSaveSteps = 0
+        refresh()
     }
 
     /**

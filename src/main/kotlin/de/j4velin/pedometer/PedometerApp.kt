@@ -25,6 +25,8 @@ import de.j4velin.pedometer.data.StepsHistory
 import de.j4velin.pedometer.domain.StepAccounting
 import de.j4velin.pedometer.games.GamesIntegration
 import de.j4velin.pedometer.games.createGamesIntegration
+import java.io.File
+import java.util.UUID
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -59,9 +61,27 @@ class PedometerApp : Application() {
         settings = Settings(this)
         accounting = StepAccounting(database, settings)
         history = StepsHistory(database, io)
+        if (restoredFromBackup()) accounting.onRestored()
+    }
+
+    /**
+     * Whether the data comes from a backup of another installation: the id in the preferences,
+     * which Android backs up, differs from the one in the files it never backs up
+     */
+    private fun restoredFromBackup(): Boolean {
+        val file = File(noBackupFilesDir, INSTALL_ID_FILE)
+        val local = file.takeIf { it.exists() }?.readText()
+        val backedUp = settings.installId
+        if (local != null && local == backedUp) return false
+        val id = local ?: UUID.randomUUID().toString().also { file.writeText(it) }
+        settings.installId = id
+        // without any id, this is a new installation or an update from a version before ids
+        return backedUp != null
     }
 
     companion object {
+        private const val INSTALL_ID_FILE = "install_id"
+
         @JvmStatic
         fun get(context: Context): PedometerApp = context.applicationContext as PedometerApp
     }

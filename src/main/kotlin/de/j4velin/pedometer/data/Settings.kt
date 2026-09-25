@@ -77,6 +77,23 @@ class Settings(context: Context) {
         get() = prefs.getInt(BOOT_COUNT, -1)
         set(value) = prefs.edit { putInt(BOOT_COUNT, value) }
 
+    /**
+     * An id for this installation. The preferences are backed up, so after a restore on another
+     * device it is the one of the installation the backup came from.
+     */
+    var installId: String?
+        get() = prefs.getString(INSTALL_ID, null)
+        set(value) = prefs.edit { putString(INSTALL_ID, value) }
+
+    /**
+     * The data was restored from a backup and no step counter value arrived since: the next one
+     * starts today at 0 steps, as the steps since this device booted belong to no day in the
+     * history.
+     */
+    var startFresh: Boolean
+        get() = prefs.getBoolean(START_FRESH, false)
+        set(value) = prefs.edit { if (value) putBoolean(START_FRESH, true) else remove(START_FRESH) }
+
     /** Removes settings of features that no longer exist */
     fun removeObsolete() = prefs.edit { remove(PAUSE_COUNT) }
 
@@ -91,6 +108,8 @@ class Settings(context: Context) {
         private const val SPLIT_STEPS = "split_steps"
         private const val CORRECT_SHUTDOWN = "correctShutdown"
         private const val BOOT_COUNT = "bootCount"
+        private const val INSTALL_ID = "install_id"
+        private const val START_FRESH = "start_fresh"
         /** left over from the removed "pause" feature */
         private const val PAUSE_COUNT = "pauseCount"
 
