@@ -105,7 +105,10 @@ class SensorListener : Service(), SensorEventListener {
             minOf(Util.getTomorrow(), System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR)
         @Suppress("DEPRECATION")
         if (BuildConfig.DEBUG) Logger.log("next update: " + Date(nextUpdate).toLocaleString())
-        val pi = PendingIntent.getService(
+        // a foreground service start, as Android 8+ allows no plain service start from the
+        // background. It works while the service runs, and before Android 12 also if it was
+        // stopped in the meantime.
+        val pi = PendingIntent.getForegroundService(
             applicationContext, 2, Intent(this, SensorListener::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -127,7 +130,7 @@ class SensorListener : Service(), SensorEventListener {
         // Restart service in 500 ms
         getSystemService(AlarmManager::class.java).set(
             AlarmManager.RTC, System.currentTimeMillis() + 500,
-            PendingIntent.getService(
+            PendingIntent.getForegroundService(
                 this, 3, Intent(this, SensorListener::class.java), PendingIntent.FLAG_IMMUTABLE
             )
         )

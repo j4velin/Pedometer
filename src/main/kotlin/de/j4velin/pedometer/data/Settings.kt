@@ -24,8 +24,8 @@ import java.util.Locale
  * Typed access to the "pedometer" preferences. The file name and the keys are the ones every
  * earlier version used, so existing settings carry over.
  *
- * The values are read on every access rather than cached, as parts of the UI still write the
- * same file directly.
+ * The values are read on every access rather than cached: the file is written from the service,
+ * the receivers and the UI, and the preferences keep it cached in memory anyway.
  */
 class Settings(context: Context) {
 
