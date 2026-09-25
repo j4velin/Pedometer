@@ -12,16 +12,16 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import de.j4velin.pedometer.AppUpdatedReceiver
 import de.j4velin.pedometer.BootReceiver
-import de.j4velin.pedometer.Database
+import de.j4velin.pedometer.PedometerApp
 import de.j4velin.pedometer.SensorListener
 import de.j4velin.pedometer.ShutdownRecevier
+import de.j4velin.pedometer.data.StepsDatabase
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Locale
 import java.util.TimeZone
-import java.util.concurrent.atomic.AtomicInteger
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
@@ -35,7 +35,7 @@ import org.robolectric.shadows.ShadowSensor
  *
  * The tests describe *what happens to the step history* in a scenario: sensor events, midnight,
  * shutdowns, reboots, imports. Everything that depends on how the app is built today - which
- * class receives the sensor event, which static fields have to be reset for a "new process" -
+ * class receives the sensor event, what has to be recreated for a "new process" -
  * lives here and in the drivers, so that the migration only has to change the harness, never the
  * expectations in the tests.
  *
@@ -52,6 +52,7 @@ abstract class StepsTest {
     private lateinit var previousLocale: Locale
 
     protected val context: Application get() = ApplicationProvider.getApplicationContext()
+    private val app: PedometerApp get() = context as PedometerApp
     protected val prefs: SharedPreferences
         get() = context.getSharedPreferences("pedometer", Context.MODE_PRIVATE)
 
@@ -72,7 +73,7 @@ abstract class StepsTest {
 
     @After
     fun tearDownStepsTest() {
-        closeDatabase()
+        app.database.close()
         TimeZone.setDefault(previousZone)
         Locale.setDefault(previousLocale)
     }
@@ -113,14 +114,7 @@ abstract class StepsTest {
 
     protected fun givenSavedSinceBoot(steps: Int) = withDb { it.saveCurrentSteps(steps) }
 
-    protected fun <T> withDb(block: (Database) -> T): T {
-        val db = Database.getInstance(context)
-        try {
-            return block(db)
-        } finally {
-            db.close()
-        }
-    }
+    protected fun <T> withDb(block: (StepsDatabase) -> T): T = block(app.database)
 
     // ---- the system ----
 
@@ -129,10 +123,8 @@ abstract class StepsTest {
      * and preferences stay.
      */
     protected fun newProcess() {
-        closeDatabase()
-        setStatic(SensorListener::class.java, "steps", 0)
-        setStatic(SensorListener::class.java, "lastSaveSteps", 0)
-        setStatic(SensorListener::class.java, "lastSaveTime", 0L)
+        app.database.close()
+        app.createObjects()
     }
 
     protected fun givenBootCount(count: Int) {
@@ -187,24 +179,5 @@ abstract class StepsTest {
                 .setValues(floatArrayOf(value))
                 .setTimestamp(0)
                 .build()
-
-        private fun closeDatabase() {
-            val instance = Database::class.java.getDeclaredField("instance")
-            instance.isAccessible = true
-            val counter = Database::class.java.getDeclaredField("openCounter")
-            counter.isAccessible = true
-            (instance.get(null) as Database?)?.let {
-                (counter.get(null) as AtomicInteger).set(1)
-                it.close()
-            }
-            instance.set(null, null)
-            (counter.get(null) as AtomicInteger).set(0)
-        }
-
-        private fun setStatic(cls: Class<*>, name: String, value: Any) {
-            val field = cls.getDeclaredField(name)
-            field.isAccessible = true
-            field.set(null, value)
-        }
     }
 }

@@ -41,37 +41,31 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 
-import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.PedometerApp;
+import de.j4velin.pedometer.data.Settings;
+import de.j4velin.pedometer.domain.StepAccounting;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 import de.j4velin.pedometer.util.API26Wrapper;
 import de.j4velin.pedometer.util.PlaySettingsWrapper;
-import de.j4velin.pedometer.util.Util;
 
 public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
 
-    final static int DEFAULT_GOAL = 10000;
+    final static int DEFAULT_GOAL = Settings.DEFAULT_GOAL;
     // not constants, as the locale might change while the app is running
-    private static boolean isUS() {
-        return "US".equals(Locale.getDefault().getCountry());
-    }
-
     static float getDefaultStepSize() {
-        return isUS() ? 2.5f : 75f;
+        return Settings.getDefaultStepSize();
     }
 
     static String getDefaultStepUnit() {
-        return isUS() ? "ft" : "cm";
+        return Settings.getDefaultStepUnit();
     }
 
     private final static int REQUEST_EXPORT = 1;
@@ -279,31 +273,16 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
      * @param uri the document picked by the user
      */
     private void exportCsv(final Uri uri) {
-        Database db = Database.getInstance(getActivity());
-        // today's entry is not a step count yet, but the negative sensor value at the start of
-        // the day - exporting it (as 0) would reset today's steps when importing the file again
-        Cursor c = db.query(new String[]{"date", "steps"}, "date > 0 AND date < ?",
-                new String[]{String.valueOf(Util.getToday())}, null, null, "date", null);
         // the document was just created by ACTION_CREATE_DOCUMENT, so there is nothing to truncate
         // (and not every provider supports "wt")
         try (OutputStream os = getActivity().getContentResolver().openOutputStream(uri, "w")) {
             if (os == null) throw new IOException(uri.toString());
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
-            if (c != null && c.moveToFirst()) {
-                while (!c.isAfterLast()) {
-                    out.append(c.getString(0)).append(";")
-                            .append(String.valueOf(Math.max(0, c.getInt(1)))).append("\n");
-                    c.moveToNext();
-                }
-            }
-            out.flush();
+            PedometerApp.get(getActivity()).getAccounting()
+                    .exportCsv(new OutputStreamWriter(os, StandardCharsets.UTF_8));
         } catch (IOException | SecurityException e) {
             showMessage(getString(R.string.error_file, e.getMessage()));
             e.printStackTrace();
             return;
-        } finally {
-            if (c != null) c.close();
-            db.close();
         }
         showMessage(getString(R.string.data_saved, getDisplayName(uri)));
     }
@@ -315,41 +294,22 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
      * @param uri the document picked by the user
      */
     private void importCsv(final Uri uri) {
-        Database db = Database.getInstance(getActivity());
-        String line;
-        String[] data;
-        int ignored = 0, inserted = 0, overwritten = 0;
-        final long today = Util.getToday();
+        StepAccounting.ImportResult result;
         try (InputStream is = getActivity().getContentResolver().openInputStream(uri)) {
             if (is == null) throw new IOException(uri.toString());
-            BufferedReader in = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-            while ((line = in.readLine()) != null) {
-                data = line.split(";");
-                try {
-                    long date = Long.parseLong(data[0]);
-                    // files exported by older versions contain today's entry (as 0 steps),
-                    // which would overwrite today's offset and thereby the steps taken so far
-                    if (date >= today) continue;
-                    if (db.insertDayFromBackup(date, Integer.valueOf(data[1]))) {
-                        inserted++;
-                    } else {
-                        overwritten++;
-                    }
-                } catch (Exception nfe) {
-                    ignored++;
-                }
-            }
+            result = PedometerApp.get(getActivity()).getAccounting()
+                    .importCsv(new InputStreamReader(is, StandardCharsets.UTF_8));
         } catch (IOException | SecurityException e) {
             showMessage(getString(R.string.file_cant_read, getDisplayName(uri)));
             e.printStackTrace();
             return;
-        } finally {
-            db.close();
         }
-        String message = getString(R.string.entries_imported, inserted + overwritten);
-        if (overwritten > 0)
-            message += "\n\n" + getString(R.string.entries_overwritten, overwritten);
-        if (ignored > 0) message += "\n\n" + getString(R.string.entries_ignored, ignored);
+        String message = getString(R.string.entries_imported,
+                result.getInserted() + result.getOverwritten());
+        if (result.getOverwritten() > 0)
+            message += "\n\n" + getString(R.string.entries_overwritten, result.getOverwritten());
+        if (result.getIgnored() > 0)
+            message += "\n\n" + getString(R.string.entries_ignored, result.getIgnored());
         showMessage(message);
     }
 

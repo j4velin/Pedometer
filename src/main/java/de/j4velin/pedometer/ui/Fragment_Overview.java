@@ -28,7 +28,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,10 +46,13 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import kotlin.Pair;
 import java.util.Locale;
 
 import de.j4velin.pedometer.BuildConfig;
-import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.PedometerApp;
+import de.j4velin.pedometer.data.StepsDatabase;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 import de.j4velin.pedometer.util.API26Wrapper;
@@ -111,7 +113,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         super.onResume();
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 
-        Database db = Database.getInstance(getActivity());
+        StepsDatabase db = PedometerApp.get(getActivity()).getDatabase();
 
         if (BuildConfig.DEBUG) db.logState();
         // read todays offset
@@ -148,7 +150,6 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         total_start = db.getTotalWithoutToday();
         total_days = db.getDays();
 
-        db.close();
 
         stepsDistanceChanged();
     }
@@ -185,9 +186,8 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         } catch (Exception e) {
             if (BuildConfig.DEBUG) Logger.log(e);
         }
-        Database db = Database.getInstance(getActivity());
+        StepsDatabase db = PedometerApp.get(getActivity()).getDatabase();
         db.saveCurrentSteps(since_boot);
-        db.close();
     }
 
     @Override
@@ -224,26 +224,20 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             // the app was open at midnight: today's entry might already have been created by
             // the SensorListener
             today = Util.getToday();
-            Database db = Database.getInstance(getActivity());
+            StepsDatabase db = PedometerApp.get(getActivity()).getDatabase();
             todayOffset = db.getSteps(today);
-            db.close();
         }
         if (todayOffset == Integer.MIN_VALUE) {
-            // no values for today
-            // we dont know when the reboot was, so set todays steps to 0 by
-            // initializing them with -STEPS_SINCE_BOOT
-            todayOffset = -(int) event.values[0];
-            Database db = Database.getInstance(getActivity());
-            db.insertNewDay(today, (int) event.values[0]);
-            db.close();
+            // no values for today: we dont know when the reboot was, so today starts at 0 steps
+            todayOffset = PedometerApp.get(getActivity()).getAccounting()
+                    .startToday((int) event.values[0]);
         }
         since_boot = (int) event.values[0];
         if (dayChanged) {
             // yesterday is now part of the total and the bar chart
-            Database db = Database.getInstance(getActivity());
+            StepsDatabase db = PedometerApp.get(getActivity()).getDatabase();
             total_start = db.getTotalWithoutToday();
             total_days = db.getDays();
-            db.close();
             updateBars();
         }
         updatePie();
@@ -319,14 +313,13 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         }
         barChart.setShowDecimal(!showSteps); // show decimal in distance view only
         BarModel bm;
-        Database db = Database.getInstance(getActivity());
+        StepsDatabase db = PedometerApp.get(getActivity()).getDatabase();
         List<Pair<Long, Integer>> last = db.getLastEntries(8);
-        db.close();
         for (int i = last.size() - 1; i > 0; i--) {
             Pair<Long, Integer> current = last.get(i);
-            steps = current.second;
+            steps = current.getSecond();
             if (steps > 0) {
-                bm = new BarModel(df.format(new Date(current.first)), 0,
+                bm = new BarModel(df.format(new Date(current.getFirst())), 0,
                         steps > goal ? Color.parseColor("#99CC00") : Color.parseColor("#0099cc"));
                 if (showSteps) {
                     bm.setValue(steps);

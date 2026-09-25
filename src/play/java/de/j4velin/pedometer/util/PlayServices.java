@@ -24,7 +24,8 @@ import android.preference.PreferenceManager;
 
 import com.google.android.gms.games.PlayGames;
 
-import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.PedometerApp;
+import de.j4velin.pedometer.data.StepsDatabase;
 import de.j4velin.pedometer.R;
 
 /**
@@ -78,7 +79,7 @@ public abstract class PlayServices {
      */
     public static void achievementsAndLeaderboard(final Activity gc, final Context context) {
         {
-            Database db = Database.getInstance(context);
+            StepsDatabase db = PedometerApp.get(context).getDatabase();
             db.removeInvalidEntries();
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -242,7 +243,6 @@ public abstract class PlayServices {
 
             updateOneDayLeaderboard(gc, context, db.getRecord());
 
-            db.close();
         }
     }
 

@@ -23,7 +23,8 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
-import de.j4velin.pedometer.Database;
+import de.j4velin.pedometer.PedometerApp;
+import de.j4velin.pedometer.data.StepsDatabase;
 import de.j4velin.pedometer.util.Util;
 
 public class WidgetUpdateService extends JobIntentService {
@@ -36,9 +37,8 @@ public class WidgetUpdateService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        Database db = Database.getInstance(this);
+        StepsDatabase db = PedometerApp.get(this).getDatabase();
         int steps = Math.max(db.getCurrentSteps() + db.getSteps(Util.getToday()), 0);
-        db.close();
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds =
                 appWidgetManager.getAppWidgetIds(new ComponentName(this, Widget.class));

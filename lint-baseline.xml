@@ -13,17 +13,6 @@
     </issue>
 
     <issue
-        id="ApplySharedPref"
-        message="Consider using `apply()` instead; `commit` writes its data to persistent storage immediately, whereas `apply` will handle it in the background"
-        errorLine1="                .putBoolean(&quot;correctShutdown&quot;, true).commit();"
-        errorLine2="                                                     ~~~~~~~~">
-        <location
-            file="src/main/java/de/j4velin/pedometer/ShutdownRecevier.java"
-            line="39"
-            column="54"/>
-    </issue>
-
-    <issue
         id="InflateParams"
         message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
         errorLine1="        final View v = inflater.inflate(R.layout.fragment_overview, null);"
@@ -43,17 +32,6 @@
             file="src/main/java/de/j4velin/pedometer/ui/Fragment_Settings.java"
             line="202"
             column="78"/>
-    </issue>
-
-    <issue
-        id="UseRequiresApi"
-        message="Use `@RequiresApi(Build.VERSION_CODES.M)` instead of `@TargetApi` to propagate the requirement to users of `API23Wrapper`"
-        errorLine1="@TargetApi(Build.VERSION_CODES.M)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/de/j4velin/pedometer/util/API23Wrapper.java"
-            line="25"
-            column="1"/>
     </issue>
 
     <issue
@@ -109,39 +87,6 @@
             file="src/main/res/values/strings.xml"
             line="29"
             column="5"/>
-    </issue>
-
-    <issue
-        id="ObsoleteSdkInt"
-        message="Unnecessary; `SDK_INT` is always >= 23"
-        errorLine1="@TargetApi(Build.VERSION_CODES.M)"
-        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/de/j4velin/pedometer/util/API23Wrapper.java"
-            line="25"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="ObsoleteSdkInt"
-        message="Unnecessary; `SDK_INT` is always >= 24"
-        errorLine1="        return Build.VERSION.SDK_INT >= 24 ? Settings.Global"
-        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/de/j4velin/pedometer/BootReceiver.java"
-            line="36"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="ObsoleteSdkInt"
-        message="Unnecessary; `SDK_INT` is always >= 24"
-        errorLine1="        if (Build.VERSION.SDK_INT >= 23) {"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/de/j4velin/pedometer/SensorListener.java"
-            line="183"
-            column="13"/>
     </issue>
 
     <issue
