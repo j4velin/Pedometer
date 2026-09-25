@@ -32,9 +32,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.provider.OpenableColumns;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -120,8 +117,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         stepsize.setSummary(getString(R.string.step_size_summary,
                 prefs.getFloat("stepsize_value", getDefaultStepSize()),
                 prefs.getString("stepsize_unit", getDefaultStepUnit())));
-
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -133,27 +128,9 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         if (Build.VERSION.SDK_INT >= 26) { // notification settings might have changed
             SensorListener.start(getActivity());
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(final Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.action_settings).setVisible(false);
-        menu.findItem(R.id.action_split_count).setVisible(false);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        return ((Activity_Main) getActivity()).optionsItemSelected(item);
     }
 
     @Override

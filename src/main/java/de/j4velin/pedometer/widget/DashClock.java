@@ -25,7 +25,7 @@ import de.j4velin.pedometer.PedometerApp;
 import de.j4velin.pedometer.data.StepsDatabase;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.ui.Activity_Main;
-import de.j4velin.pedometer.ui.Fragment_Overview;
+import de.j4velin.pedometer.ui.Formats;
 import de.j4velin.pedometer.util.Util;
 
 /**
@@ -39,7 +39,7 @@ public class DashClock extends DashClockExtension {
         ExtensionData data = new ExtensionData();
         StepsDatabase db = PedometerApp.get(this).getDatabase();
         int steps = Math.max(db.getCurrentSteps() + db.getSteps(Util.getToday()), 0);
-        data.visible(true).status(Fragment_Overview.formatter.format(steps))
+        data.visible(true).status(Formats.number().format(steps))
                 .icon(R.drawable.ic_dashclock)
                 .clickIntent(new Intent(DashClock.this, Activity_Main.class));
         publishUpdate(data);

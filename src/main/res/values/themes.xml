@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The main screen draws its own top bar in Compose. The framework dialogs and the
+         preference screen still use these colours, which match PedometerTheme in Theme.kt.
+         windowBackground is the Compose background, so a cold start doesn't flash another colour. -->
+    <style name="Theme.Pedometer" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">#FF526526</item>
+        <item name="android:colorAccent">#FF526526</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <color name="background">#FFFAFAEE</color>
+</resources>

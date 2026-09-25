@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Thomas Hoffmann
+ * Copyright 2026 Thomas Hoffmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer.ui;
+package de.j4velin.pedometer.ui
 
-import android.app.AlertDialog;
+import java.text.NumberFormat
 
-public class Activity_Main extends PedometerActivity {
+object Formats {
 
-    @Override
-    protected void onGamesItem(final int id) {
-        new AlertDialog.Builder(this).setTitle("Google services required")
-                .setMessage("This feature is not available on the F-Droid version of the app")
-                .setNegativeButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
-                .create().show();
-    }
+    /** Steps and distances, in the current locale, with up to three decimals */
+    @JvmStatic
+    fun number(): NumberFormat = NumberFormat.getInstance()
 }

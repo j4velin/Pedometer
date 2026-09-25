@@ -13,7 +13,6 @@ fragment        = "1.9.1"
 lifecycle       = "2.11.0"
 colorpicker     = "1.27.1"
 dashclock       = "2.0.0"
-nineoldandroids = "2.4.0"
 playGames       = "22.1.0"
 
 junit           = "4.13.2"
@@ -39,7 +38,6 @@ lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", versio
 lifecycleViewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 colorpicker     = { module = "com.github.j4velin:colorpicker", version.ref = "colorpicker" }
 dashclock       = { module = "com.google.android.apps.dashclock:dashclock-api", version.ref = "dashclock" }
-nineoldandroids = { module = "com.nineoldandroids:library", version.ref = "nineoldandroids" }
 playGames       = { module = "com.google.android.gms:play-services-games-v2", version.ref = "playGames" }
 
 junit           = { module = "junit:junit", version.ref = "junit" }
@@ -52,6 +50,7 @@ compose-ui      = { module = "androidx.compose.ui:ui" }
 compose-graphics = { module = "androidx.compose.ui:ui-graphics" }
 compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 compose-lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -59,5 +58,4 @@ compose-lifecycleViewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary  = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

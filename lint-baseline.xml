@@ -15,17 +15,6 @@
     <issue
         id="InflateParams"
         message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
-        errorLine1="        final View v = inflater.inflate(R.layout.fragment_overview, null);"
-        errorLine2="                                                                    ~~~~">
-        <location
-            file="src/main/java/de/j4velin/pedometer/ui/Fragment_Overview.java"
-            line="80"
-            column="69"/>
-    </issue>
-
-    <issue
-        id="InflateParams"
-        message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
         errorLine1="            v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);"
         errorLine2="                                                                             ~~~~">
         <location
@@ -247,17 +236,6 @@
     </issue>
 
     <issue
-        id="ConstantLocale"
-        message="Assigning `Locale.getDefault()` to a final static field is suspicious; this code will not work correctly if the user changes locale while the app is running"
-        errorLine1="    public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());"
-        errorLine2="                                                                          ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/de/j4velin/pedometer/ui/Fragment_Overview.java"
-            line="68"
-            column="75"/>
-    </issue>
-
-    <issue
         id="SetTextI18n"
         message="String literal in `setText` can not be translated. Use Android resources instead."
         errorLine1="            ((TextView) d.findViewById(R.id.distanceunit)).setText(&quot;km&quot;);"
@@ -288,28 +266,6 @@
             file="src/main/java/de/j4velin/pedometer/ui/Dialog_Statistics.java"
             line="62"
             column="17"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;10.000&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;10.000&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout-land/fragment_overview.xml"
-            line="22"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;10.000&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;10.000&quot;/>"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/fragment_overview.xml"
-            line="25"
-            column="9"/>
     </issue>
 
     <issue
@@ -376,83 +332,6 @@
             file="src/main/res/layout/dialog_split.xml"
             line="62"
             column="17"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider replacing `android:layout_alignParentLeft` with `android:layout_alignParentStart=&quot;true&quot;` to better support right-to-left layouts"
-        errorLine1="        android:layout_alignParentLeft=&quot;true&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout-land/fragment_overview.xml"
-            line="14"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider replacing `android:layout_alignParentLeft` with `android:layout_alignParentStart=&quot;true&quot;` to better support right-to-left layouts"
-        errorLine1="        android:layout_alignParentLeft=&quot;true&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/fragment_overview.xml"
-            line="40"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider replacing `android:layout_alignLeft` with `android:layout_alignStart=&quot;@+id/bargraph&quot;` to better support right-to-left layouts"
-        errorLine1="        android:layout_alignLeft=&quot;@+id/bargraph&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout-land/fragment_overview.xml"
-            line="42"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
-        errorLine1="        android:layout_alignParentRight=&quot;true&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout-land/fragment_overview.xml"
-            line="43"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider replacing `android:layout_alignLeft` with `android:layout_alignStart=&quot;@+id/averageandtotal&quot;` to better support right-to-left layouts"
-        errorLine1="        android:layout_alignLeft=&quot;@+id/averageandtotal&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout-land/fragment_overview.xml"
-            line="69"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider replacing `android:layout_alignParentRight` with `android:layout_alignParentEnd=&quot;true&quot;` to better support right-to-left layouts"
-        errorLine1="        android:layout_alignParentRight=&quot;true&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout-land/fragment_overview.xml"
-            line="96"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="RtlHardcoded"
-        message="Consider replacing `android:layout_toRightOf` with `android:layout_toEndOf=&quot;@+id/graph&quot;` to better support right-to-left layouts"
-        errorLine1="        android:layout_toRightOf=&quot;@+id/graph&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout-land/fragment_overview.xml"
-            line="97"
-            column="9"/>
     </issue>
 
     <issue

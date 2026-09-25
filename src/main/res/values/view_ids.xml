@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- the main screen's menu entries -->
+    <item name="action_settings" type="id" />
+    <item name="action_achievements" type="id" />
+    <item name="action_leaderboard" type="id" />
+    <item name="action_faq" type="id" />
+    <item name="action_split_count" type="id" />
+    <item name="action_about" type="id" />
+    <!-- holds the preference fragment inside the Compose screen -->
+    <item name="settings_container" type="id" />
+</resources>

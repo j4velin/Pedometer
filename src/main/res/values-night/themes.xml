@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Pedometer" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">#FFB8CF84</item>
+        <item name="android:colorAccent">#FFB8CF84</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <color name="background">#FF12140D</color>
+</resources>

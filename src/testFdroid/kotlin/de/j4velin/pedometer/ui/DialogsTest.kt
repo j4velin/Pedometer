@@ -33,8 +33,7 @@ class DialogsTest : ScreenTest() {
         givenSavedSinceBoot(6500)
 
         val overview = overview()
-        overview.activity.findViewById<View>(R.id.bargraph).performClick()
-        idle()
+        overview.openStatistics()
         val dialog = latestDialog()
 
         assertEquals(

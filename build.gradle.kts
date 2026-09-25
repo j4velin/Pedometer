@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.composeCompiler)
 }
 
@@ -104,7 +103,6 @@ dependencies {
     implementation(libs.core)
     implementation(libs.fragment)
     implementation(libs.colorpicker)
-    implementation(project(":eazegraph"))
     implementation(libs.dashclock)
     "playImplementation"(libs.playGames)
 
@@ -129,4 +127,6 @@ dependencies {
     testImplementation(libs.test.ext.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.coroutines.test)
+    testImplementation(platform(libs.compose.bom))
+    testImplementation(libs.compose.test.junit4)
 }
