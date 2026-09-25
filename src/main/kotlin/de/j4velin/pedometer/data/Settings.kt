@@ -35,9 +35,13 @@ class Settings(context: Context) {
         get() = prefs.getInt(GOAL, DEFAULT_GOAL)
         set(value) = prefs.edit { putInt(GOAL, value) }
 
-    /** The step length, in [stepUnit]s */
+    /**
+     * The step length, in [stepUnit]s. A stored length that is not [plausible][isValidStepSize]
+     * reads as the default for the unit: earlier versions accepted any number.
+     */
     var stepSize: Float
-        get() = prefs.getFloat(STEP_SIZE, defaultStepSize)
+        get() = prefs.getFloat(STEP_SIZE, defaultStepSize).takeIf { isValidStepSize(it, stepUnit) }
+            ?: if (stepUnit == "cm") 75f else 2.5f
         set(value) = prefs.edit { putFloat(STEP_SIZE, value) }
 
     /** "cm" or "ft" */
@@ -97,5 +101,9 @@ class Settings(context: Context) {
 
         @JvmStatic
         val defaultStepUnit: String get() = if (isUS) "ft" else "cm"
+
+        /** Whether [size] is a plausible step length in [unit], "cm" or "ft" */
+        fun isValidStepSize(size: Float, unit: String): Boolean =
+            size in if (unit == "cm") 10f..300f else 0.3f..10f
     }
 }

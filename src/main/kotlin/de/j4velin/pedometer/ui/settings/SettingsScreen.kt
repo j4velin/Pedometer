@@ -51,6 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.j4velin.pedometer.R
 import de.j4velin.pedometer.SensorListener
 import de.j4velin.pedometer.StepsNotification
+import de.j4velin.pedometer.data.Settings
 import de.j4velin.pedometer.games.GamesState
 import de.j4velin.pedometer.ui.dialogs.MessageDialog
 
@@ -184,6 +185,7 @@ private fun StepSizeDialog(
     var selectedUnit by rememberSaveable { mutableStateOf(unit) }
     // the keyboard might use the locale's decimal separator
     val value = text.trim().replace(',', '.').toFloatOrNull()
+        ?.takeIf { Settings.isValidStepSize(it, selectedUnit) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.set_step_size)) },
