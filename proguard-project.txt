@@ -1,2 +1,7 @@
 -renamesourcefileattribute SourceFile    
 -keepattributes SourceFile,LineNumberTable
+
+# Glance brings WorkManager 2.7 and with it Room 2.2, whose rule keeps the generated databases but
+# not their constructors. Room creates them by reflection, which R8's full mode breaks: WorkManager's
+# database fails to open and the app crashes on start. Newer Room versions ship this rule.
+-keep class * extends androidx.room.RoomDatabase { void <init>(); }
