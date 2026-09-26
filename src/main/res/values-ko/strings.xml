@@ -42,12 +42,12 @@
     <string name="notification_title">피도미터가 측정중입니다</string>
     <string name="your_progress_will_be_shown_here_soon">진행 상황이 여기에 곧 나타납니다</string>
     <string name="average">평균</string>
-    <string name="record">기록</string>
+    <string name="record">최고 기록</string>
     <string name="total_last_7_days">지난 7일간 합계</string>
     <string name="average_last_7_days">지난 7일간 평균</string>
     <string name="total_this_month">이번달 합계</string>
     <string name="average_this_month">이번달 평균</string>
-    <string name="about_text_links">제작자는 Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>)이며 <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech 그리고 <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov 가 사용되었습니다.\n\nPedometer는 소스 코드가 공개되어 있습니다! 소스 코드와 모든 기여자들을 다음에서 확인하세요.<a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">제작자는 Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>)입니다.\n\nPedometer는 소스 코드가 공개되어 있습니다! 소스 코드와 모든 기여자 목록은 <a href="https://github.com/j4velin/Pedometer">GitHub</a>에서 확인하세요.\n\n</string>
     <string name="about_app_version">앱 버전: %s</string>
     <string name="since">%s 이후로</string>
     <string name="start">시작</string>
@@ -55,4 +55,15 @@
     <string name="close">닫기</string>
     <string name="no_split_active">활성화된 구분 측정 카운터가 없습니다. 시작을 눌러 지금부터 걸음 수를 측정하세요.</string>
     <string name="split_count">구분 측정</string>
+    <plurals name="entries_overwritten">
+        <item quantity="other">%d 개 항목을 불러온 자료로 덮어썼습니다</item>
+    </plurals>
+    <string name="no_sensor">센서를 찾을 수 없음</string>
+    <string name="no_sensor_explain">이 앱은 전용 하드웨어 걸음 센서가 필요하지만 이 기기에는 없습니다. 이 기기에서는 앱이 작동하지 않습니다.</string>
+    <string name="notification_settings">알림 설정</string>
+    <string name="permission_activity_recognition">신체 활동 권한이 없으면 걸음 수를 측정할 수 없습니다</string>
+    <string name="hue">색조</string>
+    <string name="saturation">채도</string>
+    <string name="brightness">밝기</string>
+    <string name="opacity">불투명도</string>
 </resources>

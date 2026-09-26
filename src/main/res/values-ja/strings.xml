@@ -41,12 +41,12 @@
     <string name="notification_title">歩数をカウント中</string>
     <string name="your_progress_will_be_shown_here_soon">歩数はもうすぐ表示されます</string>
     <string name="average">平均</string>
-    <string name="record">記録</string>
+    <string name="record">最高記録</string>
     <string name="total_last_7_days">過去7日間の合計</string>
     <string name="average_last_7_days">過去7日間の平均</string>
     <string name="total_this_month">今月の合計</string>
     <string name="average_this_month">今月の平均</string>
-    <string name="about_text_links">このアプリは Thomas Hoffmann によって作成されました (<a href="https://www.j4velin.de">www.j4velin.de</a>) そして <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech と <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov を使用します。\n\nPedometer はオープンソースです! コードと貢献者のすべてのリストは <a href="https://github.com/j4velin/Pedometer">GitHub</a> を参照してください。\n\n</string>
+    <string name="about_text_links">このアプリは Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) が作成しました。\n\nPedometer はオープンソースです！コードと貢献者の完全なリストは <a href="https://github.com/j4velin/Pedometer">GitHub</a> で確認できます。\n\n</string>
     <string name="about_app_version">アプリのバージョン: %s</string>
     <string name="since">%s より</string>
     <string name="start">開始</string>
@@ -56,4 +56,13 @@
     <string name="split_count">スプリットカウント</string>
     <string name="no_sensor">センサーが見つかりません</string>
     <string name="no_sensor_explain">このアプリは、専用のハードウェア歩数センサーが必要です - お使いのデバイスにはありません。このアプリはお使いのデバイスで実行できません。</string>
+    <plurals name="entries_overwritten">
+        <item quantity="other">%d 件のデータを上書きしました</item>
+    </plurals>
+    <string name="notification_settings">通知設定</string>
+    <string name="permission_activity_recognition">身体活動の権限がないと歩数をカウントできません</string>
+    <string name="hue">色相</string>
+    <string name="saturation">彩度</string>
+    <string name="brightness">明度</string>
+    <string name="opacity">不透明度</string>
 </resources>

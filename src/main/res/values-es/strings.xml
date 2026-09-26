@@ -58,7 +58,7 @@
     <string name="average_last_7_days">Media últimos 7 días</string>
     <string name="total_this_month">Total este mes</string>
     <string name="average_this_month">Media este mes</string>
-    <string name="about_text_links">Esta aplicación fue creada por Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) y utiliza <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> de Paul Cech y <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> de Sergey Margaritov.\n\n¡Podómetro es código libre! Consigue el código y la lista completa de contribuciones de <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">Esta aplicación fue creada por Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\n¡Podómetro es software libre! Consigue el código y la lista completa de colaboradores en <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Versión: %s</string>
     <string name="since">Desde %s</string>
     <string name="start">Iniciar</string>
@@ -67,4 +67,12 @@
     <string name="no_split_active">No hay contador parcial activo. Pulsa iniciar para contar los pasos a partir de este momento</string>
     <string name="split_count">Contador parcial</string>
     
+    <string name="no_sensor">Sensor no encontrado</string>
+    <string name="no_sensor_explain">Esta aplicación necesita un sensor de pasos de hardware dedicado, que tu dispositivo no tiene. Esta aplicación no funcionará en tu dispositivo.</string>
+    <string name="notification_settings">Ajustes de notificaciones</string>
+    <string name="permission_activity_recognition">No se pueden contar los pasos sin el permiso de actividad física</string>
+    <string name="hue">Tono</string>
+    <string name="saturation">Saturación</string>
+    <string name="brightness">Brillo</string>
+    <string name="opacity">Opacidad</string>
 </resources>

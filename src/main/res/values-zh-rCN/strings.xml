@@ -42,4 +42,28 @@
     <string name="notification_title">Pedometer 正在记步</string>
     <string name="your_progress_will_be_shown_here_soon">您的进度很快会在这显示</string>
     <string name="average">每日</string>
+    <string name="record">最高纪录</string>
+    <string name="total_last_7_days">最近 7 天共计</string>
+    <string name="average_last_7_days">最近 7 天平均</string>
+    <string name="total_this_month">本月共计</string>
+    <string name="average_this_month">本月平均</string>
+    <string name="about_text_links">此应用由 Thomas Hoffmann（<a href="https://www.j4velin.de">www.j4velin.de</a>）开发。\n\nPedometer 是开源软件！可在 <a href="https://github.com/j4velin/Pedometer">GitHub</a> 上获取源代码和完整的贡献者列表。\n\n</string>
+    <string name="about_app_version">应用版本：%s</string>
+    <string name="since">自 %s 起</string>
+    <string name="start">开始</string>
+    <string name="stop">停止</string>
+    <string name="close">关闭</string>
+    <string name="no_split_active">分段计步器未启动。点击“开始”从现在起计步</string>
+    <string name="split_count">分段计步</string>
+    <string name="no_sensor">未找到传感器</string>
+    <string name="no_sensor_explain">此应用需要专用的硬件计步传感器，而您的设备没有。此应用无法在您的设备上运行。</string>
+    <plurals name="entries_overwritten">
+        <item quantity="other">%d 项条目已被导入的数据覆盖</item>
+    </plurals>
+    <string name="notification_settings">通知设置</string>
+    <string name="permission_activity_recognition">没有身体活动权限，无法计步</string>
+    <string name="hue">色相</string>
+    <string name="saturation">饱和度</string>
+    <string name="brightness">亮度</string>
+    <string name="opacity">不透明度</string>
 </resources>

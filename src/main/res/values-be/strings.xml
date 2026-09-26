@@ -62,7 +62,7 @@
     <string name="average_last_7_days">Сярэдняе за апошнія 7 дзён</string>
     <string name="total_this_month">Усяго за месяц</string>
     <string name="average_this_month">Сярэдняе за месяц</string>
-    <string name="about_text_links">Гэтае прыкладанне своранае Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) і выкарыстоўвае <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a>, створаную Paul Cech і <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a>, створаную Sergey Margaritov.\n\nPedometer — праграма з адкрытым кодам! Атрымаць зыходны код і поўны спіс удзельнікаў можна на <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">Гэтае прыкладанне стварыў Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\nPedometer — праграма з адкрытым кодам! Зыходны код і поўны спіс удзельнікаў можна атрымаць на <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Версія прыкладання: %s</string>
     <string name="since">Пачанаючы з %s</string>
     <string name="start">Пачаць</string>
@@ -73,4 +73,9 @@
     <string name="no_sensor">Датчык не знойдзены</string>
     <string name="no_sensor_explain">Гэтае прыкладанне патрабуе адмысловы апаратны датчык крокаў, якога няма на вашай прыладзе. Гэтае прыкладанне не будзе працаваць на вашай прыладзе.</string>
     <string name="notification_settings">Налады абвестак</string>
+    <string name="permission_activity_recognition">Без дазволу «Фізічная актыўнасць» нельга лічыць крокі</string>
+    <string name="hue">Адценне</string>
+    <string name="saturation">Насычанасць</string>
+    <string name="brightness">Яркасць</string>
+    <string name="opacity">Непразрыстасць</string>
 </resources>

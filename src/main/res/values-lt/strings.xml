@@ -10,7 +10,7 @@
     <string name="close">uždaryti</string>
     <string name="faq">DUK</string>
     <string name="goal">Tikslas</string>
-    <string name="record">Įrašas</string>
+    <string name="record">Rekordas</string>
     <string name="settings">Nustatymai</string>
     <string name="start">Pradėti</string>
     <string name="step_size">Žingsnio dydis</string>
@@ -24,4 +24,57 @@
     <string name="import_title">Importuoti/Atkurti</string>
     <string name="export_title">Eksportuoti/Išsaugoti</string>
     <string name="about_app_version">Programėlės versija: %s</string>
+    <plurals name="goal_summary">
+        <item quantity="one">Dabartinis tikslas: %,d žingsnis</item>
+        <item quantity="few">Dabartinis tikslas: %,d žingsniai</item>
+        <item quantity="many">Dabartinis tikslas: %,d žingsnio</item>
+        <item quantity="other">Dabartinis tikslas: %,d žingsnių</item>
+    </plurals>
+    <string name="step_size_summary">Dabartinis žingsnio dydis: %1$.2f %2$s</string>
+    <string name="sign_in">Prisijunkite prie „Google“ paskyros, kad galėtumėte naudoti pasiekimus ir lyderių lenteles</string>
+    <string name="export_summary">Išsaugokite duomenis .csv faile</string>
+    <string name="import_summary">Importuoja anksčiau išsaugotus duomenis</string>
+    <string name="set_goal">Nustatyti tikslą</string>
+    <string name="set_step_size">Nustatyti žingsnio dydį</string>
+    <string name="file_cant_read">Klaida: nepavyko perskaityti %s</string>
+    <string name="error_file">Klaida pasiekiant failą: %s</string>
+    <string name="data_saved">Duomenys išsaugoti %s</string>
+    <plurals name="entries_imported">
+        <item quantity="one">%d įrašas importuotas</item>
+        <item quantity="few">%d įrašai importuoti</item>
+        <item quantity="many">%d įrašo importuota</item>
+        <item quantity="other">%d įrašų importuota</item>
+    </plurals>
+    <plurals name="entries_ignored">
+        <item quantity="one">%d įrašas praleistas, nes jame nėra tinkamų duomenų</item>
+        <item quantity="few">%d įrašai praleisti, nes juose nėra tinkamų duomenų</item>
+        <item quantity="many">%d įrašo praleista, nes juose nėra tinkamų duomenų</item>
+        <item quantity="other">%d įrašų praleista, nes juose nėra tinkamų duomenų</item>
+    </plurals>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d įrašas perrašytas importuotais duomenimis</item>
+        <item quantity="few">%d įrašai perrašyti importuotais duomenimis</item>
+        <item quantity="many">%d įrašo perrašyta importuotais duomenimis</item>
+        <item quantity="other">%d įrašų perrašyta importuotais duomenimis</item>
+    </plurals>
+    <string name="sign_in_necessary">Būtina prisijungti</string>
+    <string name="please_sign_in_with_your_google_account">Norėdami naudoti šią funkciją, prisijunkite prie „Google“ paskyros.</string>
+    <string name="achievements">Pasiekimai</string>
+    <string name="leaderboard">Lyderių lentelė</string>
+    <string name="goal_reached_notification">Tikslas pasiektas! %s žingsnių ir skaičiuojama toliau</string>
+    <string name="notification_text">Liko %s žingsnių</string>
+    <string name="notification_title">Žingsniamatis skaičiuoja</string>
+    <string name="your_progress_will_be_shown_here_soon">Jūsų pažanga netrukus bus rodoma čia</string>
+    <string name="total_last_7_days">Iš viso per pask. 7 dienas</string>
+    <string name="total_this_month">Iš viso šį mėnesį</string>
+    <string name="about_text_links">Šią programėlę sukūrė Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\nPedometer yra atvirojo kodo! Kodą ir visą prisidėjusiųjų sąrašą rasite <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="no_split_active">Tarpinis skaitiklis neaktyvus. Spustelėkite „Pradėti“, kad žingsniai būtų skaičiuojami nuo dabar</string>
+    <string name="split_count">Tarpinis skaičiavimas</string>
+    <string name="no_sensor_explain">Šiai programėlei reikalingas specialus aparatinis žingsnių jutiklis, kurio jūsų įrenginys neturi. Programėlė jūsų įrenginyje neveiks.</string>
+    <string name="notification_settings">Pranešimų nustatymai</string>
+    <string name="permission_activity_recognition">Be fizinės veiklos leidimo žingsnių skaičiuoti negalima</string>
+    <string name="hue">Atspalvis</string>
+    <string name="saturation">Sotis</string>
+    <string name="brightness">Šviesumas</string>
+    <string name="opacity">Nepermatomumas</string>
 </resources>

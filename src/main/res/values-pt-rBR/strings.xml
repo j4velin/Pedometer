@@ -55,12 +55,12 @@
     <string name="notification_title">Pedômetro está contando</string>
     <string name="your_progress_will_be_shown_here_soon">Seu progresso será mostrado aqui em breve</string>
     <string name="average">Média</string>
-    <string name="record">Registro</string>
+    <string name="record">Recorde</string>
     <string name="total_last_7_days">Total dos últimos 7 dias</string>
     <string name="average_last_7_days">Média dos últimos 7 dias</string>
     <string name="total_this_month">Total desse mës</string>
     <string name="average_this_month">Média desse mes</string>
-    <string name="about_text_links">Esta aplicação foi creada por Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) e utiliza <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> de Paul Cech e <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> de Sergey Margaritov.\n\n¡Pedômetro é código livre! Veja o código e a lista completa de contribuidores em <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">Este aplicativo foi criado por Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\nO Pedômetro é de código aberto! Veja o código e a lista completa de colaboradores no <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">App versão: %s</string>
     <string name="since">Desde %s</string>
     <string name="start">Iniciar</string>
@@ -71,4 +71,10 @@
     <string name="no_sensor">Sensor não encontrado</string>
     <string name="no_sensor_explain">Este aplicativo requer um sensor de passo de hardware dedicado - o seu dispositivo não possui o sensor. Este aplicativo não será executado no seu dispositivo.</string>
 
+    <string name="notification_settings">Configurações de notificação</string>
+    <string name="permission_activity_recognition">Os passos não podem ser contados sem a permissão de atividade física</string>
+    <string name="hue">Matiz</string>
+    <string name="saturation">Saturação</string>
+    <string name="brightness">Brilho</string>
+    <string name="opacity">Opacidade</string>
 </resources>

@@ -11,7 +11,7 @@
     <string name="error_file">Errore nell\'accedere al file: %s</string>
     <string name="about">Info</string>
     <string name="achievements">Risultati</string>
-    <string name="about_text_links">Quest\'app è stata creata da Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) e si serve <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> by Paul Cech and <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> by Sergey Margaritov.\n\nPedometro è open source! Trovi il codice e la lista di chi ha contribuito qui <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n (</string>
+    <string name="about_text_links">Quest\'app è stata creata da Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\nPedometro è open source! Trovi il codice e l\'elenco completo di chi ha contribuito su <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="export_summary">Salva i tuoi dati in un file .csv</string>
     <string name="export_title">Esporta/Backup</string>
     <string name="faq">FAQ</string>
@@ -60,4 +60,18 @@
         <item quantity="other">Sono state importate %d voci</item>
     </plurals>
 
+    <string name="account">Account</string>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d voce è stata sovrascritta con i dati importati</item>
+        <item quantity="many">%d voci sono state sovrascritte con i dati importati</item>
+        <item quantity="other">%d voci sono state sovrascritte con i dati importati</item>
+    </plurals>
+    <string name="no_sensor">Sensore non trovato</string>
+    <string name="no_sensor_explain">Questa app richiede un sensore hardware dedicato per il conteggio dei passi, che il tuo dispositivo non ha. L\'app non funzionerà sul tuo dispositivo.</string>
+    <string name="notification_settings">Impostazioni notifiche</string>
+    <string name="permission_activity_recognition">Senza l\'autorizzazione per l\'attività fisica non è possibile contare i passi</string>
+    <string name="hue">Tonalità</string>
+    <string name="saturation">Saturazione</string>
+    <string name="brightness">Luminosità</string>
+    <string name="opacity">Opacità</string>
 </resources>

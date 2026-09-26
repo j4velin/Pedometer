@@ -56,15 +56,7 @@
     <string name="average_last_7_days">Son 7 günün ortalaması</string>
     <string name="total_this_month">Bu ayın toplamı</string>
     <string name="average_this_month">Bu ayın ortalaması</string>
-    <string name="about_text_links">Bu uygulama Thomas Hoffmann tarafından oluşturulmuştur (<a
-        href="https://www.j4velin.de">www.j4velin.de</a>) ve Paul Cech tarafından oluşturulan <a
-        href="https://github.com/blackfizz/EazeGraph">EazeGraph
-    </a> ve Sergey Margaritov tarafından oluşturulan <a
-        href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference
-    </a> yazılımlarından yararlanır.\n\nPedometer açık kaynaktır! Kodun ve katkıcıların tümüne <a
-        href="https://github.com/j4velin/Pedometer">GitHub
-    </a> konumundan erişin.
-    </string>
+    <string name="about_text_links">Bu uygulama Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) tarafından oluşturulmuştur.\n\nPedometer açık kaynaklıdır! Kodu ve katkıda bulunanların tam listesini <a href="https://github.com/j4velin/Pedometer">GitHub</a> üzerinden edinebilirsiniz.\n\n</string>
     <string name="about_app_version">Uygulama sürümü: %s</string>
     <string name="since">%s tarihinden beri</string>
     <string name="start">Başlat</string>
@@ -78,4 +70,14 @@
     <string name="no_sensor_explain">Bu uygulama -cihazınızda bulunmayan- adım algılayıcı özel
         donanıma ihtiyaç duyar. Bu uygulama cihazınız çalışmayacak.
     </string>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d girdinin üzerine içeri aktarılan veriler yazıldı</item>
+        <item quantity="other">%d girdinin üzerine içeri aktarılan veriler yazıldı</item>
+    </plurals>
+    <string name="notification_settings">Bildirim ayarları</string>
+    <string name="permission_activity_recognition">Fiziksel aktivite izni olmadan adımlar sayılamaz</string>
+    <string name="hue">Ton</string>
+    <string name="saturation">Doygunluk</string>
+    <string name="brightness">Parlaklık</string>
+    <string name="opacity">Opaklık</string>
 </resources>

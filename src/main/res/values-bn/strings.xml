@@ -11,12 +11,12 @@
     <string name="steps">পদক্ষেপ</string>
     <string name="stop">থামান</string>
     <string name="data_saved">তথ্য সংরক্ষিত %s</string>
-    <string name="about_text_links">এই অ্যাপ তৈরী করেছিলেন Thomas Hoffmann এবং ব্যবহার করে Paul Cech \'র <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> এবং Sergey Margaritov \'র <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a>\n\nPedometer হলো ওপেন সোর্স! কোড এবং পূর্ণ সদস্য তালিকা থেকে পাবেন <a href="https://github.com/j4velin/Pedometer">GitHub</a></string>
+    <string name="about_text_links">এই অ্যাপটি তৈরি করেছেন Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>)।\n\nPedometer ওপেন সোর্স! কোড এবং অবদানকারীদের সম্পূর্ণ তালিকা পাবেন <a href="https://github.com/j4velin/Pedometer">GitHub</a>-এ।\n\n</string>
     <string name="export_summary">আপনার তথ্য একটি .csv ফাইলে সংরক্ষণ করুন</string>
     <string name="goal">লক্ষ্য</string>
     <string name="set_goal">লক্ষ্য স্থির করুন</string>
     <string name="set_step_size">পদক্ষেপের দীর্ঘ স্থির করুন</string>
-    <string name="record">লিপিবদ্ধ করুন</string>
+    <string name="record">রেকর্ড</string>
     <plurals name="entries_imported">
         <item quantity="one">%d এন্ট্রি আমদানি হলো</item>
         <item quantity="other">%d এন্ট্রি আমদানি হলো</item>
@@ -58,4 +58,15 @@
     <string name="faq">FAQ</string>
     <string name="goal_reached_notification">লক্ষ্যে পৌঁছেছেন ! %s  টি পদক্ষেপ এবং গণনা চলছে</string>
     <string name="no_split_active">কোন বিভক্ত গণক সক্রিয় নেই. এখন থেকে পদক্ষেপ গণনা চালু করতে শুরুতে ক্লিক করুন</string>
+    <string name="account">অ্যাকাউন্ট</string>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d এন্ট্রি আমদানি করা তথ্য দিয়ে প্রতিস্থাপিত হয়েছে</item>
+        <item quantity="other">%d এন্ট্রি আমদানি করা তথ্য দিয়ে প্রতিস্থাপিত হয়েছে</item>
+    </plurals>
+    <string name="notification_settings">বিজ্ঞপ্তি সেটিংস</string>
+    <string name="permission_activity_recognition">শারীরিক কার্যকলাপের অনুমতি ছাড়া পদক্ষেপ গণনা করা যায় না</string>
+    <string name="hue">বর্ণ</string>
+    <string name="saturation">সম্পৃক্ততা</string>
+    <string name="brightness">উজ্জ্বলতা</string>
+    <string name="opacity">অস্বচ্ছতা</string>
 </resources>

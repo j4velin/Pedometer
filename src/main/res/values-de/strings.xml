@@ -30,6 +30,10 @@
         <item quantity="one">%d Eintrag wurde ignoriert, da dieser in keinem gültigen Format vorlag</item>
         <item quantity="other">%d Einträge wurden ignoriert, da diese in keinem gültigen Format vorlagen</item>
     </plurals>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d Eintrag wurde mit importierten Daten überschrieben</item>
+        <item quantity="other">%d Einträge wurden mit importierten Daten überschrieben</item>
+    </plurals>
     <string name="sign_in_necessary">Login erforderlich</string>
     <string name="please_sign_in_with_your_google_account">Bitte logge dich mit deinem Google Konto ein um diese Funktion zu nutzen.</string>
     <string name="steps">Schritte</string>
@@ -50,7 +54,7 @@
     <string name="average_last_7_days">Durchschnitt der letzten 7 Tage</string>
     <string name="total_this_month">Gesamt diesen Monat</string>
     <string name="average_this_month">Durchschnitt diesen Monat</string>
-    <string name="about_text_links">Diese App wurde von Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) erstellt und verwendet <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> von Paul Cech und <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> von Sergey Margaritov.\n\nDie App ist Open-Source! Der Quellcode und die vollständige Liste alle Mitwirkenden kann auf <a href="https://github.com/j4velin/Pedometer">GitHub</a> eingesehen werden.\n\n</string>
+    <string name="about_text_links">Diese App wurde von Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) erstellt.\n\nDie App ist Open Source! Den Quellcode und die vollständige Liste aller Mitwirkenden gibt es auf <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">App Version: %s</string>
     <string name="since">Seit %s</string>
     <string name="start">Start</string>
@@ -60,6 +64,7 @@
     <string name="split_count">Split-Counter</string>
     <string name="no_sensor">Sensor nicht gefunden</string>
     <string name="no_sensor_explain">Diese App benötigt einen dedizierten Hardware Schritt-Zähler Sensor - dein Gerät scheint einen solchen aber nicht zu besitzen. Die App wird auf diesem Gerät daher nicht funktionieren.</string>
+    <string name="notification_settings">Benachrichtigungseinstellungen</string>
     <string name="permission_activity_recognition">Ohne die Berechtigung für körperliche Aktivitäten können keine Schritte gezählt werden</string>
     <string name="hue">Farbton</string>
     <string name="saturation">Sättigung</string>

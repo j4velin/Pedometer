@@ -55,20 +55,12 @@
     <string name="notification_title">A Pedometer számol</string>
     <string name="your_progress_will_be_shown_here_soon">E hónapi összesen</string>
     <string name="average">Átlag</string>
-    <string name="record">Felvétel</string>
+    <string name="record">Rekord</string>
     <string name="total_last_7_days">7 napi összesen</string>
     <string name="average_last_7_days">Utolsó 7 nap átlaga</string>
     <string name="total_this_month">E hónapi összesen</string>
     <string name="average_this_month">E hónap átlaga</string>
-    <string name="about_text_links">Ezt a programot Thomas Hoffmann készítette (<a
-        href="https://www.j4velin.de">www.j4velin.de</a>) és felhasználja:<a
-        href="https://github.com/blackfizz/EazeGraph">az EazeGraph-ot
-    </a> Paul Cech-től és <a href="https://github.com/attenzione/android-ColorPickerPreference">a
-        ColorPickerPreference programot
-    </a> Sergey Margaritov-tól.\n\nA Pedometer nyílt forráskódú program! A forráskódot és a
-        közreműködők teljes listáját itt találod: <a href="https://github.com/j4velin/Pedometer">
-            GitHub</a>.
-    </string>
+    <string name="about_text_links">Ezt az alkalmazást Thomas Hoffmann készítette (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\nA Pedometer nyílt forráskódú program! A forráskódot és a közreműködők teljes listáját itt találod: <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">App verzió: %s</string>
     <string name="since">%s óta</string>
     <string name="start">Indít</string>
@@ -82,4 +74,10 @@
     <string name="no_sensor_explain">Ez az alkalmazás egy külön hardveres lépésérzékelőt igényel -
         amellyel a készülék nem rendelkezik. Ez az alkalmazás nem fog futni a készüléken.
     </string>
+    <string name="notification_settings">Értesítési beállítások</string>
+    <string name="permission_activity_recognition">A fizikai tevékenységre vonatkozó engedély nélkül a lépések nem számolhatók</string>
+    <string name="hue">Színárnyalat</string>
+    <string name="saturation">Telítettség</string>
+    <string name="brightness">Fényerő</string>
+    <string name="opacity">Átlátszatlanság</string>
 </resources>

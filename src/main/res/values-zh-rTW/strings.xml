@@ -47,7 +47,7 @@
     <string name="average_last_7_days">本週平均</string>
     <string name="total_this_month">本月總計</string>
     <string name="average_this_month">本月平均</string>
-    <string name="about_text_links">本程式由 Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) 開發，並使用了由 Paul Cech 開發的 <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> 及 Sergey Margaritov 開發的 <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a>。\n\nPedometer 是開源的！可從 <a href="https://github.com/j4velin/Pedometer">GitHub</a> 取得程式碼及完整的貢獻者名單。\n\n</string>
+    <string name="about_text_links">本程式由 Thomas Hoffmann（<a href="https://www.j4velin.de">www.j4velin.de</a>）開發。\n\nPedometer 是開源的！可從 <a href="https://github.com/j4velin/Pedometer">GitHub</a> 取得程式碼及完整的貢獻者名單。\n\n</string>
     <string name="about_app_version">程式版本：%s</string>
     <string name="since">開始時間 %s</string>
     <string name="start">啟動</string>
@@ -56,4 +56,15 @@
     <string name="no_split_active">沒有啟用中的獨立計步器。請點擊啟動開始計步</string>
     <string name="split_count">獨立計步器</string>
 
+    <plurals name="entries_overwritten">
+        <item quantity="other">%d 項條目已被匯入的資料覆寫</item>
+    </plurals>
+    <string name="no_sensor">找不到感應器</string>
+    <string name="no_sensor_explain">此應用程式需要專用的硬體計步感應器，而您的裝置沒有。此應用程式無法在您的裝置上執行。</string>
+    <string name="notification_settings">通知設定</string>
+    <string name="permission_activity_recognition">沒有體能活動權限，無法計步</string>
+    <string name="hue">色相</string>
+    <string name="saturation">飽和度</string>
+    <string name="brightness">亮度</string>
+    <string name="opacity">不透明度</string>
 </resources>

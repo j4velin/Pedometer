@@ -11,12 +11,12 @@
     <string name="steps">कदम</string>
     <string name="stop">रोकें</string>
     <string name="data_saved">%s डेटा सहेजा गया</string>
-    <string name="about_text_links">इस ऐप को डिज़ाइन किया गया था थॉमस हॉफमैन और पॉल सेक \'के साथ <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> और सर्गे मार्गरिटोव \'के साथ <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> का उपयोग करके।\n\nपेडोमीटर ओपन सोर्स है! कोड और पूरी सदस्य सूची <a href="https://github.com/j4velin/Pedometer">GitHub</a> से प्राप्त करें।</string>
+    <string name="about_text_links">इस ऐप को Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) ने बनाया है।\n\nपेडोमीटर ओपन सोर्स है! कोड और योगदानकर्ताओं की पूरी सूची <a href="https://github.com/j4velin/Pedometer">GitHub</a> से प्राप्त करें।\n\n</string>
     <string name="export_summary">अपने डेटा को .csv फ़ाइल में सहेजें</string>
     <string name="goal">लक्ष्य</string>
     <string name="set_goal">लक्ष्य सेट करें</string>
     <string name="set_step_size">कदम का आकार सेट करें</string>
-    <string name="record">रिकॉर्ड करें</string>
+    <string name="record">रिकॉर्ड</string>
     <plurals name="entries_imported">
         <item quantity="one">%d एन्ट्री आयात की गई</item>
         <item quantity="other">%d एन्ट्री आयात की गई</item>
@@ -58,4 +58,15 @@
     <string name="faq">सामान्य प्रश्न</string>
     <string name="goal_reached_notification">लक्ष्य पूरा किया गया है! %s कदम और गणना जारी है</string>
     <string name="no_split_active">कोई विभाजन गणना सक्रिय नहीं है। अब से कदम गणना चालने के लिए शुरू करने के लिए क्लिक करें</string>
+    <string name="account">खाता</string>
+    <plurals name="entries_overwritten">
+        <item quantity="one">%d एन्ट्री को आयात किए गए डेटा से बदल दिया गया</item>
+        <item quantity="other">%d एन्ट्री को आयात किए गए डेटा से बदल दिया गया</item>
+    </plurals>
+    <string name="notification_settings">सूचना सेटिंग्स</string>
+    <string name="permission_activity_recognition">शारीरिक गतिविधि की अनुमति के बिना कदम नहीं गिने जा सकते</string>
+    <string name="hue">रंगत</string>
+    <string name="saturation">संतृप्ति</string>
+    <string name="brightness">चमक</string>
+    <string name="opacity">अपारदर्शिता</string>
 </resources>

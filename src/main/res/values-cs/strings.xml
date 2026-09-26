@@ -61,7 +61,7 @@
     <string name="average_last_7_days">Průměr za týden</string>
     <string name="total_this_month">Celkem tento měsíc</string>
     <string name="average_this_month">Průměr tento měsíc</string>
-    <string name="about_text_links">Tuto aplikaci vytvořil Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) a používá <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> od Pavla Čecha a <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> od Sergeje Margaritova.\n\nPedometer is open source! Kód a úplný seznam přispěvatelů získáte na adrese <a href="https://github.com/j4velin/Pedometer">GitHub</a>.</string>
+    <string name="about_text_links">Tuto aplikaci vytvořil Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\nPedometer je open source! Kód a úplný seznam přispěvatelů najdete na <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Verze aplikace: %s</string>
     <string name="since">Od %s</string>
     <string name="start">Start</string>
@@ -72,4 +72,9 @@
     <string name="no_sensor">Snímač nenalezen</string>
     <string name="no_sensor_explain">Tato aplikace vyžaduje speciální hardwarový snímač kroků, který vaše zařízení nemá. Tato aplikace nebude na vašem zařízení spuštěna.</string>
     <string name="notification_settings">Nastavení oznámení</string>
+    <string name="permission_activity_recognition">Bez oprávnění k fyzické aktivitě nelze počítat kroky</string>
+    <string name="hue">Odstín</string>
+    <string name="saturation">Sytost</string>
+    <string name="brightness">Jas</string>
+    <string name="opacity">Krytí</string>
 </resources>

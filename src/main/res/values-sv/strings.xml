@@ -56,7 +56,7 @@
     <string name="average_last_7_days">Genomsnitt senaste 7 dagarna</string>
     <string name="total_this_month">Totalt den här månaden</string>
     <string name="average_this_month">Genomsnitt den här månaden</string>
-    <string name="about_text_links">Den här appen skapades av Thomas Hoffmann (<a href="http://www.j4velin-development.de">www.j4velin-development.de</a>) och använder <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> av Paul Cech och <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> av Sergey Margaritov.\n\nPedometer är öppen källkod! Hämta koden och en fullständig lista på de som bidragit på <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">Den här appen skapades av Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\nPedometer är öppen källkod! Hämta koden och en fullständig lista över alla som bidragit på <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Appens version: %s</string>
     <string name="since">Sedan %s</string>
     <string name="start">Start</string>
@@ -67,4 +67,9 @@
     <string name="no_sensor">Sensor hittades inte</string>
     <string name="no_sensor_explain">Denna app kräver en dedikerad stegräknare i hårdvara, som din enhet saknar. Den här appen kan inte köra på din enhet.</string>
     <string name="notification_settings">Notifieringsinställningar</string>
+    <string name="permission_activity_recognition">Steg kan inte räknas utan behörigheten för fysisk aktivitet</string>
+    <string name="hue">Nyans</string>
+    <string name="saturation">Mättnad</string>
+    <string name="brightness">Ljusstyrka</string>
+    <string name="opacity">Opacitet</string>
 </resources>

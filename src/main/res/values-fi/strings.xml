@@ -56,7 +56,7 @@
     <string name="average_last_7_days">Keskiarvo viimeisenä 7 päivänä</string>
     <string name="total_this_month">Yhteensä tässä kuussa</string>
     <string name="average_this_month">Keskiarvo tässä kuussa</string>
-    <string name="about_text_links">Tämän sovelluksen teki Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>) käyttäen <a href="https://github.com/blackfizz/EazeGraph">EazeGraph</a> (Paul Cech) ja <a href="https://github.com/attenzione/android-ColorPickerPreference">ColorPickerPreference</a> (Sergey Margaritov).\n\nAskelmittari on avoimen lähdekoodin sovellus! Lähdekoodi sekä kaikkien avustajien lista löytyy täältä: <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
+    <string name="about_text_links">Tämän sovelluksen on tehnyt Thomas Hoffmann (<a href="https://www.j4velin.de">www.j4velin.de</a>).\n\nAskelmittari on avoimen lähdekoodin sovellus! Lähdekoodi ja kaikkien avustajien lista löytyvät täältä: <a href="https://github.com/j4velin/Pedometer">GitHub</a>.\n\n</string>
     <string name="about_app_version">Sovelluksen versio: %s</string>
     <string name="since">Aloitettu: %s</string>
     <string name="start">Aloita</string>
@@ -66,5 +66,11 @@
     <string name="split_count">Alilaskuri</string>
     <string name="no_sensor">Sensoria ei löydetty</string>
     <string name="no_sensor_explain">Tämä sovellus tarvitsee erillisen laitteistosensorin jota laittessasi ei ole. Sovellus ei toimi laitteessasi.</string>
+    <string name="notification_settings">Ilmoitusasetukset</string>
+    <string name="permission_activity_recognition">Askelia ei voi laskea ilman fyysisen aktiivisuuden käyttöoikeutta</string>
+    <string name="hue">Sävy</string>
+    <string name="saturation">Kylläisyys</string>
+    <string name="brightness">Kirkkaus</string>
+    <string name="opacity">Peittävyys</string>
 </resources>
 
