@@ -22,9 +22,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
@@ -156,10 +156,10 @@ private fun ColorSlider(
 
 /** [color] over a checkerboard, which shows how transparent it is */
 @Composable
-fun ColorSwatch(@ColorInt color: Int, modifier: Modifier = Modifier) {
+fun ColorSwatch(@ColorInt color: Int, modifier: Modifier = Modifier.size(32.dp)) {
     val shape = RoundedCornerShape(4.dp)
     Canvas(
-        modifier.defaultMinSize(32.dp, 32.dp).clip(shape).border(1.dp, MaterialTheme.colorScheme.outline, shape)
+        modifier.clip(shape).border(1.dp, MaterialTheme.colorScheme.outline, shape)
     ) {
         val cell = 8.dp.toPx()
         var y = 0f
