@@ -5,3 +5,8 @@
 # not their constructors. Room creates them by reflection, which R8's full mode breaks: WorkManager's
 # database fails to open and the app crashes on start. Newer Room versions ship this rule.
 -keep class * extends androidx.room.RoomDatabase { void <init>(); }
+
+# The same for WorkManager 2.7's rule, which keeps the input mergers but not their constructors.
+# WorkManager creates them by reflection, so without it no work runs - Glance's included, which
+# updates the widgets. Newer WorkManager versions ship this rule.
+-keep class * extends androidx.work.InputMerger { void <init>(); }
