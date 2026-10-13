@@ -26,8 +26,8 @@ android {
         applicationId = "de.j4velin.pedometer"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 2100
-        versionName = "2.1.0"
+        versionCode = 2101
+        versionName = "2.1.1"
     }
 
     buildFeatures {
