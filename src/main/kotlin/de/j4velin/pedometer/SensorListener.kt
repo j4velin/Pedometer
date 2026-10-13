@@ -18,6 +18,7 @@ package de.j4velin.pedometer
 
 import android.Manifest
 import android.app.AlarmManager
+import android.app.ForegroundServiceStartNotAllowedException
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
@@ -84,6 +85,15 @@ class SensorListener : Service(), SensorEventListener {
         } catch (e: SecurityException) {
             // permission got revoked
             stopSelf()
+        } catch (e: IllegalStateException) {
+            // Since Android 12, an app in the background may not make a service a foreground
+            // one, which happens when the system restarts this sticky service on its own. The
+            // hourly alarm or the next app start will try again.
+            if (Build.VERSION.SDK_INT >= 31 && e is ForegroundServiceStartNotAllowedException) {
+                stopSelf()
+            } else {
+                throw e
+            }
         }
     }
 
